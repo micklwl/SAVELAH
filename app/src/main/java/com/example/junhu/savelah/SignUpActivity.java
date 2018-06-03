@@ -34,6 +34,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         progressBar = findViewById(R.id.progressbar);
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.sign_up_button).setOnClickListener(this);
+        findViewById(R.id.log_in_button).setOnClickListener(this);
+
     }
 
     private void registerUser(){
@@ -76,6 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     if(task.getException() instanceof FirebaseAuthUserCollisionException) {
                         Toast.makeText(getApplicationContext(), "User with Email id already exists", Toast.LENGTH_SHORT).show();
                     }
+
                     else Toast.makeText(getApplicationContext(), "Some Error Occurred", Toast.LENGTH_SHORT).show();
                 }
             }
