@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".SignUpActivity"
     tools:layout_editor_absoluteY="81dp">
 
     <TextView
@@ -22,9 +22,9 @@
         android:id="@+id/field_email"
         android:layout_width="wrap_content"
         android:layout_height="46dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="59dp"
         android:layout_marginEnd="73dp"
-        android:layout_marginTop="51dp"
+        android:layout_marginTop="50dp"
         android:ems="10"
         android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="@+id/field_password"
@@ -44,31 +44,43 @@
     <EditText
         android:id="@+id/field_password"
         android:layout_width="wrap_content"
-        android:layout_height="49dp"
-        android:layout_marginTop="108dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="107dp"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="@+id/field_email"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/sign_up_button"
         android:layout_width="126dp"
         android:layout_height="49dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginTop="45dp"
-        android:text="Log In"
-        app:layout_constraintEnd_toStartOf="@+id/create_account_button"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="48dp"
+        android:onClick="onClick"
+        android:text="Sign up"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/field_password" />
 
     <Button
-        android:id="@+id/create_account_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/log_in_button"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="41dp"
         android:onClick="onClick"
-        android:text="Create Account"
-        app:layout_constraintBaseline_toBaselineOf="@+id/login_button"
+        android:text="Log in"
+        app:layout_constraintBaseline_toBaselineOf="@+id/sign_up_button"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:layout_marginBottom="144dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
