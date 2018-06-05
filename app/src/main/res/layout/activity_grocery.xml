@@ -9,35 +9,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
+
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/addText"
-                android:inputType="textAutoComplete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center_horizontal"
-                android:hint="Add Grocery" />
-
-            <Button
-                android:id="@+id/addButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="addGroceryListener"
-                android:gravity="center_horizontal"
-                android:text="Add" />
-
-        </LinearLayout>
+        
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         </ListView>
-        
+
     </LinearLayout>
 
     </LinearLayout>
