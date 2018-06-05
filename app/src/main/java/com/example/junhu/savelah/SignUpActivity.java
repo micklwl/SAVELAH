@@ -33,7 +33,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         editTextPassword = findViewById(R.id.field_password);
         progressBar = findViewById(R.id.progressbar);
         mAuth = FirebaseAuth.getInstance();
-        findViewById(R.id.sign_up_button).setOnClickListener(this);
+        findViewById(R.id.register_button).setOnClickListener(this);
+        findViewById(R.id.login_button).setOnClickListener(this);
+
     }
 
     private void registerUser(){
@@ -76,6 +78,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     if(task.getException() instanceof FirebaseAuthUserCollisionException) {
                         Toast.makeText(getApplicationContext(), "User with Email id already exists", Toast.LENGTH_SHORT).show();
                     }
+
                     else Toast.makeText(getApplicationContext(), "Some Error Occurred", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -86,10 +89,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view){
         switch(view.getId()){
-            case R.id.sign_up_button:
+            case R.id.register_button:
                 registerUser();
                 break;
-            case R.id.log_in_button:
+            case R.id.login_button:
                 startActivity(new Intent(this, MainActivity.class));
                 break;
         }
