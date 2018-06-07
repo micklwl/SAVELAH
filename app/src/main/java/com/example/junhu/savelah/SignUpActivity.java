@@ -93,6 +93,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 registerUser();
                 break;
             case R.id.login_button:
+                finish();
                 startActivity(new Intent(this, MainActivity.class));
                 break;
         }

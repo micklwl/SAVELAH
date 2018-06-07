@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressBar.setVisibility(View.GONE);
                 if(task.isSuccessful()){
+                    finish();
                     Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -96,13 +97,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+        if (mAuth.getCurrentUser() != null){
+            finish();
+            startActivity(new Intent(this, ProfileActivity.class));
+        }
     }
 
     @Override
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.create_account_button:
+                finish();
                 startActivity(new Intent(this, SignUpActivity.class));
                 break;
             case R.id.login_button:

@@ -29,10 +29,12 @@ public class GroceryActivity extends AppCompatActivity {
     private ArrayList<String> list;
     private ArrayAdapter<String> adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery);
+
         // Initalise widgets
         toAdd = findViewById(R.id.addText);
         groceryList = findViewById(R.id.groceryList);

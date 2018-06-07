@@ -42,14 +42,16 @@
 
     </RelativeLayout>
 
-    <EditText
-    android:id="@+id/editTextDisplayName"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Enter Display Name" />
+    <TextView
+        android:id="@+id/ShowEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button" />
 
     <Button
-    android:id="@+id/buttonSave"
+    android:id="@+id/buttonPW"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -57,7 +59,28 @@
     android:background="@drawable/rounded_button_solid"
     android:paddingLeft="55dp"
     android:paddingRight="55dp"
-    android:text="Save"
+    android:text="Change Password"
     android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/buttonSignOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/rounded_button_solid"
+        android:paddingLeft="55dp"
+        android:paddingRight="55dp"
+        android:text="Sign Out"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/buttonGrocery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="Grocery List"
+        android:textAllCaps="false"/>
 
 </LinearLayout>
