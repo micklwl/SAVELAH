@@ -8,12 +8,15 @@ import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,10 +27,11 @@ import java.util.ArrayList;
 
 public class GroceryActivity extends AppCompatActivity {
     private EditText toAdd;
-    private ListView groceryList;
     private EditText findList;
+    private ListView groceryList;
     private ArrayList<String> list;
     private ArrayAdapter<String> adapter;
+    private FirebaseUser user;
 
 
     @Override
@@ -37,10 +41,13 @@ public class GroceryActivity extends AppCompatActivity {
 
         // Initalise widgets
         toAdd = findViewById(R.id.addText);
+        findList = findViewById(R.id.findText);
         groceryList = findViewById(R.id.groceryList);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-        groceryList.setAdapter(adapter);
         registerForContextMenu(groceryList);
+//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+//        groceryList.setAdapter(adapter);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+  //      Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
     }
     // to create options list to delete grocery
     @Override
@@ -49,10 +56,22 @@ public class GroceryActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.grocery, menu);
     }
- // to fill up :
+
+    private void deleteGrocery(String key) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Grocery");
+        mDatabase.child(key).removeValue();
+    }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.delGrocery :
+             int position = info.position;
+             deleteGrocery(list.get(position));
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     private void addGrocery() {
@@ -68,21 +87,25 @@ public class GroceryActivity extends AppCompatActivity {
         }
     }
 
+    public void addGroceryListener(View view) {
+        addGrocery();
+    }
+
     ChildEventListener ls = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
             list.add(dataSnapshot.getValue(String.class));
-            adapter.notifyDataSetChanged();
+           // adapter.notifyDataSetChanged();
         }
 
         @Override
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
         }
-
         @Override
         public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+            list.remove(dataSnapshot.getValue(String.class));
+          //  adapter.notifyDataSetChanged();
         }
 
         @Override
@@ -95,15 +118,6 @@ public class GroceryActivity extends AppCompatActivity {
 
         }
     };
-
-    private void deleteGrocery(String key) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Grocery");
-        mDatabase.child(key).removeValue();
-    }
-
-    public void addGroceryListener(View view) {
-        addGrocery();
-    }
 
     public void getList(){
         findList = findViewById(R.id.findText);
