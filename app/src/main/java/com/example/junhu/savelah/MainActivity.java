@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText editTextPassword;
     ProgressBar progressBar;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.create_account_button).setOnClickListener(this);
         findViewById(R.id.login_button).setOnClickListener(this);
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null){
-
-                }
-            }
-        };
     }
 
     private void userLogin(){
@@ -83,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 progressBar.setVisibility(View.GONE);
                 if(task.isSuccessful()){
                     finish();
-                    Intent intent = new Intent(MainActivity.this, GroceryActivity.class);
+                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
