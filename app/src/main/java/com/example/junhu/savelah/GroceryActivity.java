@@ -33,10 +33,12 @@ public class GroceryActivity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference mDatabase;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery);
+
         // Initalise widgets
         toAdd = findViewById(R.id.addText);
         findList = findViewById(R.id.findText);
