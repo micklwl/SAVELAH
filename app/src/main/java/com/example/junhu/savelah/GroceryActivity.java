@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -23,15 +22,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GroceryActivity extends AppCompatActivity {
     private EditText toAdd;
     private EditText findList;
     private ListView groceryList;
-    private ArrayList<String> list;
-    private ArrayAdapter<String> adapter;
+    private ArrayList<String> list = new ArrayList<>();
     private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +42,38 @@ public class GroceryActivity extends AppCompatActivity {
         findList = findViewById(R.id.findText);
         groceryList = findViewById(R.id.groceryList);
         registerForContextMenu(groceryList);
-//        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
-//        groceryList.setAdapter(adapter);
         user = FirebaseAuth.getInstance().getCurrentUser();
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        groceryList.setAdapter(adapter);
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        mDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                list.add(dataSnapshot.getValue(String.class));
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                list.remove(dataSnapshot.getValue(String.class));
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
   //      Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
     }
     // to create options list to delete grocery
@@ -75,7 +104,6 @@ public class GroceryActivity extends AppCompatActivity {
     private void addGrocery() {
         String str = toAdd.getText().toString().trim();
         if (!str.isEmpty()) {
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
             String listID = mDatabase.push().getKey();
             if (listID != null) {
                 mDatabase.child(listID).setValue(str);
@@ -88,34 +116,6 @@ public class GroceryActivity extends AppCompatActivity {
     public void addGroceryListener(View view) {
         addGrocery();
     }
-
-    ChildEventListener ls = new ChildEventListener() {
-        @Override
-        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            list.add(dataSnapshot.getValue(String.class));
-           // adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-        }
-        @Override
-        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            list.remove(dataSnapshot.getValue(String.class));
-          //  adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-        }
-    };
 
     public void getList(){
         findList = findViewById(R.id.findText);
