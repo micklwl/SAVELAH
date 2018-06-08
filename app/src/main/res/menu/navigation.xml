@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_grocery"
+        android:icon="@drawable/icon_camera"
+        android:title="Grocery List"/>
+
+    <item
+        android:id="@+id/navigation_recipe"
+        android:icon="@drawable/icon_camera"
+        android:title="Recipe"/>
+
+    <item
+        android:id="@+id/navigation_calendar"
+        android:icon="@drawable/icon_camera"
+        android:title="Calendar"/>
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/icon_camera"
+        android:title="Profile"/>
+
+</menu>

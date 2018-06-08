@@ -23,8 +23,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".ProfileActivity"/>
-        <activity android:name=".GroceryActivity"/>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".GroceryActivity" />
+        <activity
+            android:name=".RecipeActivity"
+            android:label="@string/title_activity_recipe"></activity>
     </application>
 
 </manifest>

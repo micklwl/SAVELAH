@@ -1,86 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ProfileActivity">
+    tools:context=".ProfileActivity"
+    tools:layout_editor_absoluteY="81dp">
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:background="#ffffff" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#ffffff"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Tap on camera to choose profile picture"
-    android:textAlignment="center"
-    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="26dp"
+        android:text="Tap on camera to choose profile picture"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="27dp"
+        android:layout_marginTop="14dp"
         android:background="@drawable/icon_camera"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="@+id/ShowEmail"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <ProgressBar
         android:id="@+id/progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone" />
+        android:layout_marginBottom="47dp"
+        android:layout_marginEnd="78dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    </RelativeLayout>
 
     <TextView
         android:id="@+id/ShowEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="31dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button"
+        app:layout_constraintBottom_toTopOf="@+id/buttonPW"
+        app:layout_constraintEnd_toEndOf="@+id/buttonPW"
+        app:layout_constraintStart_toStartOf="@+id/buttonPW"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
-    android:id="@+id/buttonPW"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:layout_marginTop="25dp"
-    android:background="@drawable/rounded_button_solid"
-    android:paddingLeft="55dp"
-    android:paddingRight="55dp"
-    android:text="Change Password"
-    android:textAllCaps="false" />
+        android:id="@+id/buttonPW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="69dp"
+        android:layout_marginTop="59dp"
+        android:background="@drawable/rounded_button_solid"
+        android:paddingLeft="55dp"
+        android:paddingRight="55dp"
+        android:text="Change Password"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/buttonSignOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="25dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="9dp"
         android:background="@drawable/rounded_button_solid"
         android:paddingLeft="55dp"
         android:paddingRight="55dp"
         android:text="Sign Out"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@+id/buttonPW"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPW" />
 
     <Button
         android:id="@+id/buttonGrocery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="23dp"
         android:text="Grocery List"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="@+id/buttonSignOut"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSignOut" />
 
-</LinearLayout>
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/navigation" />
+
+
+</android.support.constraint.ConstraintLayout>
