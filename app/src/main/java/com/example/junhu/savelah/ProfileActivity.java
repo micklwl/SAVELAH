@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -31,10 +33,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         editTextEmail = findViewById(R.id.ShowEmail);
         mAuth = FirebaseAuth.getInstance();
+        BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
+        bottombar.enableAnimation(false);
+        bottombar.enableShiftingMode(false);
+        bottombar.enableItemShiftingMode(false);
+        bottombar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.navigation_grocery:
+                        startActivity(new Intent(ProfileActivity.this, GroceryActivity.class)) ;
+                        break;
+                    case R.id.navigation_recipe:
+                        startActivity(new Intent(ProfileActivity.this, RecipeActivity.class)) ;
+                        break;
+                    case R.id.navigation_calendar:
+
+                        break;
+                    case R.id.navigation_profile:
+
+                        break;
+                }
+                return false;
+            }
+        });
 
         findViewById(R.id.buttonPW).setOnClickListener(this);
         findViewById(R.id.buttonSignOut).setOnClickListener(this);
-        findViewById(R.id.buttonGrocery).setOnClickListener(this);
+
 
         loadUserInformation();
 
@@ -69,9 +95,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 startActivity(new Intent(this, MainActivity.class));
-                break;
-            case R.id.buttonGrocery:
-                startActivity(new Intent(this, GroceryActivity.class));
                 break;
         }
     }

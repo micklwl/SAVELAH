@@ -8,48 +8,48 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="457dp"
         android:orientation="vertical">
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:rowCount="2"
-        android:columnCount="2">
-
-        <EditText
-            android:id="@+id/addText"
-            android:layout_width="323dp"
+        <GridLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:hint="Add Grocery"
-            android:inputType="textAutoComplete" />
+            android:columnCount="2"
+            android:rowCount="2">
 
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:onClick="addGroceryListener"
-            android:text="Add" />
+            <EditText
+                android:id="@+id/addText"
+                android:layout_width="323dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:hint="Add Grocery"
+                android:inputType="textAutoComplete" />
 
-        <EditText
-            android:id="@+id/findText"
-            android:inputType="textAutoComplete"
-            android:layout_width="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:layout_height="wrap_content"
-            android:hint="Name of List" />
+            <Button
+                android:id="@+id/addButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:onClick="addGroceryListener"
+                android:text="Add" />
 
-        <Button
-            android:id="@+id/findButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="findListListener"
-            android:gravity="center"
-            android:text="GO" />
+            <EditText
+                android:id="@+id/findText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:hint="Name of List"
+                android:inputType="textAutoComplete" />
 
-    </GridLayout>
+            <Button
+                android:id="@+id/findButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:onClick="findListListener"
+                android:text="GO" />
+
+        </GridLayout>
 
         <ListView
             android:id="@+id/groceryList"
@@ -59,24 +59,17 @@
 
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <android.support.design.widget.BottomNavigationView
+    <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
         android:id="@+id/navigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/navigation" />
 
 </android.support.constraint.ConstraintLayout>

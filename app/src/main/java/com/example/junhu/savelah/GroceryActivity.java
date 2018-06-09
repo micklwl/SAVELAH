@@ -1,7 +1,9 @@
 package com.example.junhu.savelah;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -77,6 +80,30 @@ public class GroceryActivity extends AppCompatActivity {
             }
         });
   //      Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
+        BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
+        bottombar.enableAnimation(false);
+        bottombar.enableShiftingMode(false);
+        bottombar.enableItemShiftingMode(false);
+        bottombar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.navigation_grocery:
+
+                        break;
+                    case R.id.navigation_recipe:
+                        startActivity(new Intent(GroceryActivity.this, RecipeActivity.class)) ;
+                        break;
+                    case R.id.navigation_calendar:
+
+                        break;
+                    case R.id.navigation_profile:
+                        startActivity(new Intent(GroceryActivity.this, ProfileActivity.class)) ;
+                        break;
+                }
+                return false;
+            }
+        });
     }
     // to create options list to delete grocery
     @Override
