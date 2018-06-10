@@ -16,18 +16,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
     EditText editTextEmail;
     EditText editTextPassword;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     ProgressBar progressBar;
     private static final String TAG = SignUpActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         setContentView(R.layout.activity_sign_up);
         editTextEmail = findViewById(R.id.field_email);
         editTextPassword = findViewById(R.id.field_password);
@@ -39,9 +43,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void registerUser(){
-        String email = editTextEmail.getText().toString().trim();
+       final String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
-
         if (email.isEmpty()){
             editTextEmail.setError("Email is required");
             editTextEmail.requestFocus();
@@ -71,6 +74,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressBar.setVisibility(View.GONE);
                 if (task.isSuccessful()){
+                    Customer c = new Customer();
+                    c.setEmail(email);
+                    mDatabase.child(email).setValue(c);
+//                    mDatabase.push().setValue(c);
                     Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -78,7 +85,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     if(task.getException() instanceof FirebaseAuthUserCollisionException) {
                         Toast.makeText(getApplicationContext(), "User with Email id already exists", Toast.LENGTH_SHORT).show();
                     }
-
                     else Toast.makeText(getApplicationContext(), "Some Error Occurred", Toast.LENGTH_SHORT).show();
                 }
             }
