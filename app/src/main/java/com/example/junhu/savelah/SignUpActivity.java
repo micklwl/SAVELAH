@@ -80,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                     mDatabase.child("Users:").child(fUser.getUid()).child("Email").setValue(email);
                     Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
+                    mAuth.signOut();
                 } else {
                     Log.w(TAG, "signInWithCredential", task.getException());
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
