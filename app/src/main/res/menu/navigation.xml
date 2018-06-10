@@ -3,21 +3,21 @@
     <item
         android:id="@+id/navigation_grocery"
         android:icon="@drawable/grocery"
-        android:title="Grocery List"/>
+        android:title="@string/grocery_list"/>
 
     <item
         android:id="@+id/navigation_recipe"
         android:icon="@drawable/recipe"
-        android:title="Recipe"/>
+        android:title="@string/recipes"/>
 
     <item
         android:id="@+id/navigation_calendar"
         android:icon="@drawable/calendar"
-        android:title="Calendar"/>
+        android:title="@string/calendar"/>
 
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/profile"
-        android:title="Profile"/>
+        android:title="@string/profile"/>
 
 </menu>

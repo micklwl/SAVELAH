@@ -15,6 +15,10 @@
     <string name="return_to_log_in_page">Return to Log In Page</string>
     <string name="password">Password:</string>
     <string name="email">Email:</string>
+    <string name="calendar">Calendar</string>
+    <string name="profile">Profile</string>
+    <string name="recipes">Recipes</string>
+    <string name="grocery_list">Grocery List</string>
 
 
     <!-- Strings related to login -->
