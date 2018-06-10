@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -23,9 +25,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GroceryActivity extends AppCompatActivity {
@@ -35,13 +37,18 @@ public class GroceryActivity extends AppCompatActivity {
     private ArrayList<String> list = new ArrayList<>();
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private DatabaseReference customer;
 
-
+    private DatabaseReference initialiseDatabase(final FirebaseUser u, final DatabaseReference ref) {
+      Query user = ref.orderByChild("email").equalTo(u.getEmail());
+      user.keepSynced(true);
+        Log.d("ref",user.toString());
+      return user.getRef();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery);
-
         // Initalise widgets
         toAdd = findViewById(R.id.addText);
         findList = findViewById(R.id.findText);
@@ -51,7 +58,9 @@ public class GroceryActivity extends AppCompatActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
         mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-        mDatabase.addChildEventListener(new ChildEventListener() {
+     //   Toast.makeText(this, mDatabase.getKey(), Toast.LENGTH_LONG).show();
+        customer = initialiseDatabase(user, mDatabase);
+        customer.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 list.add(dataSnapshot.getValue(String.class));
@@ -67,7 +76,7 @@ public class GroceryActivity extends AppCompatActivity {
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 list.remove(dataSnapshot.getValue(String.class));
                 adapter.notifyDataSetChanged();
-            }
+        }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -79,7 +88,7 @@ public class GroceryActivity extends AppCompatActivity {
 
             }
         });
-  //      Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
+   // Toast.makeText(this, user.getEmail(), Toast.LENGTH_LONG).show();
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
         bottombar.enableShiftingMode(false);
@@ -89,13 +98,11 @@ public class GroceryActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.navigation_grocery:
-
                         break;
                     case R.id.navigation_recipe:
                         startActivity(new Intent(GroceryActivity.this, RecipeActivity.class)) ;
                         break;
                     case R.id.navigation_calendar:
-
                         break;
                     case R.id.navigation_profile:
                         startActivity(new Intent(GroceryActivity.this, ProfileActivity.class)) ;
@@ -125,6 +132,7 @@ public class GroceryActivity extends AppCompatActivity {
             case R.id.delGrocery :
              int position = info.position;
              deleteGrocery(list.get(position));
+             return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -133,10 +141,14 @@ public class GroceryActivity extends AppCompatActivity {
     private void addGrocery() {
         String str = toAdd.getText().toString().trim();
         if (!str.isEmpty()) {
-            String listID = mDatabase.push().getKey();
-            if (listID != null) {
-                mDatabase.child(listID).setValue(str);
+          String listID = mDatabase.push().getKey();
+           if (listID != null) {
+              // DatabaseReference ref = mDatabase.child(user.getEmail());
+               mDatabase.child(listID).setValue(str);
+          //  if (user.getEmail()!= null) {
+         //      DatabaseReference ref = mDatabase.child(user.getEmail());
             }
+          //  }
         } else {
             Toast.makeText(this,"Please enter grocery name", Toast.LENGTH_SHORT).show();
         }

@@ -60,11 +60,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         findViewById(R.id.buttonPW).setOnClickListener(this);
         findViewById(R.id.buttonSignOut).setOnClickListener(this);
-
-
         loadUserInformation();
-
-
     }
 
     @Override
