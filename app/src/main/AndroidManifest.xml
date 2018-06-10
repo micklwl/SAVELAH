@@ -27,7 +27,8 @@
         <activity android:name=".GroceryActivity" />
         <activity
             android:name=".RecipeActivity"
-            android:label="@string/title_activity_recipe"></activity>
+            android:label="@string/title_activity_recipe" />
+        <activity android:name=".RecipeSearchActivity"></activity>
     </application>
 
 </manifest>
