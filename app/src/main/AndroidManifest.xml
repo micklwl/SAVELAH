@@ -32,7 +32,8 @@
         <activity
             android:name=".RecipeActivity"
             android:label="@string/title_activity_recipe" />
-        <activity android:name=".RecipeSearchActivity"></activity>
+        <activity android:name=".RecipeSearchActivity" />
+        <activity android:name=".SharedListActivity"></activity>
     </application>
 
 </manifest>

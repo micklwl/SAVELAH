@@ -20,6 +20,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
     EditText editTextEmail;
@@ -78,7 +81,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 if (task.isSuccessful()) {
                     FirebaseUser fUser = mAuth.getCurrentUser();
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                    mDatabase.child("Users:").child(fUser.getUid()).child("Email").setValue(email);
+                    Customer c = new Customer(email);
+                    c.initialiseRecipe();
+                    mDatabase.child("Users").child(fUser.getUid()).setValue(c);
+//                    mDatabase.child("Users:").child(fUser.getUid()).child("Email").setValue(email);
+//                    HashMap<String, String> map = new HashMap<>();
+//                    map.put("tomato", "Tuesday");
+//                    mDatabase.child("Users:").child(fUser.getUid()).child("List").setValue(map);
                     Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 } else {
