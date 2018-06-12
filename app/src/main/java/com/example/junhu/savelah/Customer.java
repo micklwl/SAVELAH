@@ -7,7 +7,7 @@ import java.util.List;
 public class Customer {
 
     private String email;
-    private List<String> recipe;
+    private HashMap<String,String> recipe;
     private List<String> members;
 
     private Customer() {}
@@ -32,16 +32,16 @@ public class Customer {
     }
 
     public void initialiseRecipe() {
-        this.recipe = new ArrayList<>();
-        recipe.add("fish");
+        this.recipe = new HashMap<>();
+        recipe.put("fish", "12 June");
         this.members = new ArrayList<>();
         members.add("junhui096@gmail.com");
     }
-    public List<String> getRecipe() {
+    public HashMap<String, String> getRecipe() {
         return this.recipe;
     }
     public void addIngredient(String ingredient) {
-        recipe.add(ingredient);
+        recipe.put(ingredient, "default");
     }
 
 }
