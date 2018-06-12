@@ -33,12 +33,12 @@ import java.util.HashMap;
 
 public class GroceryActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
-    private int nextIndex;
     private EditText toAdd;
     private EditText findList;
     private ListView groceryList;
     private ArrayList<String> list = new ArrayList<>();
     private FirebaseUser user;
+    private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
 
     @Override
@@ -54,7 +54,8 @@ public class GroceryActivity extends AppCompatActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
         Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
-        mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+        initDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        mDatabase = initDatabase.child(user.getUid());
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -132,24 +133,50 @@ public class GroceryActivity extends AppCompatActivity {
         addGrocery();
     }
 
-//    public void findListListener(View view) {
-//        final String sharedEmail = findList.getText().toString().trim();
-//        Query query = customer.orderByChild("Collaborators").equalTo(sharedEmail);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.exists()) {
-//                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
-//                    intent.putExtra(EXTRA_MESSAGE, sharedEmail);
-//                } else{
-//                    Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+    public void findListListener(View view) {
+        final String sharedEmail = findList.getText().toString().trim();
+        Query query = mDatabase.child("members").orderByValue().equalTo(sharedEmail);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d("onDataChanges", dataSnapshot.getValue() + "");
+                if(dataSnapshot.exists()) {
+                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
+                    intent.putExtra(EXTRA_MESSAGE, sharedEmail);
+                    startActivity(intent);
+                } else{
+                    Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void shareListListener(View view) {
+        final String emailToShare = findList.getText().toString().trim();
+        Query query = initDatabase.orderByChild("email").equalTo(emailToShare);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Customer c = dataSnapshot.child("Users").getValue(DataSnapshot.class).getValue(Customer.class);
+                    String ID = c.getUid();
+                    Log.d("shareListLL", c.getEmail());
+                //    mDatabase.child("members").child(ID).setValue(emailToShare);
+                } else {
+                    Toast.makeText(GroceryActivity.this,"No such user in SAVELAH", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 }
