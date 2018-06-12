@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ProgressBar progressBar;
     private FirebaseAuth mAuth;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

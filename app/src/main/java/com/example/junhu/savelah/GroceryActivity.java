@@ -29,8 +29,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GroceryActivity extends AppCompatActivity {
+    public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
+    private int nextIndex;
     private EditText toAdd;
     private EditText findList;
     private ListView groceryList;
@@ -40,10 +43,8 @@ public class GroceryActivity extends AppCompatActivity {
     private DatabaseReference customer;
 
     private DatabaseReference initialiseDatabase(final FirebaseUser u, final DatabaseReference ref) {
-      Query user = ref.orderByChild("email").equalTo(u.getEmail());
-      user.keepSynced(true);
-        Log.d("ref",user.toString());
-      return user.getRef();
+       String uid =  u.getUid();
+        return ref.child(uid);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,30 +58,17 @@ public class GroceryActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
-        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
-     //   Toast.makeText(this, mDatabase.getKey(), Toast.LENGTH_LONG).show();
-        customer = initialiseDatabase(user, mDatabase);
-        customer.addChildEventListener(new ChildEventListener() {
+        Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                list.add(dataSnapshot.getValue(String.class));
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Customer c = dataSnapshot.getValue(Customer.class);
+                nextIndex = c.getRecipe().size();
+                list.clear();
+                list.addAll(c.getRecipe());
+                Log.d("hello", "onDataChange: " + list);
                 adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                list.remove(dataSnapshot.getValue(String.class));
-                adapter.notifyDataSetChanged();
-        }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
             }
 
             @Override
@@ -120,9 +108,8 @@ public class GroceryActivity extends AppCompatActivity {
         inflater.inflate(R.menu.grocery, menu);
     }
 
-    private void deleteGrocery(String key) {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Grocery");
-        mDatabase.child(key).removeValue();
+    private void deleteGrocery(int key) {
+        mDatabase.child("recipe").child(key + "").removeValue();
     }
 
     @Override
@@ -131,7 +118,7 @@ public class GroceryActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.delGrocery :
              int position = info.position;
-             deleteGrocery(list.get(position));
+             deleteGrocery(position);
              return true;
             default:
                 return super.onContextItemSelected(item);
@@ -139,31 +126,33 @@ public class GroceryActivity extends AppCompatActivity {
     }
 
     private void addGrocery() {
-        String str = toAdd.getText().toString().trim();
-        if (!str.isEmpty()) {
-          String listID = mDatabase.push().getKey();
-           if (listID != null) {
-              // DatabaseReference ref = mDatabase.child(user.getEmail());
-               mDatabase.child(listID).setValue(str);
-          //  if (user.getEmail()!= null) {
-         //      DatabaseReference ref = mDatabase.child(user.getEmail());
-            }
-          //  }
-        } else {
-            Toast.makeText(this,"Please enter grocery name", Toast.LENGTH_SHORT).show();
-        }
+        final String str = toAdd.getText().toString().trim();
+        mDatabase.child("recipe").child(nextIndex + "").setValue(str);
+        Log.d("hello", "addGrocery: " + str);
     }
 
     public void addGroceryListener(View view) {
         addGrocery();
     }
 
-    public void getList(){
-        findList = findViewById(R.id.findText);
-        String str = findList.getText().toString().trim();
-    }
-
     public void findListListener(View view) {
-        getList();
+        final String sharedEmail = findList.getText().toString().trim();
+        Query query = customer.orderByChild("Collaborators").equalTo(sharedEmail);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
+                    intent.putExtra(EXTRA_MESSAGE, sharedEmail);
+                } else{
+                    Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
