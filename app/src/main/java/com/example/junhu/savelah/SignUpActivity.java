@@ -81,13 +81,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                 if (task.isSuccessful()) {
                     FirebaseUser fUser = mAuth.getCurrentUser();
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                    Customer c = new Customer(email);
+                    Customer c = new Customer(email,fUser.getUid());
                     c.initialiseRecipe();
                     mDatabase.child("Users").child(fUser.getUid()).setValue(c);
-//                    mDatabase.child("Users:").child(fUser.getUid()).child("Email").setValue(email);
-//                    HashMap<String, String> map = new HashMap<>();
-//                    map.put("tomato", "Tuesday");
-//                    mDatabase.child("Users:").child(fUser.getUid()).child("List").setValue(map);
                     Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 } else {

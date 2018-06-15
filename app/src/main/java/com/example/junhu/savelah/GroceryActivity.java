@@ -25,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -33,12 +34,12 @@ import java.util.HashMap;
 
 public class GroceryActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
-    private int nextIndex;
     private EditText toAdd;
     private EditText findList;
     private ListView groceryList;
     private ArrayList<String> list = new ArrayList<>();
     private FirebaseUser user;
+    private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
 
     @Override
@@ -54,7 +55,8 @@ public class GroceryActivity extends AppCompatActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
         Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
-        mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+        initDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        mDatabase = initDatabase.child(user.getUid());
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -132,24 +134,63 @@ public class GroceryActivity extends AppCompatActivity {
         addGrocery();
     }
 
-//    public void findListListener(View view) {
-//        final String sharedEmail = findList.getText().toString().trim();
-//        Query query = customer.orderByChild("Collaborators").equalTo(sharedEmail);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.exists()) {
+    public void findListListener(View view) {
+        final String sharedEmail = findList.getText().toString().trim();
+        final String decodedEmail = sharedEmail.replace(".", ",");
+        Query query = mDatabase.child("members").orderByKey().equalTo(decodedEmail);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    GenericTypeIndicator<HashMap<String, String>> t = new GenericTypeIndicator<HashMap<String,String>>() {};
+                    HashMap <String, String> map = dataSnapshot.getValue(t);
+                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
+                    intent.putExtra(EXTRA_MESSAGE, map.get(decodedEmail));
+                    startActivity(intent);
+                   // Log.d("onDataChanges", dataSnapshot.getValue());
 //                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
 //                    intent.putExtra(EXTRA_MESSAGE, sharedEmail);
-//                } else{
-//                    Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+//                    startActivity(intent);
+                } else{
+                    Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void shareListListener(View view) {
+        final String emailToShare = findList.getText().toString().trim();
+        // encode email by replacing . with ,
+        final String newEmail = emailToShare.replace(".", ",");
+        Log.d("Listener", newEmail);
+        Query query = initDatabase.orderByChild("email").equalTo(emailToShare);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    //Customer c = dataSnapshot.child("Users").getValue(DataSnapshot.class).getValue(Customer.class);
+                    //String ID = c.getUid();
+                    GenericTypeIndicator<HashMap<String, Customer>> t = new GenericTypeIndicator<HashMap<String,Customer>>() {};
+                    String[] a = new String[1];
+                    String[] b = dataSnapshot.getValue(t).keySet().toArray(a);
+                    mDatabase.child("members").child(newEmail).setValue(b[0]);
+//                    Log.d("shareHello", dataSnapshot.getValue(t).keySet().toString());
+                //    mDatabase.child("members").child(ID).setValue(emailToShare);
+                } else {
+                    Toast.makeText(GroceryActivity.this,"No such user in SAVELAH", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 }

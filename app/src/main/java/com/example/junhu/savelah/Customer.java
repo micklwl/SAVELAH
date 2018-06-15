@@ -5,15 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Customer {
-
+    private String uid;
     private String email;
     private HashMap<String,String> recipe;
-    private List<String> members;
+    private HashMap<String, String> members;
 
     private Customer() {}
 
-    public Customer(String email) {
+    public Customer(String email, String uid) {
         this.email = email;
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -23,19 +24,18 @@ public class Customer {
         this.email = email;
     }
 
-    public List<String> getMembers() {
-        return this.members;
+    public String getUid(){
+        return this.uid;
     }
 
-    public void addMember(String email){
-        this.members.add(email);
+    public HashMap<String, String> getMembers() {
+        return this.members;
     }
 
     public void initialiseRecipe() {
         this.recipe = new HashMap<>();
         recipe.put("fish", "12 June");
-        this.members = new ArrayList<>();
-        members.add("junhui096@gmail.com");
+        this.members = new HashMap<>();
     }
     public HashMap<String, String> getRecipe() {
         return this.recipe;
