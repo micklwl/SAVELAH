@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HTTP_RecipeShort {
-    private ArrayList<Recipe_Short> results;
+    private List<Recipe_Short> results;
     private String baseUri;
     private int offset;
     private int number;
@@ -15,7 +15,7 @@ public class HTTP_RecipeShort {
     private long expires;
     private boolean isStale;
 
-    private HTTP_RecipeShort(String baseUri, long expires, boolean isStale, int number, int offset, int processingTimeMs, ArrayList<Recipe_Short> results, int totalResults) {
+    private HTTP_RecipeShort(String baseUri, long expires, boolean isStale, int number, int offset, int processingTimeMs, List<Recipe_Short> results, int totalResults) {
         this.baseUri = baseUri;
         this.expires = expires;
         this.isStale = isStale;
@@ -62,7 +62,7 @@ public class HTTP_RecipeShort {
         return processingTimeMs;
     }
 
-    public ArrayList<Recipe_Short> getResults() {
+    public List<Recipe_Short> getResults() {
         return results;
     }
 

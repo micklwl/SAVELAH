@@ -18,7 +18,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.junhu.savelah.adapter.FoodAdapter;
+//import com.example.junhu.savelah.adapter.FoodAdapter;
 import com.example.junhu.savelah.dataObjects.HTTP_RecipeShort;
 import com.example.junhu.savelah.dataObjects.Recipe_Short;
 import com.google.gson.Gson;
@@ -62,7 +62,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
     private static final int    resultNumber = 20;
     private int offset;
     private String type;
-    FoodAdapter test;
+    //FoodAdapter test;
 
     //static final String xMashapeKey = "mFpLVZi0g1mshN4KsSrVPNXmfYATp1qkdk9jsnFqTeb4ks0NAc";
     //static final String API_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search";
@@ -100,8 +100,6 @@ public class RecipeSearchActivity extends AppCompatActivity{
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         searchItem = (EditText) findViewById(R.id.groceryItem);
 
-        // Configuration parameters
-        com.mashape.p.spoonacularrecipefoodnutritionv1.Configuration.initialize(this.getBaseContext());
         Button queryButton = (Button) findViewById(R.id.queryButton);
 
         queryButton.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +112,9 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 }
             }
         });
+
+        // Configuration parameters
+        com.mashape.p.spoonacularrecipefoodnutritionv1.Configuration.initialize(this.getBaseContext());
     }
 
     private void doSearch(boolean nextSet) {

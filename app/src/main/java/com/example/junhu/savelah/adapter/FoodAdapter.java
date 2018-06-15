@@ -16,7 +16,7 @@ import com.example.junhu.savelah.dataObjects.Recipe_Short;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodAdapter extends ArrayAdapter<Recipe_Short> {
+/*public class FoodAdapter extends ArrayAdapter<Recipe_Short> {
 
     public FoodAdapter (Context context,ArrayList<Recipe_Short> recipe_Short) {
         super(context, 0,recipe_Short );
@@ -42,4 +42,4 @@ public class FoodAdapter extends ArrayAdapter<Recipe_Short> {
     }
 
 
-}
+} */
