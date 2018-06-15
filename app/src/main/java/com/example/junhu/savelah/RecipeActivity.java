@@ -6,11 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,15 @@ public class RecipeActivity extends AppCompatActivity {
                 return false;
             }
         });
+        findViewById(R.id.searchButton).setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View view){
+        switch(view.getId()){
+            case R.id.searchButton:
+                startActivity(new Intent(this, RecipeSearchActivity.class));
+                break;
+        }
+    }
 }
