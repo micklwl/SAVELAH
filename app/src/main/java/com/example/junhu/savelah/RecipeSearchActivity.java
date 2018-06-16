@@ -140,13 +140,16 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 // Get the recipe results:
                 List<Recipe_Short> data = handler.getResults();
 
+                List temp = new ArrayList<Recipe>();
+                results.clear();
                 for (Recipe_Short i : data) {
                     String title = i.getTitle();
                     String suffix = i.getImage();
                     String urlFinal = handler.getBaseUri() + suffix;
-                    results.add(new Recipe(title, urlFinal));
-                    adapter.notifyDataSetChanged();
+                    temp.add(new Recipe(title, urlFinal));
                 }
+                results.addAll(temp);
+                adapter.notifyDataSetChanged();
                 // Load data in handler:
              //   PocketKitchenData pkData = PocketKitchenData.getInstance();
                 if (!nextSet) {
