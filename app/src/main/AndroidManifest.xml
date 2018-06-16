@@ -15,10 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="xmashapekey"
             android:value="XDldRKNWBVmshAwM842H5IykN8TLp1PF0BrjsnHZvSIqrmdtt1" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,7 @@
             android:name=".RecipeActivity"
             android:label="@string/title_activity_recipe" />
         <activity android:name=".RecipeSearchActivity" />
-        <activity android:name=".SharedListActivity"></activity>
+        <activity android:name=".SharedListActivity" />
     </application>
 
 </manifest>
