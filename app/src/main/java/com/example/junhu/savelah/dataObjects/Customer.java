@@ -1,4 +1,4 @@
-package com.example.junhu.savelah;
+package com.example.junhu.savelah.dataObjects;
 
 import java.util.HashMap;
 
