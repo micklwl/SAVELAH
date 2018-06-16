@@ -22,8 +22,9 @@
                 android:id="@+id/groceryItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textAutoComplete"
                 android:focusable="true"
-                android:hint="Enter grocery item" />
+                android:hint="@string/enter_grocery_item" />
 
             <Button
                 android:id="@+id/queryButton"
@@ -31,10 +32,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="Search" />
+                android:text="@string/search" />
 
             <ListView
-                android:id="@+id/recipe_list"
+                android:id="@+id/listOfRecipes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="57dp"

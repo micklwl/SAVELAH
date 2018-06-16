@@ -1,53 +1,35 @@
 package com.example.junhu.savelah;
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 //import com.example.junhu.savelah.adapter.FoodAdapter;
+import com.example.junhu.savelah.adapter.CustomListAdapter;
 import com.example.junhu.savelah.dataObjects.HTTP_RecipeShort;
 import com.example.junhu.savelah.dataObjects.Recipe_Short;
-import com.google.gson.Gson;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.SpoonacularAPIClient;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.controllers.APIController;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.http.client.APICallBack;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.http.client.HttpContext;
-import com.mashape.p.spoonacularrecipefoodnutritionv1.http.response.HttpResponse;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.models.DynamicResponse;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
-
-
-
 
 public class RecipeSearchActivity extends AppCompatActivity{
     private EditText searchItem;
@@ -62,6 +44,8 @@ public class RecipeSearchActivity extends AppCompatActivity{
     private static final int    resultNumber = 20;
     private int offset;
     private String type;
+    private ArrayList<Recipe> results;
+    private CustomListAdapter adapter;
     //FoodAdapter test;
 
     //static final String xMashapeKey = "mFpLVZi0g1mshN4KsSrVPNXmfYATp1qkdk9jsnFqTeb4ks0NAc";
@@ -94,12 +78,12 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 return false;
             }
         });
-
-        recipeResults= (ListView) findViewById(R.id.recipe_list);
-
+        recipeResults = (ListView) findViewById(R.id.listOfRecipes);
+        results = new ArrayList<Recipe>();
+        adapter = new CustomListAdapter(getApplicationContext(), R.layout.recipe_search_list, results);
+        recipeResults.setAdapter(adapter);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         searchItem = (EditText) findViewById(R.id.groceryItem);
-
         Button queryButton = (Button) findViewById(R.id.queryButton);
 
         queryButton.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +140,13 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 // Get the recipe results:
                 List<Recipe_Short> data = handler.getResults();
 
+                for (Recipe_Short i : data) {
+                    String title = i.getTitle();
+                    String suffix = i.getImage();
+                    String urlFinal = handler.getBaseUri() + suffix;
+                    results.add(new Recipe(title, urlFinal));
+                    adapter.notifyDataSetChanged();
+                }
                 // Load data in handler:
              //   PocketKitchenData pkData = PocketKitchenData.getInstance();
                 if (!nextSet) {
@@ -172,9 +163,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 Toast.makeText(getApplicationContext(), "Failed to parse", Toast.LENGTH_SHORT).show();
             }
 
-
             }
-
         @Override
         public void onFailure(HttpContext context, Throwable error) {
             // Unknown error. Originating from API or Mashape Key most likely.

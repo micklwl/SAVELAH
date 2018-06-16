@@ -18,6 +18,9 @@
     <string name="recipes">Recipes</string>
     <string name="grocery_list">Grocery List</string>
     <string name="title_activity_recipe_search_list">RecipeSearchList</string>
+    <string name="demo">Demo</string>
+    <string name="enter_grocery_item">Enter grocery item</string>
+    <string name="search">Search</string>
 
 
     <!-- Strings related to login -->

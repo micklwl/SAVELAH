@@ -94,7 +94,7 @@ public class GroceryActivity extends AppCompatActivity {
                     case R.id.navigation_grocery:
                         break;
                     case R.id.navigation_recipe:
-                        startActivity(new Intent(GroceryActivity.this, RecipeActivity.class)) ;
+                        startActivity(new Intent(GroceryActivity.this, RecipeSearchActivity.class)) ;
                         break;
                     case R.id.navigation_calendar:
                         break;

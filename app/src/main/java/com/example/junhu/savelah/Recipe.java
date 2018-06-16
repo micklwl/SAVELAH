@@ -2,36 +2,31 @@ package com.example.junhu.savelah;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class Recipe {
-    private String listName;
-    private ArrayList<String> ingredients;
-    private ArrayList<String> users;
-    private int numOfUsers;
+public class Recipe {
+    private String title;
+    private String image;
 
     public Recipe() {}
 
-    public String getListName() {
-        return this.listName;
-    }
-    public ArrayList<String> getIngredients() {
-        return this.ingredients;
+    public Recipe(String title, String image) {
+        this.title = title;
+        this.image = image;
     }
 
-    public ArrayList<String> getUsers() {
-        return users;
+    public String getTitle() {
+        return this.title;
     }
 
-    public void setListName(String name)  {
-        this.listName = name;
-    }
-    public void addIngredient(String name) {
-        this.ingredients.add(name);
+    public String getImage() {
+        return this.image;
     }
 
-    public void addUsers(String user) {
-        String s =  numOfUsers + "";
-        this.users.add(user);
-        numOfUsers ++;
+    public void setTitle(String name) {
+        this.title = name;
+    }
+
+    public void setImage(String str) {
+        this.image = str;
     }
 
 }
