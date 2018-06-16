@@ -30,7 +30,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GroceryActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
@@ -61,9 +63,16 @@ public class GroceryActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Customer c = dataSnapshot.getValue(Customer.class);
-             //   nextIndex = c.getRecipe().size();
                 list.clear();
-                list.addAll(new ArrayList<String>(c.getRecipe().keySet()));
+                HashMap<String, Ingredient> map = c.getRecipe();
+                ArrayList<String> temp = new ArrayList<>();
+                for (Map.Entry<String, Ingredient> entry: map.entrySet()) {
+                    String key = entry.getKey();
+                    Ingredient value = entry.getValue();
+                    temp.add(key +  " " + value.getAmount());
+                }
+                list.addAll(temp);
+               // list.addAll(new ArrayList<String>(c.getRecipe().keySet()));
                 Log.d("hello", "onDataChange: " + list);
                 adapter.notifyDataSetChanged();
             }
@@ -107,6 +116,7 @@ public class GroceryActivity extends AppCompatActivity {
 
     private void deleteGrocery(int key) {
         String item = list.get(key);
+        item = item.substring(0, item.lastIndexOf(" "));
         mDatabase.child("recipe").child(item).removeValue();
     }
 
@@ -125,7 +135,7 @@ public class GroceryActivity extends AppCompatActivity {
 
     private void addGrocery() {
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("recipe").child(str).setValue("default");
+        mDatabase.child("recipe").child(str).setValue(new Ingredient(str, "default", 1));
       //  mDatabase.child("recipe").child(nextIndex + "").setValue(str);
         Log.d("hello", "addGrocery: " + str);
     }

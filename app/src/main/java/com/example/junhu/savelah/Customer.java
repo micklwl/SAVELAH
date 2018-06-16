@@ -1,13 +1,11 @@
 package com.example.junhu.savelah;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Customer {
     private String uid;
     private String email;
-    private HashMap<String,String> recipe;
+    private HashMap<String, Ingredient> recipe;
     private HashMap<String, String> members;
 
     private Customer() {}
@@ -34,14 +32,14 @@ public class Customer {
 
     public void initialiseRecipe() {
         this.recipe = new HashMap<>();
-        recipe.put("fish", "12 June");
+        recipe.put("fish", new Ingredient("fish", "default", 1));
         this.members = new HashMap<>();
     }
-    public HashMap<String, String> getRecipe() {
+    public HashMap<String, Ingredient> getRecipe() {
         return this.recipe;
     }
-    public void addIngredient(String ingredient) {
-        recipe.put(ingredient, "default");
+    public void addIngredient(String ingredient, String date, int amount) {
+        recipe.put(ingredient, new Ingredient(ingredient, date, amount));
     }
 
 }
