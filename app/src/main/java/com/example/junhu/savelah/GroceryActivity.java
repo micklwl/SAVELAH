@@ -1,9 +1,13 @@
 package com.example.junhu.savelah;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.junhu.savelah.dataObjects.DatePickerFragment;
 import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +36,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,11 +121,15 @@ public class GroceryActivity extends AppCompatActivity {
     }
 
     private void deleteGrocery(int key) {
-        String item = list.get(key);
-        item = item.substring(0, item.lastIndexOf(" "));
+        String item = findItem(key);
         mDatabase.child("recipe").child(item).removeValue();
     }
 
+    public String findItem(int position) {
+        String item = list.get(position);
+        item = item.substring(0, item.lastIndexOf(" "));
+        return item;
+    }
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -128,6 +138,15 @@ public class GroceryActivity extends AppCompatActivity {
              int position = info.position;
              deleteGrocery(position);
              return true;
+            case R.id.updateDate :
+                int p = info.position;
+                DatePickerFragment newFragment = new DatePickerFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("item", findItem(p));
+                bundle.putString("User", user.getUid());
+                newFragment.setArguments(bundle);
+             //   setDate(newFragment.getDate(), p);
+                newFragment.show(getFragmentManager(), "datePicker");
             default:
                 return super.onContextItemSelected(item);
         }
