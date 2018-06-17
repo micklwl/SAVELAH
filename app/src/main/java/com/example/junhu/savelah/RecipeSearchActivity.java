@@ -17,6 +17,7 @@ import android.widget.Toast;
 //import com.example.junhu.savelah.adapter.FoodAdapter;
 import com.example.junhu.savelah.adapter.CustomListAdapter;
 import com.example.junhu.savelah.dataObjects.HTTP_RecipeShort;
+import com.example.junhu.savelah.dataObjects.Recipe;
 import com.example.junhu.savelah.dataObjects.Recipe_Short;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.SpoonacularAPIClient;
@@ -41,7 +42,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
     private String query;
     private String excludeIngredients;
     private static final boolean    limitLicense = false;
-    private static final int    resultNumber = 20;
+    private static final int    resultNumber = 10;
     private int offset;
     private String type;
     private ArrayList<Recipe> results;
@@ -140,12 +141,22 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 // Get the recipe results:
                 List<Recipe_Short> data = handler.getResults();
 
-                List temp = new ArrayList<Recipe>();
+                List<Recipe> temp = new ArrayList<Recipe>();
                 results.clear();
                 for (Recipe_Short i : data) {
                     String title = i.getTitle();
+                    String id = String.valueOf(i.getId());
                     String suffix = i.getImage();
-                    String urlFinal = handler.getBaseUri() + suffix;
+                    //String urlFinal = handler.getBaseUri() + suffix;
+                    //String urlFinal=handler.getBaseUri()+ id + "312x231.jpg";
+                    String urlFinal = "https://spoonacular.com/recipeImages/";
+                    if (suffix.endsWith(".jpg")) {
+                        urlFinal = urlFinal + id + "-556x370.jpg";
+                    }
+                    else if (suffix.endsWith(".png")){
+                        urlFinal = urlFinal + id + "-556x370.png";
+                    }
+
                     temp.add(new Recipe(title, urlFinal));
                 }
                 results.addAll(temp);
@@ -170,6 +181,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
         @Override
         public void onFailure(HttpContext context, Throwable error) {
             // Unknown error. Originating from API or Mashape Key most likely.
+            progressBar.setVisibility(View.GONE);
             Toast.makeText(getApplicationContext(), "Recipe query failed", Toast.LENGTH_SHORT).show();
         }
     }

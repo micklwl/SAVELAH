@@ -1,4 +1,6 @@
-package com.example.junhu.savelah;
+package com.example.junhu.savelah.dataObjects;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +13,7 @@ public class Recipe {
     public Recipe(String title, String image) {
         this.title = title;
         this.image = image;
+        Log.d("hello", title) ;
     }
 
     public String getTitle() {

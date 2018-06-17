@@ -34,7 +34,6 @@ public class Recipe_Short {
         return gson.toJson(this);
     }
 
-
     public int getId() {
         return id;
     }
@@ -55,7 +54,7 @@ public class Recipe_Short {
     }
 
     public String getTitle() {
-        return title;
+        return title.replaceAll("\\p{Pd}", "-");
     }
 
     @Override
