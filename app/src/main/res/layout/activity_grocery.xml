@@ -14,47 +14,56 @@
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="3">
-
-            <EditText
-                android:id="@+id/addText"
-                android:layout_width="323dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="fill_horizontal"
-                android:hint="Add Grocery"
-                android:inputType="textAutoComplete" />
-
-            <Button
-                android:id="@+id/addButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:onClick="addGroceryListener"
-                android:text="Add" />
+            android:columnCount="3"
+            android:rowCount="1">
 
             <EditText
                 android:id="@+id/findText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="fill_horizontal"
-                android:hint="Email of shared users list"
+                android:hint="@string/email_of_shared_users_list"
                 android:inputType="textAutoComplete" />
 
-            <Button
+            <ImageButton
+                android:id="@+id/shareList"
+                android:text="@string/go"
+                app:srcCompat="@drawable/ic_forward_black_24dp"
+                android:onClick="findListListener"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
                 android:id="@+id/findButton"
+                app:srcCompat="@drawable/ic_send_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:onClick="findListListener"
-                android:text="GO" />
-
-            <Button
-                android:id="@+id/shareList"
-                android:text="SHARE"
                 android:onClick="shareListListener"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:text="@string/share" />
+
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="1">
+
+        <EditText
+            android:id="@+id/addText"
+            android:layout_width="323dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill_horizontal"
+            android:hint="Add Grocery"
+            android:inputType="textAutoComplete" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_add_black_24dp"
+            android:onClick="addGroceryListener"/>
+
         </GridLayout>
 
         <ListView
@@ -62,6 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </ListView>
+
 
     </LinearLayout>
 
