@@ -42,7 +42,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GroceryActivity extends AppCompatActivity {
+public class GroceryActivity extends AppCompatActivity implements AddGroceryDialogListener {
     public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
     private EditText toAdd;
     private EditText findList;
@@ -71,18 +71,20 @@ public class GroceryActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Customer c = dataSnapshot.getValue(Customer.class);
-                list.clear();
-                HashMap<String, Ingredient> map = c.getRecipe();
-                ArrayList<String> temp = new ArrayList<>();
-                for (Map.Entry<String, Ingredient> entry: map.entrySet()) {
-                    String key = entry.getKey();
-                    Ingredient value = entry.getValue();
-                    temp.add(key +  " " + value.getAmount());
+                if (c != null) {
+                    list.clear();
+                    HashMap<String, Ingredient> map = c.getList();
+                    ArrayList<String> temp = new ArrayList<>();
+                    for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
+                        String key = entry.getKey();
+                        Ingredient value = entry.getValue();
+                        temp.add(key + " " + value.getAmount());
+                    }
+                    list.addAll(temp);
+                    // list.addAll(new ArrayList<String>(c.getList().keySet()));
+                    Log.d("hello", "onDataChange: " + list);
+                    adapter.notifyDataSetChanged();
                 }
-                list.addAll(temp);
-               // list.addAll(new ArrayList<String>(c.getRecipe().keySet()));
-                Log.d("hello", "onDataChange: " + list);
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -124,7 +126,7 @@ public class GroceryActivity extends AppCompatActivity {
 
     private void deleteGrocery(int key) {
         String item = findItem(key);
-        mDatabase.child("recipe").child(item).removeValue();
+        mDatabase.child("list").child(item).removeValue();
     }
 
     public String findItem(int position) {
@@ -154,15 +156,16 @@ public class GroceryActivity extends AppCompatActivity {
         }
     }
 
-    private void addGrocery() {
+    private void addGrocery(String quantity) {
+        Log.d("entered", "entered");
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("recipe").child(str).setValue(new Ingredient(str, "default", 1));
-      //  mDatabase.child("recipe").child(nextIndex + "").setValue(str);
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Integer.parseInt(quantity)));
+      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
         Log.d("hello", "addGrocery: " + str);
     }
 
     public void addGroceryListener(View view) {
-        addGrocery();
+        openDialog();
     }
 
     public void findListListener(View view) {
@@ -223,5 +226,16 @@ public class GroceryActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void openDialog() {
+        AddGroceryDialog dialog = new AddGroceryDialog();
+        dialog.show(getSupportFragmentManager(), "add grocery dialog");
+    }
+
+
+    @Override
+    public void applyText(String quantity) {
+        addGrocery(quantity);
     }
 }

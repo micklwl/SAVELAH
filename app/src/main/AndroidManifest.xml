@@ -34,6 +34,7 @@
             android:label="@string/title_activity_recipe" />
         <activity android:name=".RecipeSearchActivity" />
         <activity android:name=".SharedListActivity" />
+        <activity android:name=".CalendarActivity"></activity>
     </application>
 
 </manifest>

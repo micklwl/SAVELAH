@@ -38,15 +38,14 @@ public class DatePickerFragment extends DialogFragment
         toUpdate = bundle.getString("item");
         uid = bundle.getString("User");
         Log.d("Fragment", toUpdate + uid);
-        ref = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("recipe")
+        ref = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("list")
                 .child(toUpdate).child("date");
         // Create a new instance of DatePickerDialog and return it
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-            String date = getDate(day, month, year);
-            //Log.d("FragmentIII", ref.toString());
-          ref.setValue(date);
+        String date = getDate(day, month, year);
+        ref.setValue(date);
     }
 }

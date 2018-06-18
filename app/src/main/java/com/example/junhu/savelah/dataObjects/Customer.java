@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Customer {
     private String uid;
     private String email;
-    private HashMap<String, Ingredient> recipe;
+    private HashMap<String, Ingredient> list;
     private HashMap<String, String> members;
 
     private Customer() {}
@@ -30,16 +30,17 @@ public class Customer {
         return this.members;
     }
 
-    public void initialiseRecipe() {
-        this.recipe = new HashMap<>();
-        recipe.put("fish", new Ingredient("fish", "default", 1));
+    public void initialiseList() {
+        this.list = new HashMap<>();
+        list.put("fish", new Ingredient("fish", "default", 1));
         this.members = new HashMap<>();
     }
-    public HashMap<String, Ingredient> getRecipe() {
-        return this.recipe;
+    public HashMap<String, Ingredient> getList() {
+        return this.list;
     }
+
     public void addIngredient(String ingredient, String date, int amount) {
-        recipe.put(ingredient, new Ingredient(ingredient, date, amount));
+        list.put(ingredient, new Ingredient(ingredient, date, amount));
     }
 
 }

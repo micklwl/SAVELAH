@@ -55,7 +55,7 @@ public class SharedListActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Customer c = dataSnapshot.getValue(Customer.class);
                 list.clear();
-                HashMap<String, Ingredient> map = c.getRecipe();
+                HashMap<String, Ingredient> map = c.getList();
                 ArrayList<String> temp = new ArrayList<>();
                 for (Map.Entry<String, Ingredient> entry: map.entrySet()) {
                     String key = entry.getKey();
@@ -63,7 +63,7 @@ public class SharedListActivity extends AppCompatActivity {
                     temp.add(key +  " " + value.getAmount());
                 }
                 list.addAll(temp);
-                // list.addAll(new ArrayList<String>(c.getRecipe().keySet()));
+                // list.addAll(new ArrayList<String>(c.getList().keySet()));
                 Log.d("hello", "onDataChange: " + list);
                 adapter.notifyDataSetChanged();
             }
@@ -108,7 +108,7 @@ public class SharedListActivity extends AppCompatActivity {
 
     private void deleteGrocery(int key) {
         String item = findItem(key);
-        mDatabase.child("recipe").child(item).removeValue();
+        mDatabase.child("list").child(item).removeValue();
     }
 
     public String findItem(int position) {
@@ -140,8 +140,8 @@ public class SharedListActivity extends AppCompatActivity {
 
     private void addGrocery() {
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("recipe").child(str).setValue(new Ingredient(str, "default", 1));
-        //  mDatabase.child("recipe").child(nextIndex + "").setValue(str);
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", 1));
+        //  mDatabase.child("list").child(nextIndex + "").setValue(str);
         Log.d("hello", "addGrocery: " + str);
     }
 

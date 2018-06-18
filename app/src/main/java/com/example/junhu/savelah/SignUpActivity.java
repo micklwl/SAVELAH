@@ -80,7 +80,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     FirebaseUser fUser = mAuth.getCurrentUser();
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                     Customer c = new Customer(email,fUser.getUid());
-                    c.initialiseRecipe();
+                    c.initialiseList();
                     mDatabase.child("Users").child(fUser.getUid()).setValue(c);
                     Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
