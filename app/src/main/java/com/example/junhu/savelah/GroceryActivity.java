@@ -107,6 +107,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                         startActivity(new Intent(GroceryActivity.this, RecipeSearchActivity.class)) ;
                         break;
                     case R.id.navigation_calendar:
+                        startActivity(new Intent(GroceryActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
                         startActivity(new Intent(GroceryActivity.this, ProfileActivity.class)) ;
