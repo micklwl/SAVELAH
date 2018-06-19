@@ -8,20 +8,19 @@ public class Ingredient_Full {
     private String image;
     private String name;
     private float amount;
-    private String unitShort;
-    private String unitLong;
+    private String unit;
     private String originalString;
 
     // Standard Ingredient
-    public Ingredient_Full(String aisle, float amount, int id, String image, String name, String originalString, String unitLong, String unitShort) {
+
+    public Ingredient_Full(String aisle, float amount, int id, String image, String name, String originalString, String unit) {
         this.aisle = aisle;
         this.amount = amount;
         this.id = id;
         this.image = image;
         this.name = name;
         this.originalString = originalString;
-        this.unitLong = unitLong;
-        this.unitShort = unitShort;
+        this.unit = unit;
     }
 
     public Ingredient_Full(String json) {
@@ -33,8 +32,7 @@ public class Ingredient_Full {
         this.image = ingredient.getImage();
         this.name = ingredient.getName();
         this.originalString = ingredient.getOriginalString();
-        this.unitLong = ingredient.getUnitLong();
-        this.unitShort = ingredient.getUnitShort();
+        this.unit = ingredient.getUnit();
     }
 
     public String getJson() {
@@ -57,8 +55,8 @@ public class Ingredient_Full {
     }
 
 
-    public String getUnitShort() {
-        return unitShort;
+    public String getUnit() {
+        return unit;
     }
 
 
@@ -77,10 +75,6 @@ public class Ingredient_Full {
     }
 
 
-    public String getUnitLong() {
-        return unitLong;
-    }
-
     public void setAmount(float amount) {
         this.amount = amount;
     }
@@ -89,11 +83,4 @@ public class Ingredient_Full {
         this.name = name;
     }
 
-    public void setUnitShort(String unitShort) {
-        this.unitShort = unitShort;
-    }
-
-    public void setUnitLong(String unitLong) {
-        this.unitLong = unitLong;
-    }
 }

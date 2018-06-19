@@ -119,6 +119,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
 
     private void showOnScreen(Recipe_Full singleRecipe) {
 
+
         Textv.setText(recipeName);
 
         String imageUrl = "https://spoonacular.com/recipeImages/";
@@ -142,7 +143,8 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         ingredients.setText(readIngredients(singleRecipe.getExtendedIngredients()));
 
         String instruc = singleRecipe.getInstructions();
-        if (instruc != null || !instruc.equals("null") ) {
+        if (instruc != null) {
+            Log.d("test","instruc null");
             instructions.setText(instruc.replaceAll("<[^>]*>", "\n").trim());
         }
         else {
@@ -166,8 +168,8 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
     private String readIngredients(List<Ingredient_Full> ingredientList) {
         String result = "";
         for (Ingredient_Full i : ingredientList) {
-            if (i.getUnitShort().length() > 1) {
-                result += i.getAmount() + " " + i.getUnitShort() + " " + i.getName() + "\n";
+            if (i.getUnit().length() > 1) {
+                result += i.getAmount() + " " + i.getUnit() + " " + i.getName() + "\n";
             } else {
                 result += i.getOriginalString() + "\n";
             }
