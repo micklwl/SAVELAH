@@ -38,7 +38,6 @@ public class Recipe_Short {
         return id;
     }
 
-
     public String getImage() {
         return image;
     }

@@ -5,8 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -100,6 +102,18 @@ public class RecipeSearchActivity extends AppCompatActivity{
 
         // Configuration parameters
         com.mashape.p.spoonacularrecipefoodnutritionv1.Configuration.initialize(this.getBaseContext());
+
+        recipeResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(RecipeSearchActivity.this, SingleRecipeActivity.class);
+                Recipe selectedRecipe =  (Recipe)recipeResults.getItemAtPosition(position);
+                intent.putExtra("title",selectedRecipe.getTitle());
+                intent.putExtra("search_id",selectedRecipe.getIdString());
+                Log.d("hello", selectedRecipe.getIdString());
+                startActivity(intent);
+            }
+        });
     }
 
     private void doSearch(boolean nextSet) {
@@ -157,7 +171,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
                         urlFinal = urlFinal + id + "-556x370.png";
                     }
 
-                    temp.add(new Recipe(title, urlFinal));
+                    temp.add(new Recipe(title, urlFinal,i.getId()));
                 }
                 results.addAll(temp);
                 adapter.notifyDataSetChanged();

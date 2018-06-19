@@ -34,9 +34,11 @@
         android:id="@+id/Password"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:text="@string/password"
+        app:layout_constraintBottom_toTopOf="@+id/register_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Email" />
 
@@ -54,14 +56,15 @@
 
     <EditText
         android:id="@+id/field_password"
-        android:layout_width="wrap_content"
+        android:layout_width="216dp"
         android:layout_height="48dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="20dp"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/Password"
         app:layout_constraintStart_toEndOf="@+id/Password"
-        app:layout_constraintTop_toTopOf="@+id/Password" />
+        app:layout_constraintTop_toTopOf="@+id/Password"
+        app:layout_constraintVertical_bias="0.645" />
 
     <Button
         android:id="@+id/register_button"
