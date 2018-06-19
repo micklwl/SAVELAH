@@ -91,7 +91,7 @@ public class SingleRecipeActivity extends AppCompatActivity {
     }
 
     private void showOnScreen(Recipe singleRecipe) {
-        instructions.setText(singleRecipe.getInstructions());
+        //instructions.setText(singleRecipe.getInstructions());
     }
 }
 

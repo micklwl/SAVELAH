@@ -92,7 +92,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
 
             }
         });
-   // Toast.makeText(this, user.getEmail(), Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, user.getEmail(), Toast.LENGTH_LONG).show();
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
         bottombar.enableShiftingMode(false);
@@ -140,9 +140,9 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.delGrocery :
-             int position = info.position;
-             deleteGrocery(position);
-             return true;
+                int position = info.position;
+                deleteGrocery(position);
+                return true;
             case R.id.updateDate :
                 int p = info.position;
                 DatePickerFragment newFragment = new DatePickerFragment();
@@ -150,7 +150,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                 bundle.putString("item", findItem(p));
                 bundle.putString("User", user.getUid());
                 newFragment.setArguments(bundle);
-             //   setDate(newFragment.getDate(), p);
+                //   setDate(newFragment.getDate(), p);
                 newFragment.show(getFragmentManager(), "datePicker");
             default:
                 return super.onContextItemSelected(item);
@@ -161,7 +161,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         Log.d("entered", "entered");
         final String str = toAdd.getText().toString().trim();
         mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Integer.parseInt(quantity)));
-      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
+        //  mDatabase.child("list").child(nextIndex + "").setValue(str);
         Log.d("hello", "addGrocery: " + str);
     }
 
@@ -182,7 +182,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                     Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
                     intent.putExtra(EXTRA_MESSAGE, map.get(decodedEmail));
                     startActivity(intent);
-                   // Log.d("onDataChanges", dataSnapshot.getValue());
+                    // Log.d("onDataChanges", dataSnapshot.getValue());
 //                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
 //                    intent.putExtra(EXTRA_MESSAGE, sharedEmail);
 //                    startActivity(intent);
@@ -215,7 +215,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                     String[] b = dataSnapshot.getValue(t).keySet().toArray(a);
                     mDatabase.child("members").child(newEmail).setValue(b[0]);
 //                    Log.d("shareHello", dataSnapshot.getValue(t).keySet().toString());
-                //    mDatabase.child("members").child(ID).setValue(emailToShare);
+                    //    mDatabase.child("members").child(ID).setValue(emailToShare);
                 } else {
                     Toast.makeText(GroceryActivity.this,"No such user in SAVELAH", Toast.LENGTH_SHORT).show();
                 }
