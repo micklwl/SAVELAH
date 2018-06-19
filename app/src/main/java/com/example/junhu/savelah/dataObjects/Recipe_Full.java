@@ -2,6 +2,7 @@ package com.example.junhu.savelah.dataObjects;
 
 import com.google.gson.Gson;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class Recipe_Full {
@@ -29,6 +30,15 @@ public class Recipe_Full {
     private String title;
     private int readyInMinutes;
     private String instructions;
+
+    public Recipe_Full(String title, int id, int servings, int readyInMinutes, HashMap<String,Ingredient_Full> extendedIngredients, String instructions){
+        this.title = title;
+        this.id = id;
+        this.servings = servings;
+        this.readyInMinutes = readyInMinutes;
+        //this.extendedIngredients = extendedIngredients;
+        this.instructions = instructions;
+    }
 
     public Recipe_Full(String json) {
         Gson gson = new Gson();

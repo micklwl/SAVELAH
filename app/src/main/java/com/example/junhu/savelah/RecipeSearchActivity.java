@@ -172,6 +172,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
                     else if (suffix.endsWith(".jpeg")){
                         urlFinal = urlFinal+ id + "-556x370.jpeg";
                     }
+                    Log.d("lol",title);
                     temp.add(new Recipe(title, urlFinal,i.getId()));
                 }
                 results.addAll(temp);

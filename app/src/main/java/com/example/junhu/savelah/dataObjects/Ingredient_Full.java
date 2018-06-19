@@ -11,6 +11,8 @@ public class Ingredient_Full {
     private String unit;
     private String originalString;
 
+    public Ingredient_Full(){}
+
     // Standard Ingredient
 
     public Ingredient_Full(String aisle, float amount, int id, String image, String name, String originalString, String unit) {
@@ -22,6 +24,13 @@ public class Ingredient_Full {
         this.originalString = originalString;
         this.unit = unit;
     }
+
+    public Ingredient_Full(String name, float amount, String unit) {
+        this.amount = amount;
+        this.name = name;
+        this.unit = unit;
+    }
+
 
     public Ingredient_Full(String json) {
         Gson gson = new Gson();
