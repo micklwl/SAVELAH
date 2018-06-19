@@ -24,15 +24,15 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/btn_do_recipe_f"
+            android:id="@+id/saveRecipe"
             android:text="@string/save_recipe"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
         <Button
-            android:id="@+id/btn_do_recipe_ing"
-            android:text="Add to Grocery List"
+            android:id="@+id/addList"
+            android:text="@string/add_to_grocery_list"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
@@ -44,7 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/ll_view_recipe_bar">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -58,14 +59,14 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:focusable="false"
-                android:text="Recipe Title"
                 android:gravity="center"
+                android:text="@string/recipe_title"
                 android:textSize="16sp"
                 android:textStyle="bold|italic" />
 
             <!-- Master Image -->
             <ImageView
-                android:id="@+id/recipe_image_f"
+                android:id="@+id/recipeImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recipe_title"
@@ -73,7 +74,8 @@
                 android:adjustViewBounds="true"
                 android:focusable="false"
                 android:maxHeight="400dp"
-                android:maxWidth="400dp" />
+                android:maxWidth="400dp"
+                android:src="@drawable/grocery"/>
 
 
             <!-- Recipe Information -->
@@ -82,19 +84,19 @@
                 android:id="@+id/recipe_time_img_f"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recipe_image_f"
+                android:layout_below="@id/recipeImage"
                 android:layout_margin="5dp"
                 android:adjustViewBounds="true"
                 android:focusable="false"
                 android:maxHeight="35dp"
                 android:maxWidth="35dp"
-                android:src="@drawable/grocery" />
+                android:src="@drawable/time"/>
 
             <TextView
                 android:id="@+id/recipe_time_f"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recipe_image_f"
+                android:layout_below="@id/recipeImage"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="5dp"
@@ -108,19 +110,20 @@
                 android:id="@+id/recipe_serves_img_f"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recipe_image_f"
+                android:layout_below="@id/recipeImage"
                 android:layout_margin="5dp"
                 android:layout_toEndOf="@id/recipe_time_f"
                 android:adjustViewBounds="true"
                 android:focusable="false"
                 android:maxHeight="35dp"
-                android:maxWidth="35dp" />
+                android:maxWidth="35dp"
+                android:src="@drawable/ps_serves_img"/>
 
             <TextView
-                android:id="@+id/recipe_serves_f"
+                android:id="@+id/recipeServes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recipe_image_f"
+                android:layout_below="@id/recipeImage"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="5dp"

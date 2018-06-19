@@ -22,7 +22,7 @@ public class Recipe {
     }
 
     public String getTitle() {
-        return this.title;
+        return this.title.replaceAll("\\p{Pd}", "-");
     }
 
     public String getImage() {
