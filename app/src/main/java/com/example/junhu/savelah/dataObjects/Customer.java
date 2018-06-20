@@ -29,8 +29,7 @@ public class Customer {
         this.members = new HashMap<>();
         this.recipes =  new HashMap<>();
         HashMap<String,Ingredient> ingredientlist = new HashMap<>();
-        Ingredient testing = new Ingredient("Name-Jun Hui", "1/1/2018", 20,"kg");
-        ingredientlist.put("Name-Jun Hui",testing);
+        ingredientlist.put("Name-Jun Hui",new Ingredient("Name-Jun Hui", "1/1/2018", 20,"kg"));
         recipes.put("chicken", new Recipe_DB("chicken",12,"https://spoonacular.com/recipeImages/123-556x370.jpg",12,12,ingredientlist,"test"));
     }
 
