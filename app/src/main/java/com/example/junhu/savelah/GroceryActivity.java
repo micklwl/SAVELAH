@@ -71,9 +71,9 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Customer c = dataSnapshot.getValue(Customer.class);
-                if (c != null) {
-                    list.clear();
-                    HashMap<String, Ingredient> map = c.getList();
+                list.clear();
+                HashMap<String, Ingredient> map = c.getList();
+                if (map != null) {
                     ArrayList<String> temp = new ArrayList<>();
                     for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
                         String key = entry.getKey();
@@ -172,28 +172,28 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     public void findListListener(View view) {
         final String sharedEmail = findList.getText().toString().trim();
         final String decodedEmail = sharedEmail.replace(".", ",");
-        Query query = mDatabase.child("members").orderByKey().equalTo(decodedEmail);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = initDatabase.orderByChild("email").equalTo(sharedEmail);
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    GenericTypeIndicator<HashMap<String, String>> t = new GenericTypeIndicator<HashMap<String,String>>() {};
-                    HashMap <String, String> map = dataSnapshot.getValue(t);
-                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
-                    intent.putExtra(EXTRA_MESSAGE, map.get(decodedEmail));
-                    startActivity(intent);
-                   // Log.d("onDataChanges", dataSnapshot.getValue());
-//                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
-//                    intent.putExtra(EXTRA_MESSAGE, sharedEmail);
-//                    startActivity(intent);
-                } else{
-                    Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
+                if (dataSnapshot.exists()) {
+                    GenericTypeIndicator<HashMap<String, Customer>> t = new GenericTypeIndicator<HashMap<String,Customer>>() {};
+                    String[] a = new String[1];
+                    String userIDOfSharee = dataSnapshot.getValue(t).keySet().toArray(a)[0];
+                    Customer sharee = dataSnapshot.getValue(t).get(userIDOfSharee);
+                    if (sharee.getMembers().containsKey(decodedEmail)) {
+                        Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
+                        intent.putExtra(EXTRA_MESSAGE, userIDOfSharee);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(GroceryActivity.this,"No such user in SAVELAH", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
