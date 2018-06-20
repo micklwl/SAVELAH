@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SharedListActivity extends AppCompatActivity {
+public class SharedListActivity extends AppCompatActivity implements AddGroceryDialogListener {
     private EditText toAdd;
     private ListView groceryList;
     private ArrayList<String> list = new ArrayList<>();
@@ -46,7 +46,7 @@ public class SharedListActivity extends AppCompatActivity {
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
         mDatabase = initDatabase.child(message);
         toAdd = findViewById(R.id.addText);
-        groceryList = findViewById(R.id.shared);
+        groceryList = findViewById(R.id.groceryList);
         registerForContextMenu(groceryList);
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
@@ -57,15 +57,17 @@ public class SharedListActivity extends AppCompatActivity {
                 list.clear();
                 HashMap<String, Ingredient> map = c.getList();
                 ArrayList<String> temp = new ArrayList<>();
-                for (Map.Entry<String, Ingredient> entry: map.entrySet()) {
-                    String key = entry.getKey();
-                    Ingredient value = entry.getValue();
-                    temp.add(key +  " " + value.getAmount());
+                if (map != null) {
+                    for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
+                        String key = entry.getKey();
+                        Ingredient value = entry.getValue();
+                        temp.add(key + " " + value.getAmount());
+                    }
+                    list.addAll(temp);
+                    // list.addAll(new ArrayList<String>(c.getList().keySet()));
+                    Log.d("hello", "onDataChange: " + list);
+                    adapter.notifyDataSetChanged();
                 }
-                list.addAll(temp);
-                // list.addAll(new ArrayList<String>(c.getList().keySet()));
-                Log.d("hello", "onDataChange: " + list);
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -138,15 +140,25 @@ public class SharedListActivity extends AppCompatActivity {
         }
     }
 
-    private void addGrocery() {
+    private void openDialog() {
+        AddGroceryDialog dialog = new AddGroceryDialog();
+        dialog.show(getSupportFragmentManager(), "add grocery dialog");
+    }
+
+    private void addGrocery(String quantity) {
+        Log.d("entered", "entered");
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", 1));
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Integer.parseInt(quantity)));
         //  mDatabase.child("list").child(nextIndex + "").setValue(str);
         Log.d("hello", "addGrocery: " + str);
     }
 
+    @Override
+    public void applyText(String quantity) {
+        addGrocery(quantity);
+    }
 
     public void addGroceryListener(View view) {
-        addGrocery();
+        openDialog();
     }
 }
