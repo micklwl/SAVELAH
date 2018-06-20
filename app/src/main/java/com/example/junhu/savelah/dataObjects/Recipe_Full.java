@@ -31,12 +31,18 @@ public class Recipe_Full {
     private int readyInMinutes;
     private String instructions;
 
+    private HashMap<String, Ingredient_Full> ingList;
+    public HashMap<String, Ingredient_Full> getIngList() {
+        return ingList;
+    }
+
+
     public Recipe_Full(String title, int id, int servings, int readyInMinutes, HashMap<String,Ingredient_Full> extendedIngredients, String instructions){
         this.title = title;
         this.id = id;
         this.servings = servings;
         this.readyInMinutes = readyInMinutes;
-        //this.extendedIngredients = extendedIngredients;
+        this.ingList = extendedIngredients;
         this.instructions = instructions;
     }
 

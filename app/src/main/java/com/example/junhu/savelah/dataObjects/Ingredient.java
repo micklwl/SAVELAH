@@ -5,12 +5,16 @@ public class Ingredient {
     private Integer amount;
     private String name;
 
+
+    private String unit;
+
     public Ingredient() {}
 
-    public Ingredient(String name, String date, Integer amount) {
+    public Ingredient(String name, String date, Integer amount, String unit) {
         this.name = name;
         this.date = date;
         this.amount = amount;
+        this.unit = unit;
     }
 
     public String getDate() {
@@ -24,6 +28,8 @@ public class Ingredient {
     public int getAmount() {
         return this.amount;
     }
+
+    public String getUnit() { return unit; }
 }
 
 

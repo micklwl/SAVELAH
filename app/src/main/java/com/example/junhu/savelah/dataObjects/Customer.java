@@ -9,7 +9,8 @@ public class Customer {
     private String email;
     private HashMap<String, Ingredient> list;
     private HashMap<String, String> members;
-    private HashMap<String, Recipe_Full> recipes;
+
+    private HashMap<String, Recipe_DB> recipes;
     private Customer() {}
 
     public Customer(String email, String uid) {
@@ -24,13 +25,13 @@ public class Customer {
 
     public void initialiseList() {
         this.list = new HashMap<>();
-        list.put("fish", new Ingredient("fish", "default", 1));
+        list.put("fish", new Ingredient("fish", "default", 1,"kg"));
         this.members = new HashMap<>();
         this.recipes =  new HashMap<>();
-        HashMap<String,Ingredient_Full> ingredientlist = new HashMap<>();
-        Ingredient_Full testing = new Ingredient_Full("Jun Hui", 99/4, "people");
-        ingredientlist.put("Ingredient Lists",testing);
-        recipes.put("chicken", new Recipe_Full("chicken",30,2,10,ingredientlist,"eat air"));
+        HashMap<String,Ingredient> ingredientlist = new HashMap<>();
+        Ingredient testing = new Ingredient("Name-Jun Hui", "1/1/2018", 20,"kg");
+        ingredientlist.put("Name-Jun Hui",testing);
+        recipes.put("chicken", new Recipe_DB("chicken",12,"https://spoonacular.com/recipeImages/123-556x370.jpg",12,12,ingredientlist,"test"));
     }
 
     public String getUid(){
@@ -49,10 +50,11 @@ public class Customer {
         return this.members;
     }
 
-    private HashMap<String, Recipe_Full> getRecipes(){return this.recipes;}
-
-    public void addIngredient(String ingredient, String date, int amount) {
-        list.put(ingredient, new Ingredient(ingredient, date, amount));
+    public HashMap<String, Recipe_DB> getRecipes() {
+        return recipes;
+    }
+    public void addIngredient(String ingredient, String date, int amount,String unit) {
+        list.put(ingredient, new Ingredient(ingredient, date, amount,unit));
     }
 
 }

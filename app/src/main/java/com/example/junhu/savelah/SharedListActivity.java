@@ -140,7 +140,7 @@ public class SharedListActivity extends AppCompatActivity {
 
     private void addGrocery() {
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", 1));
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", 1,"kg"));
         //  mDatabase.child("list").child(nextIndex + "").setValue(str);
         Log.d("hello", "addGrocery: " + str);
     }
