@@ -27,7 +27,6 @@ public class SavedRecipesActivity extends AppCompatActivity {
                         startActivity(new Intent(SavedRecipesActivity.this, GroceryActivity.class));
                         break;
                     case R.id.navigation_recipe:
-                        startActivity(new Intent(SavedRecipesActivity.this, RecipeActivity.class));
                         break;
                     case R.id.navigation_calendar:
                         break;

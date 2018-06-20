@@ -36,7 +36,8 @@
         <activity android:name=".SharedListActivity" />
         <activity android:name=".CalendarActivity" />
         <activity android:name=".SingleRecipeActivity" />
-        <activity android:name=".SavedRecipesActivity"></activity>
+        <activity android:name=".SavedRecipesActivity" />
+        <activity android:name=".AddRecipeActivity"></activity>
     </application>
 
 </manifest>

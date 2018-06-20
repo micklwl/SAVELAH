@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/rl_add_custom_recipe"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="3dip"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar android:id="@+id/save_recipe_progress"
+        style="?android:progressBarStyleLarge"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Static Bottom Bar: -->
+    <LinearLayout android:id="@+id/ll_add_custom_recipe"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button android:id="@+id/btn_add_custom_recipe"
+            style="Base.Widget.AppCompat.Button"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save and Exit" />
+
+        <Space android:layout_weight="2"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <!-- Scroll View: -->
+    <android.support.v4.widget.NestedScrollView android:id="@+id/sv_add_custom_recipe"
+        android:descendantFocusability="afterDescendants"
+        android:fillViewport="false"
+        android:layout_above="@id/ll_add_custom_recipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <!-- Relative Layout -->
+        <RelativeLayout android:id="@+id/sv_rl_add_recipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView android:id="@+id/lbl_add_custom_recipe"
+                android:visibility="gone"
+                android:focusable="false"
+                android:textStyle="italic"
+                android:textAlignment="center"
+                android:textColor="@color/red"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Recipe Image -->
+            <ImageView android:id="@+id/img_custom_recipe"
+                android:src="@drawable/grocery"
+                android:layout_marginBottom="3dp"
+                android:clickable="true"
+                android:layout_below="@id/lbl_add_custom_recipe"
+                android:adjustViewBounds="true"
+                android:maxHeight="150dp"
+                android:maxWidth="150dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp" />
+
+            <!-- Recipe Title + Details -->
+            <TextView android:id="@+id/lbl_add_custom_recipe_title"
+                android:text="Recipe Details"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimaryDark"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingStart="10dp"
+                android:layout_toEndOf="@id/img_custom_recipe"
+                android:layout_below="@id/lbl_add_custom_recipe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText android:id="@+id/edit_add_custom_recipe_title"
+                android:hint="Enter Title here"
+                android:textSize="15sp"
+                android:inputType="textShortMessage|textCapWords|textImeMultiLine"
+                android:lines="2"
+                android:maxLines="2"
+
+                android:layout_below="@id/lbl_add_custom_recipe_title"
+                android:layout_toEndOf="@id/img_custom_recipe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText android:id="@+id/edit_add_custom_recipe_servings"
+                android:hint="Enter Servings"
+                android:textSize="15sp"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+
+                android:layout_marginEnd="10dp"
+                android:layout_below="@id/edit_add_custom_recipe_title"
+                android:layout_toEndOf="@id/img_custom_recipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText android:id="@+id/edit_add_custom_recipe_minutes"
+                android:hint="Time required"
+                android:textSize="15sp"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+
+                android:layout_below="@id/edit_add_custom_recipe_title"
+                android:layout_toEndOf="@id/edit_add_custom_recipe_servings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <!-- Recipe Ingredients List -->
+            <ImageButton android:id="@+id/btn_custom_recipe_ing"
+                android:scaleX="1.375"
+                android:scaleY="1.375"
+                android:background="@color/colorPrimaryDark"
+                android:src="@drawable/ic_arrow_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/img_custom_recipe"
+                android:layout_alignParentEnd="true" />
+
+            <TextView android:id="@+id/lbl_add_custom_recipe_ingredients"
+                android:drawableEnd="@drawable/ic_add_black_24dp"
+                android:background="@color/colorPrimaryDark"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:clickable="true"
+                android:text="Ingredients"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+
+                android:gravity="center_vertical"
+                android:layout_below="@id/img_custom_recipe"
+                android:layout_toLeftOf="@id/btn_custom_recipe_ing"
+                android:layout_alignTop="@id/btn_custom_recipe_ing"
+                android:layout_alignParentStart="true"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView android:id="@+id/rv_add_custom_recipe_ingredients"
+                android:layout_below="@id/lbl_add_custom_recipe_ingredients"
+                android:focusable="true"
+                android:scrollbars="vertical"
+                android:nestedScrollingEnabled="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Recipe Instructions: -->
+            <TextView android:id="@+id/lbl_add_custom_recipe_instructions"
+
+                android:gravity="center_vertical"
+                android:background="@color/colorPrimaryDark"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+
+                android:clickable="true"
+                android:text="Instructions"
+                android:textSize="15sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:layout_below="@id/rv_add_custom_recipe_ingredients"
+                android:layout_alignParentStart="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText android:id="@+id/edit_add_custom_recipe_instructions"
+                android:gravity="start"
+                android:focusable="true"
+                android:inputType="textLongMessage|textAutoCorrect|textMultiLine"
+                android:textIsSelectable="true"
+                android:scrollbars="vertical"
+                android:lines="6"
+                android:layout_below="@id/lbl_add_custom_recipe_instructions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>
