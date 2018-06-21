@@ -144,16 +144,14 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         String imageUrl = "https://spoonacular.com/recipeImages/";
         if (suffix.endsWith(".jpg")) {
             imageUrl = imageUrl + String.valueOf(singleRecipe.getId()) + "-556x370.jpg";
-        }
-        else if (suffix.endsWith(".png")){
+        } else if (suffix.endsWith(".png")) {
             imageUrl = imageUrl + String.valueOf(singleRecipe.getId()) + "-556x370.png";
-        }
-        else if (suffix.endsWith(".jpeg")){
+        } else if (suffix.endsWith(".jpeg")) {
             imageUrl = imageUrl + String.valueOf(singleRecipe.getId()) + "-556x370.jpeg";
         }
         Picasso.get().load(imageUrl).into(recipeImage);
 
-        String time = String.valueOf(singleRecipe.getReadyInMinutes())+" Minutes";
+        String time = String.valueOf(singleRecipe.getReadyInMinutes()) + " Minutes";
         recipeTime.setText(time);
 
         String serve = String.valueOf(singleRecipe.getServings()) + " People";
@@ -162,14 +160,16 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         ingredients.setText(readIngredients(singleRecipe.getExtendedIngredients()));
 
         String instruc = singleRecipe.getInstructions();
+
         if (instruc != null) {
-            Log.d("test",instruc);
+            //if (instruc != ""){
+            Log.d("test", instruc);
             instructions.setText(instruc.replaceAll("<[^>]*>", "\n").trim());
-        }
-        else {
+        } else {
             String failInstruc = "No instructions was provided by Spoonacular! :(";
             instructions.setText(failInstruc);
         }
+        //}
     }
 
     @Override

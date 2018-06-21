@@ -43,7 +43,6 @@ public class Recipe_Full {
         this.extendedIngredients = recipeFull.getExtendedIngredients();
         this.glutenFree = recipeFull.isGlutenFree();
         this.id = recipeFull.getId();
-        this.instructions = recipeFull.getInstructions();
         this.readyInMinutes = recipeFull.getReadyInMinutes();
         this.servings = recipeFull.getServings();
         this.spoonacularSourceUrl = recipeFull.getSpoonacularSourceUrl();
@@ -54,6 +53,14 @@ public class Recipe_Full {
         this.veryHealthy = recipeFull.isVeryHealthy();
         this.veryPopular = recipeFull.isVeryPopular();
         this.analyzedInstructions = recipeFull.getAnalyzedInstructions();
+        this.instructions = recipeFull.getInstructions();
+   /*     String temp = "";
+        for (Steps j:recipeFull.getAnalyzedInstructions()){
+            for (SingleStep k: j.getSteps()){
+                temp = temp + k.getNumber() + ". " + k.getStep() +"\n";
+            }
+        }
+        this.instructions = temp; */
     }
 
     public String getJson() {
