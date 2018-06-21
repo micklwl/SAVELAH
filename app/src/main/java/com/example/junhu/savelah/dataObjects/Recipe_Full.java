@@ -31,6 +31,7 @@ public class Recipe_Full {
     private String title;
     private int readyInMinutes;
     private String instructions;
+    private List<Steps> analyzedInstructions;
 
 
     public Recipe_Full(String json) {
@@ -52,7 +53,7 @@ public class Recipe_Full {
         this.vegetarian = recipeFull.isVegetarian();
         this.veryHealthy = recipeFull.isVeryHealthy();
         this.veryPopular = recipeFull.isVeryPopular();
-
+        this.analyzedInstructions = recipeFull.getAnalyzedInstructions();
     }
 
     public String getJson() {
@@ -113,6 +114,7 @@ public class Recipe_Full {
 
     public boolean isVeryPopular() { return veryPopular; }
 
+    public List<Steps> getAnalyzedInstructions() { return analyzedInstructions; }
 
 
 }
