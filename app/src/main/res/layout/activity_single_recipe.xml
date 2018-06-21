@@ -54,7 +54,7 @@
 
             <!-- Recipe Title -->
             <TextView
-                android:id="@+id/recipe_title"
+                android:id="@+id/recipeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -69,7 +69,7 @@
                 android:id="@+id/recipeImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recipe_title"
+                android:layout_below="@id/recipeTitle"
                 android:layout_margin="5dp"
                 android:adjustViewBounds="true"
                 android:focusable="false"
@@ -81,7 +81,7 @@
             <!-- Recipe Information -->
 
             <ImageView
-                android:id="@+id/recipe_time_img_f"
+                android:id="@+id/recipeTimeImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recipeImage"
@@ -93,7 +93,7 @@
                 android:src="@drawable/time"/>
 
             <TextView
-                android:id="@+id/recipe_time_f"
+                android:id="@+id/recipeTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recipeImage"
@@ -101,18 +101,18 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="15dp"
-                android:layout_toEndOf="@id/recipe_time_img_f"
+                android:layout_toEndOf="@id/recipeTimeImage"
                 android:focusable="false"
                 android:gravity="center"
                 android:textStyle="italic" />
 
             <ImageView
-                android:id="@+id/recipe_serves_img_f"
+                android:id="@+id/recipeServesImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recipeImage"
                 android:layout_margin="5dp"
-                android:layout_toEndOf="@id/recipe_time_f"
+                android:layout_toEndOf="@id/recipeTime"
                 android:adjustViewBounds="true"
                 android:focusable="false"
                 android:maxHeight="35dp"
@@ -128,7 +128,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="15dp"
-                android:layout_toEndOf="@id/recipe_serves_img_f"
+                android:layout_toEndOf="@id/recipeServesImage"
                 android:focusable="false"
                 android:gravity="center"
                 android:textStyle="italic" />
@@ -136,10 +136,10 @@
             <!-- Ingredient Information -->
 
             <TextView
-                android:id="@+id/recipe_ing_title_f"
+                android:id="@+id/recipeIngredients"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recipe_time_img_f"
+                android:layout_below="@id/recipeTimeImage"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
 
@@ -152,21 +152,21 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/recipe_ing_f"
+                android:id="@+id/recipeIngredientsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:layout_below="@id/recipe_ing_title_f"
+                android:layout_below="@id/recipeIngredients"
                 android:layout_margin="5dp"
                 android:focusable="true" />
 
             <!-- Instruction Information -->
 
             <TextView
-                android:id="@+id/recipe_ins_title_f"
+                android:id="@+id/recipeInstructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/recipe_ing_f"
+                android:layout_below="@id/recipeIngredientsList"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
 
@@ -179,11 +179,11 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/recipe_ins_f"
+                android:id="@+id/recipeInstructionsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:layout_below="@id/recipe_ins_title_f"
+                android:layout_below="@id/recipeInstructions"
                 android:layout_margin="5dp"
                 android:focusable="true" />
 

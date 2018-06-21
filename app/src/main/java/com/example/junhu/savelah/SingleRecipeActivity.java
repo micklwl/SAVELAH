@@ -1,6 +1,8 @@
 package com.example.junhu.savelah;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -8,12 +10,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.junhu.savelah.dataObjects.Ingredient_Full;
 import com.example.junhu.savelah.dataObjects.Recipe;
+import com.example.junhu.savelah.dataObjects.Recipe_DB;
 import com.example.junhu.savelah.dataObjects.Recipe_Full;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.SpoonacularAPIClient;
@@ -29,14 +39,20 @@ import java.text.ParseException;
 import java.util.List;
 
 public class SingleRecipeActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView instructions;
-    TextView Textv;
-    ImageView recipeImage;
-    TextView recipeTime;
-    TextView ingredients;
-    TextView servings;
-    String suffix;
-    String recipeName;
+    private TextView instructions;
+    private TextView Textv;
+    private ImageView recipeImage;
+    private TextView recipeTime;
+    private TextView ingredients;
+    private TextView servings;
+    private String suffix;
+    private String recipeName;
+    private Recipe_Full singleRecipe;
+    private FirebaseUser user;
+    private DatabaseReference initDatabase;
+    private DatabaseReference mDatabase;
+    private StorageReference mStorageRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         int id = 0;
@@ -50,13 +66,16 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
             id = Integer.valueOf(extras.getString("search_id"));
         }
 
-        Textv = (TextView)findViewById(R.id.recipe_title);
+        Textv = (TextView)findViewById(R.id.recipeTitle);
         recipeImage = (ImageView) this.findViewById(R.id.recipeImage);
-        instructions = (TextView)findViewById(R.id.recipe_ins_f);
-        recipeTime = (TextView)findViewById(R.id.recipe_time_f);
+        instructions = (TextView)findViewById(R.id.recipeInstructionsList);
+        recipeTime = (TextView)findViewById(R.id.recipeTime);
         servings = (TextView)findViewById(R.id.recipeServes);
-        ingredients = (TextView)findViewById(R.id.recipe_ing_f);
+        ingredients = (TextView)findViewById(R.id.recipeIngredientsList);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        initDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        mDatabase = initDatabase.child(user.getUid());
 
 
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
@@ -95,7 +114,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
                         // END-DEBUG */
 
                     Gson gson = new Gson();
-                    Recipe_Full singleRecipe = gson.fromJson(response.parseAsString(), Recipe_Full.class);
+                    singleRecipe = gson.fromJson(response.parseAsString(), Recipe_Full.class);
                         /* DEBUG: TEST GSON:
                         * System.out.println("RESPONSE-GSON: " + view_single_recipe.getTitle());
                         // END-DEBUG */
@@ -144,11 +163,11 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
 
         String instruc = singleRecipe.getInstructions();
         if (instruc != null) {
-            Log.d("test","instruc null");
+            Log.d("test",instruc);
             instructions.setText(instruc.replaceAll("<[^>]*>", "\n").trim());
         }
         else {
-            String failInstruc = "No instructions was provided by Spoonacular!:(";
+            String failInstruc = "No instructions was provided by Spoonacular! :(";
             instructions.setText(failInstruc);
         }
     }
@@ -157,6 +176,9 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.saveRecipe:
+                Recipe_DB recipe_db = new Recipe_DB(singleRecipe, suffix);
+                mDatabase.child("recipes").child(recipe_db.getTitle()).setValue(recipe_db);
+                mStorageRef = FirebaseStorage.getInstance().getReference("Uploads");
 
                 break;
             case R.id.addList:
@@ -175,6 +197,14 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
             }
         }
         return result;
+    }
+
+    private String getFileExtension(Uri uri){
+        ContentResolver cR= getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+    private void uploadFIle(){
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.junhu.savelah.dataObjects;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class HTTP_RecipeShort {
         this.totalResults = totalResults;
     }
     public HTTP_RecipeShort(String json) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         HTTP_RecipeShort handler = gson.fromJson(json, HTTP_RecipeShort.class);
         this.baseUri = handler.getBaseUri();
         this.expires = handler.getExpires();
@@ -62,9 +63,7 @@ public class HTTP_RecipeShort {
         return processingTimeMs;
     }
 
-    public List<Recipe_Short> getResults() {
-        return results;
-    }
+    public List<Recipe_Short> getResults() { return results; }
 
     public int getTotalResults() {
         return totalResults;

@@ -1,6 +1,7 @@
 package com.example.junhu.savelah.dataObjects;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,23 +32,10 @@ public class Recipe_Full {
     private int readyInMinutes;
     private String instructions;
 
-    private HashMap<String, Ingredient_Full> ingList;
-    public HashMap<String, Ingredient_Full> getIngList() {
-        return ingList;
-    }
-
-
-    public Recipe_Full(String title, int id, int servings, int readyInMinutes, HashMap<String,Ingredient_Full> extendedIngredients, String instructions){
-        this.title = title;
-        this.id = id;
-        this.servings = servings;
-        this.readyInMinutes = readyInMinutes;
-        this.ingList = extendedIngredients;
-        this.instructions = instructions;
-    }
 
     public Recipe_Full(String json) {
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         Recipe_Full recipeFull = gson.fromJson(json, Recipe_Full.class);
         this.cheap = recipeFull.isCheap();
         this.dairyFree = recipeFull.isDairyFree();
@@ -68,7 +56,8 @@ public class Recipe_Full {
     }
 
     public String getJson() {
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(this);
     }
 
@@ -91,7 +80,7 @@ public class Recipe_Full {
     }
 
     public String getInstructions() {
-        return instructions;
+        return instructions.replaceAll("\\s{2,}", "\n");
     }
 
     public int getReadyInMinutes() {
@@ -118,13 +107,12 @@ public class Recipe_Full {
         return vegan;
     }
 
-    public boolean isVegetarian() {
-        return vegetarian;
-    }
+    public boolean isVegetarian() { return vegetarian; }
 
     public boolean isVeryHealthy() { return veryHealthy; }
 
     public boolean isVeryPopular() { return veryPopular; }
+
 
 
 }
