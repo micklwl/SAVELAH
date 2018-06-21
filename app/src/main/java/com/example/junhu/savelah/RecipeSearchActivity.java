@@ -5,8 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -42,7 +44,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
     private String query;
     private String excludeIngredients;
     private static final boolean    limitLicense = false;
-    private static final int    resultNumber = 10;
+    private static final int    resultNumber = 20;
     private int offset;
     private String type;
     private ArrayList<Recipe> results;
@@ -100,6 +102,19 @@ public class RecipeSearchActivity extends AppCompatActivity{
 
         // Configuration parameters
         com.mashape.p.spoonacularrecipefoodnutritionv1.Configuration.initialize(this.getBaseContext());
+
+        recipeResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(RecipeSearchActivity.this, SingleRecipeActivity.class);
+                Recipe selectedRecipe =  (Recipe)recipeResults.getItemAtPosition(position);
+                intent.putExtra("title",selectedRecipe.getTitle());
+                intent.putExtra("suffix",selectedRecipe.getImage());
+                intent.putExtra("search_id",selectedRecipe.getIdString());
+                Log.d("hello", selectedRecipe.getIdString());
+                startActivity(intent);
+            }
+        });
     }
 
     private void doSearch(boolean nextSet) {
@@ -147,8 +162,6 @@ public class RecipeSearchActivity extends AppCompatActivity{
                     String title = i.getTitle();
                     String id = String.valueOf(i.getId());
                     String suffix = i.getImage();
-                    //String urlFinal = handler.getBaseUri() + suffix;
-                    //String urlFinal=handler.getBaseUri()+ id + "312x231.jpg";
                     String urlFinal = "https://spoonacular.com/recipeImages/";
                     if (suffix.endsWith(".jpg")) {
                         urlFinal = urlFinal + id + "-556x370.jpg";
@@ -156,8 +169,11 @@ public class RecipeSearchActivity extends AppCompatActivity{
                     else if (suffix.endsWith(".png")){
                         urlFinal = urlFinal + id + "-556x370.png";
                     }
-
-                    temp.add(new Recipe(title, urlFinal));
+                    else if (suffix.endsWith(".jpeg")){
+                        urlFinal = urlFinal+ id + "-556x370.jpeg";
+                    }
+                    Log.d("lol",title);
+                    temp.add(new Recipe(title, urlFinal,i.getId()));
                 }
                 results.addAll(temp);
                 adapter.notifyDataSetChanged();

@@ -71,9 +71,9 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Customer c = dataSnapshot.getValue(Customer.class);
-                list.clear();
-                HashMap<String, Ingredient> map = c.getList();
-                if (map != null) {
+                if (c != null) {
+                    list.clear();
+                    HashMap<String, Ingredient> map = c.getList();
                     ArrayList<String> temp = new ArrayList<>();
                     for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
                         String key = entry.getKey();
@@ -92,7 +92,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
 
             }
         });
-   // Toast.makeText(this, user.getEmail(), Toast.LENGTH_LONG).show();
+        // Toast.makeText(this, user.getEmail(), Toast.LENGTH_LONG).show();
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
         bottombar.enableShiftingMode(false);
@@ -140,9 +140,9 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.delGrocery :
-             int position = info.position;
-             deleteGrocery(position);
-             return true;
+                int position = info.position;
+                deleteGrocery(position);
+                return true;
             case R.id.updateDate :
                 int p = info.position;
                 DatePickerFragment newFragment = new DatePickerFragment();
@@ -150,7 +150,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                 bundle.putString("item", findItem(p));
                 bundle.putString("User", user.getUid());
                 newFragment.setArguments(bundle);
-             //   setDate(newFragment.getDate(), p);
+                //   setDate(newFragment.getDate(), p);
                 newFragment.show(getFragmentManager(), "datePicker");
             default:
                 return super.onContextItemSelected(item);
@@ -160,8 +160,8 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     private void addGrocery(String quantity) {
         Log.d("entered", "entered");
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Integer.parseInt(quantity)));
-      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Integer.parseInt(quantity),"kg"));
+        //  mDatabase.child("list").child(nextIndex + "").setValue(str);
         Log.d("hello", "addGrocery: " + str);
     }
 
@@ -172,28 +172,28 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     public void findListListener(View view) {
         final String sharedEmail = findList.getText().toString().trim();
         final String decodedEmail = sharedEmail.replace(".", ",");
-        Query query = initDatabase.orderByChild("email").equalTo(sharedEmail);
-        query.addValueEventListener(new ValueEventListener() {
+        Query query = mDatabase.child("members").orderByKey().equalTo(decodedEmail);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    GenericTypeIndicator<HashMap<String, Customer>> t = new GenericTypeIndicator<HashMap<String,Customer>>() {};
-                    String[] a = new String[1];
-                    String userIDOfSharee = dataSnapshot.getValue(t).keySet().toArray(a)[0];
-                    Customer sharee = dataSnapshot.getValue(t).get(userIDOfSharee);
-                    if (sharee.getMembers().containsKey(decodedEmail)) {
-                        Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
-                        intent.putExtra(EXTRA_MESSAGE, userIDOfSharee);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(GroceryActivity.this,"No such user in SAVELAH", Toast.LENGTH_SHORT).show();
+                if(dataSnapshot.exists()) {
+                    GenericTypeIndicator<HashMap<String, String>> t = new GenericTypeIndicator<HashMap<String,String>>() {};
+                    HashMap <String, String> map = dataSnapshot.getValue(t);
+                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
+                    intent.putExtra(EXTRA_MESSAGE, map.get(decodedEmail));
+                    startActivity(intent);
+                    // Log.d("onDataChanges", dataSnapshot.getValue());
+//                    Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
+//                    intent.putExtra(EXTRA_MESSAGE, sharedEmail);
+//                    startActivity(intent);
+                } else{
+                    Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -215,7 +215,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                     String[] b = dataSnapshot.getValue(t).keySet().toArray(a);
                     mDatabase.child("members").child(newEmail).setValue(b[0]);
 //                    Log.d("shareHello", dataSnapshot.getValue(t).keySet().toString());
-                //    mDatabase.child("members").child(ID).setValue(emailToShare);
+                    //    mDatabase.child("members").child(ID).setValue(emailToShare);
                 } else {
                     Toast.makeText(GroceryActivity.this,"No such user in SAVELAH", Toast.LENGTH_SHORT).show();
                 }

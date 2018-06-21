@@ -2,9 +2,10 @@ package com.example.junhu.savelah.dataObjects;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Recipe_Short {
+public class Recipe_Short implements Serializable {
     public int id;
     public String title;
     private int readyInMinutes;
@@ -26,7 +27,7 @@ public class Recipe_Short {
         this.image = recipe_short.getImage();
         this.imageUrls = recipe_short.getImageUrls();
         this.readyInMinutes = recipe_short.getReadyInMinutes();
-        this.title = recipe_short.getTitle();
+        this.title = recipe_short.getTitle().replaceAll("\\s\\p{Pd}\\s", "-");
     }
 
     public String getJson() {
@@ -37,7 +38,6 @@ public class Recipe_Short {
     public int getId() {
         return id;
     }
-
 
     public String getImage() {
         return image;
@@ -54,7 +54,7 @@ public class Recipe_Short {
     }
 
     public String getTitle() {
-        return title.replaceAll("\\p{Pd}", "-");
+        return title.replaceAll("\\s\\p{Pd}\\s", "-");
     }
 
     @Override
