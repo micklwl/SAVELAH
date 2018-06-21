@@ -182,7 +182,8 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                     String[] a = new String[1];
                     String shareeID = dataSnapshot.getValue(t).keySet().toArray(a)[0];
                     Customer sharee = map.get(shareeID);
-                    if (sharee.getMembers().containsKey(decodedEmail)) {
+                    HashMap<String, String> members = sharee.getMembers();
+                    if ((!(members == null)) && members.containsKey(decodedEmail)) {
                         Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
                         intent.putExtra(EXTRA_MESSAGE, shareeID);
                         startActivity(intent);
