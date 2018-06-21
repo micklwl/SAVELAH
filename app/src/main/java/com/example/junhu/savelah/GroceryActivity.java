@@ -160,7 +160,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     private void addGrocery(String quantity) {
         Log.d("entered", "entered");
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Integer.parseInt(quantity)));
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Integer.parseInt(quantity), "kg"));
       //  mDatabase.child("list").child(nextIndex + "").setValue(str);
         Log.d("hello", "addGrocery: " + str);
     }
