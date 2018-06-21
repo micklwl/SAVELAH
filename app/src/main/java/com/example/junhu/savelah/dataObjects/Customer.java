@@ -52,6 +52,7 @@ public class Customer {
     public HashMap<String, Recipe_DB> getRecipes() {
         return recipes;
     }
+
     public void addIngredient(String ingredient, String date, int amount,String unit) {
         list.put(ingredient, new Ingredient(ingredient, date, amount,unit));
     }

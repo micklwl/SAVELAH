@@ -30,6 +30,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         editTextEmail = findViewById(R.id.ShowEmail);
         mAuth = FirebaseAuth.getInstance();
+
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
         bottombar.enableShiftingMode(false);
@@ -102,7 +103,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Password change email sent.", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
     }

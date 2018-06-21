@@ -41,6 +41,7 @@ public class RecipeActivity extends AppCompatActivity implements View.OnClickLis
                 return false;
             }
         });
+
         findViewById(R.id.searchButton).setOnClickListener(this);
         findViewById(R.id.myRecipesButton).setOnClickListener(this);
     }

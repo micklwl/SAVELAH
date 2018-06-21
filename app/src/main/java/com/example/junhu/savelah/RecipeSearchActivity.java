@@ -49,15 +49,12 @@ public class RecipeSearchActivity extends AppCompatActivity{
     private String type;
     private ArrayList<Recipe> results;
     private CustomListAdapter adapter;
-    //FoodAdapter test;
-
-    //static final String xMashapeKey = "mFpLVZi0g1mshN4KsSrVPNXmfYATp1qkdk9jsnFqTeb4ks0NAc";
-    //static final String API_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_search);
+
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
         bottombar.enableShiftingMode(false);
@@ -81,10 +78,12 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 return false;
             }
         });
+
         recipeResults = (ListView) findViewById(R.id.listOfRecipes);
         results = new ArrayList<Recipe>();
         adapter = new CustomListAdapter(getApplicationContext(), R.layout.recipe_search_list, results);
         recipeResults.setAdapter(adapter);
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         searchItem = (EditText) findViewById(R.id.groceryItem);
         Button queryButton = (Button) findViewById(R.id.queryButton);
