@@ -75,15 +75,17 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                     list.clear();
                     HashMap<String, Ingredient> map = c.getList();
                     ArrayList<String> temp = new ArrayList<>();
-                    for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
-                        String key = entry.getKey();
-                        Ingredient value = entry.getValue();
-                        temp.add(key + " " + value.getAmount());
+                    if (map != null) {
+                        for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
+                            String key = entry.getKey();
+                            Ingredient value = entry.getValue();
+                            temp.add(key + " " + value.getAmount());
+                        }
+                        list.addAll(temp);
+                        // list.addAll(new ArrayList<String>(c.getList().keySet()));
+                        Log.d("hello", "onDataChange: " + list);
+                        adapter.notifyDataSetChanged();
                     }
-                    list.addAll(temp);
-                    // list.addAll(new ArrayList<String>(c.getList().keySet()));
-                    Log.d("hello", "onDataChange: " + list);
-                    adapter.notifyDataSetChanged();
                 }
             }
 

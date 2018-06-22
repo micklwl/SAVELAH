@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding = "3dp">
+
+    <TextView
+        android:id="@+id/resultsDB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textSize="15sp"
+        android:hint="Results in Database" />
+
+    <TextView
+        android:id="@+id/toAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/resultsDB"
+        android:textSize="15sp"
+        android:hint="Ingredient to Add" />
+    <TextView
+        android:id="@+id/finalResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toAdd"
+        android:textSize="15sp"
+        android:text="Enter your desired result:" />
+
+    <EditText
+        android:id="@+id/quantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/finalResult"
+        android:textSize="15sp"
+        android:hint="@string/quantity"
+        android:inputType="textAutoComplete" />
+
+    <EditText
+        android:id="@+id/unit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/quantity"
+        android:textSize="15sp"
+        android:hint="Unit"
+        android:inputType="textAutoComplete" />
+
+</RelativeLayout>

@@ -14,7 +14,9 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
 import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.example.junhu.savelah.dataObjects.Ingredient_Full;
 import com.example.junhu.savelah.dataObjects.Recipe;
@@ -45,7 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SingleRecipeActivity extends AppCompatActivity implements View.OnClickListener {
+public class SingleRecipeActivity extends AppCompatActivity implements ChangeQuantityDialog.ChangeQuantityDialogListener {
     private TextView instructions;
     private TextView Textv;
     private ImageView recipeImage;
@@ -53,6 +55,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
     private TextView ingredients;
     private TextView servings;
     private Button saveButton;
+    private Button addButton;
     private String suffix;
     private String recipeName;
     private Recipe_Full singleRecipe;
@@ -87,6 +90,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         servings = (TextView)findViewById(R.id.recipeServes);
         ingredients = (TextView)findViewById(R.id.recipeIngredientsList);
         saveButton = (Button)findViewById(R.id.saveRecipe);
+        addButton = (Button)findViewById(R.id.addList);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
@@ -123,8 +127,63 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         else{
             searchAPI();
         }
-        findViewById(R.id.saveRecipe).setOnClickListener(this);
-        findViewById(R.id.addList).setOnClickListener(this);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickSave();
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickAdd();
+            }
+        });
+
+    }
+
+    private void clickAdd() {
+        if (type){
+            HashMap<String, Ingredient> ingList = rDB.getIngList();
+            for (Map.Entry<String, Ingredient> entry : ingList.entrySet()) {
+                Ingredient value = entry.getValue();
+                addToList(value);
+            }
+        }
+        else {
+            List<Ingredient_Full> ingredientsFull = singleRecipe.getExtendedIngredients();
+            for (Ingredient_Full ing: ingredientsFull){
+                Ingredient ing1 = new Ingredient(ing);
+                addToList(ing1);
+            }
+        }
+    }
+
+    private void clickSave() {
+        if (type) {
+            if (saveButton.getText().toString().equalsIgnoreCase("unSave")) {
+                mDatabase.child("recipes").child(recipeName).removeValue();
+                Toast.makeText(SingleRecipeActivity.this,"This recipe has been removed from your list.", Toast.LENGTH_SHORT).show();
+                saveButton.setText(save);
+            } else if (saveButton.getText().toString().equalsIgnoreCase("Save")) {
+                Toast.makeText(SingleRecipeActivity.this,"This recipe has been added to your list.", Toast.LENGTH_SHORT).show();
+                mDatabase.child("recipes").child(rDB.getTitle()).setValue(rDB);
+                saveButton.setText(unSave);
+            }
+        } else {
+            if (saveButton.getText().toString().equalsIgnoreCase("Save")) {
+                Recipe_DB recipe_db = new Recipe_DB(singleRecipe, suffix);
+                mDatabase.child("recipes").child(recipe_db.getTitle()).setValue(recipe_db);
+                Toast.makeText(SingleRecipeActivity.this,"This recipe has been added to your list.", Toast.LENGTH_SHORT).show();
+                saveButton.setText(unSave);
+            } else if (saveButton.getText().toString().equalsIgnoreCase("unSave")) {
+                mDatabase.child("recipes").child(recipeName).removeValue();
+                Toast.makeText(SingleRecipeActivity.this,"This recipe has been removed from your list.", Toast.LENGTH_SHORT).show();
+                saveButton.setText(save);
+            }
+        }
     }
 
     private void searchFromDatabase() {
@@ -240,55 +299,6 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.saveRecipe:
-                if (type){
-                    if (saveButton.getText().toString().equalsIgnoreCase("unSave")){
-                        mDatabase.child("recipes").child(recipeName).removeValue();
-                        saveButton.setText(save);
-                        break;
-                    }
-                    else if (saveButton.getText().toString().equalsIgnoreCase("Save")) {
-                        mDatabase.child("recipes").child(rDB.getTitle()).setValue(rDB);
-                        saveButton.setText(unSave);
-                        break;
-                    }
-                }
-                else {
-                    if (saveButton.getText().toString().equalsIgnoreCase("Save")) {
-                        Recipe_DB recipe_db = new Recipe_DB(singleRecipe, suffix);
-                        mDatabase.child("recipes").child(recipe_db.getTitle()).setValue(recipe_db);
-                        saveButton.setText(unSave);
-                        break;
-                    }
-                    else if (saveButton.getText().toString().equalsIgnoreCase("unSave")){
-                        mDatabase.child("recipes").child(recipeName).removeValue();
-                        saveButton.setText(save);
-                        break;
-                    }
-                }
-            case R.id.addList:
-                if (type){
-                    HashMap<String, Ingredient> ingList = rDB.getIngList();
-                    for (Map.Entry<String, Ingredient> entry : ingList.entrySet()) {
-                        Ingredient value = entry.getValue();
-                        addToList(value);
-                    }
-                    break;
-                }
-                else {
-                    List<Ingredient_Full> ingredientsFull = singleRecipe.getExtendedIngredients();
-                    for (Ingredient_Full ing: ingredientsFull){
-                        Ingredient ing1 = new Ingredient(ing);
-                        addToList(ing1);
-                    }
-                    break;
-                }
-        }
-    }
-
     private void addToList(final Ingredient ing) {
         mDatabase.child("list").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -301,7 +311,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
                     }
                     else {
                         // ingredient present but unit on list and unit inside DB diff
-
+                        openDialog(ingredientDB, ing);
                     }
                 }
                 else {
@@ -314,6 +324,25 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
+    }
+
+    private void openDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
+        ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
+        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName();
+        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit();
+        Bundle bundle = new Bundle();
+        bundle.putString("Database",ingDB);
+        bundle.putString("Adding",ingAdd);
+        bundle.putString("Name",ingredientDB.getName());
+        changeQuantityDialog.setArguments(bundle);
+        changeQuantityDialog.show(getSupportFragmentManager(),"change quantity dialog");
+    }
+
+    @Override
+    public void applyTexts(float quantityResult, String unitResult, String name) {
+        //set the final amount inside database
+        mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
+        mDatabase.child("list").child(name).child("unit").setValue(unitResult);
     }
 
     private String readIngredients(List<Ingredient_Full> ingredientList) {

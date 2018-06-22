@@ -27,9 +27,9 @@
     <string name="email_of_shared_users_list">Email of shared users list</string>
     <string name="ingredients_required">Ingredients required</string>
     <string name="instructions">Instructions</string>
-    <string name="save_recipe">Save Recipe</string>
     <string name="add_to_grocery_list">Add to Grocery List</string>
     <string name="recipe_title">Recipe Title</string>
+    <string name="save">Save</string>
 
 
     <!-- Strings related to login -->

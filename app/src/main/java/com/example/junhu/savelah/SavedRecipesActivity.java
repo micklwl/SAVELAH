@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SavedRecipesActivity extends AppCompatActivity {
+public class SavedRecipesActivity extends AppCompatActivity implements View.OnClickListener  {
     private ListView recipeResults;
     private ArrayList<Recipe_DB> results;
     private SavedRecipesAdapter adapter;
@@ -85,14 +85,16 @@ public class SavedRecipesActivity extends AppCompatActivity {
                     results.clear();
                     HashMap<String, Recipe_DB> map = c.getRecipes();
                     ArrayList<Recipe_DB> temp = new ArrayList<>();
-                    for (Map.Entry<String, Recipe_DB> entry : map.entrySet()) {
-                        Recipe_DB one = entry.getValue();
-                        //Ingredient value = entry.getValue();
-                        temp.add(one);
+                    if (map != null) {
+                        for (Map.Entry<String, Recipe_DB> entry : map.entrySet()) {
+                            Recipe_DB one = entry.getValue();
+                            //Ingredient value = entry.getValue();
+                            temp.add(one);
+                        }
+                        results.addAll(temp);
+                        //Log.d("hello", "onDataChange: " + list);
+                        adapter.notifyDataSetChanged();
                     }
-                    results.addAll(temp);
-                    //Log.d("hello", "onDataChange: " + list);
-                    adapter.notifyDataSetChanged();
                 }
             }
             @Override
@@ -114,5 +116,16 @@ public class SavedRecipesActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.savedRecipes).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.savedRecipes:
+                startActivity(new Intent(SavedRecipesActivity.this, AddRecipeActivity.class));
+                break;
+        }
     }
 }
