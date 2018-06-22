@@ -106,9 +106,10 @@ public class SavedRecipesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SavedRecipesActivity.this, SingleRecipeActivity.class);
                 Recipe_DB selectedRecipe =  (Recipe_DB)recipeResults.getItemAtPosition(position);
-                //intent.putExtra("title",selectedRecipe.getTitle());
-                //intent.putExtra("suffix",selectedRecipe.getImage());
-                //intent.putExtra("search_id",selectedRecipe.getIdString());
+                intent.putExtra("title",selectedRecipe.getTitle());
+                intent.putExtra("suffix",selectedRecipe.getImageUrl());
+                intent.putExtra("search_id",String.valueOf(selectedRecipe.getId()));
+                intent.putExtra("type","true");
                // Log.d("hello", selectedRecipe.getIdString());
                 startActivity(intent);
             }

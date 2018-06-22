@@ -14,14 +14,18 @@ import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.example.junhu.savelah.dataObjects.Ingredient_Full;
 import com.example.junhu.savelah.dataObjects.Recipe;
 import com.example.junhu.savelah.dataObjects.Recipe_DB;
 import com.example.junhu.savelah.dataObjects.Recipe_Full;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
@@ -36,7 +40,9 @@ import com.squareup.picasso.Picasso;
 import org.w3c.dom.Text;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SingleRecipeActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView instructions;
@@ -48,14 +54,16 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
     private String suffix;
     private String recipeName;
     private Recipe_Full singleRecipe;
+    private boolean type;
+    private int id = 0;
     private FirebaseUser user;
     private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
+    private DatabaseReference mRecipes;
     private StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int id = 0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_recipe);
         Intent intent = getIntent();
@@ -64,6 +72,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
             recipeName = (String) extras.getString("title");
             suffix = (String) extras.getString("suffix");
             id = Integer.valueOf(extras.getString("search_id"));
+            type = Boolean.valueOf(extras.getString("type"));
         }
 
         Textv = (TextView)findViewById(R.id.recipeTitle);
@@ -101,7 +110,55 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
                 return false;
             }
         });
+        if (type){ searchFromDatabase();}
+        else{ searchAPI();}
+        findViewById(R.id.saveRecipe).setOnClickListener(this);
+        findViewById(R.id.addList).setOnClickListener(this);
+    }
 
+    private void searchFromDatabase() {
+        mRecipes = mDatabase.child("recipes");
+        mRecipes.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Recipe_DB rDB = dataSnapshot.getValue(Recipe_DB.class);
+                Textv.setText(recipeName);
+                Picasso.get().load(rDB.getImageUrl()).into(recipeImage);
+
+                String time = String.valueOf(rDB.getReadyInMinutes()) + " Minutes";
+                recipeTime.setText(time);
+
+                String serve = String.valueOf(rDB.getServings()) + " People";
+                servings.setText(serve);
+
+                HashMap<String, Ingredient> ingList = new HashMap<String, Ingredient>();
+                ingList = rDB.getIngList();
+                ingredients.setText(readIngredientsDB(ingList));
+
+                instructions.setText(rDB.getInstructions());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private String readIngredientsDB(HashMap<String, Ingredient> ingList) {
+        String result = "";
+        if (ingList != null) {
+            for (Map.Entry<String, Ingredient> entry : ingList.entrySet()) {
+                Ingredient value = entry.getValue();
+                if (value.getUnit().length() > 1) {
+                    result += value.getAmount() + " " + value.getUnit() + " " + value.getName() + "\n";
+                }
+            }
+        }
+        return result;
+    }
+
+    private void searchAPI() {
         SpoonacularAPIClient client = new SpoonacularAPIClient();
         APIController clientController = client.getClient();
         clientController.getRecipeInformationAsync(id, new APICallBack<DynamicResponse>() {
@@ -130,15 +187,9 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
-        findViewById(R.id.saveRecipe).setOnClickListener(this);
-        findViewById(R.id.addList).setOnClickListener(this);
-
-
     }
 
     private void showOnScreen(Recipe_Full singleRecipe) {
-
-
         Textv.setText(recipeName);
 
         String imageUrl = "https://spoonacular.com/recipeImages/";
@@ -162,14 +213,13 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         String instruc = singleRecipe.getInstructions();
 
         if (instruc != null) {
-            //if (instruc != ""){
             Log.d("test", instruc);
             instructions.setText(instruc.replaceAll("<[^>]*>", "\n").trim());
-        } else {
+        }
+        else {
             String failInstruc = "No instructions was provided by Spoonacular! :(";
             instructions.setText(failInstruc);
         }
-        //}
     }
 
     @Override
@@ -199,12 +249,5 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         return result;
     }
 
-    private String getFileExtension(Uri uri){
-        ContentResolver cR= getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
-    private void uploadFIle(){
-    }
 }
 

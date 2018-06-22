@@ -1,5 +1,7 @@
 package com.example.junhu.savelah.dataObjects;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -54,13 +56,7 @@ public class Recipe_Full {
         this.veryPopular = recipeFull.isVeryPopular();
         this.analyzedInstructions = recipeFull.getAnalyzedInstructions();
         this.instructions = recipeFull.getInstructions();
-   /*     String temp = "";
-        for (Steps j:recipeFull.getAnalyzedInstructions()){
-            for (SingleStep k: j.getSteps()){
-                temp = temp + k.getNumber() + ". " + k.getStep() +"\n";
-            }
-        }
-        this.instructions = temp; */
+
     }
 
     public String getJson() {
@@ -88,7 +84,12 @@ public class Recipe_Full {
     }
 
     public String getInstructions() {
-        return instructions.replaceAll("\\s{2,}", "\n");
+        if (instructions != null){
+            return instructions.replaceAll("\\s{2,}", "\n");
+        }
+        else{
+            return null;
+        }
     }
 
     public int getReadyInMinutes() {

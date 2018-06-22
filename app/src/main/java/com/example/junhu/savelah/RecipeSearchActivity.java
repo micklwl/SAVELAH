@@ -110,6 +110,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 intent.putExtra("title",selectedRecipe.getTitle());
                 intent.putExtra("suffix",selectedRecipe.getImage());
                 intent.putExtra("search_id",selectedRecipe.getIdString());
+                intent.putExtra("type", "false");
                 Log.d("hello", selectedRecipe.getIdString());
                 startActivity(intent);
             }
