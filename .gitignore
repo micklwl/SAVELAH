@@ -1,9 +1,13 @@
 *.iml
 .gradle
+/app/google-services.json
 /local.properties
 /.idea/libraries
+/.idea/dictionaries
 /.idea/modules.xml
 /.idea/workspace.xml
+/.idea/caches/build_file_checksums.ser.ser
+/.idea/assetWizardSettings.xml
 .DS_Store
 /build
 /captures

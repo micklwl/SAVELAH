@@ -15,6 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="xmashapekey"
+            android:value="XDldRKNWBVmshAwM842H5IykN8TLp1PF0BrjsnHZvSIqrmdtt1" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +27,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".GroceryActivity" />
+        <activity
+            android:name=".RecipeActivity"
+            android:label="@string/title_activity_recipe" />
+        <activity android:name=".RecipeSearchActivity" />
+        <activity android:name=".SharedListActivity" />
+        <activity android:name=".CalendarActivity" />
+        <activity android:name=".SingleRecipeActivity" />
+        <activity android:name=".SavedRecipesActivity" />
+        <activity android:name=".AddRecipeActivity"></activity>
     </application>
 
 </manifest>
