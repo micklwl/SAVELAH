@@ -13,7 +13,6 @@ import android.widget.ListView;
 
 import com.example.junhu.savelah.adapter.SavedRecipesAdapter;
 import com.example.junhu.savelah.dataObjects.Customer;
-import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.example.junhu.savelah.dataObjects.Recipe_DB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -68,7 +67,7 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
         });
 
 
-        results = new ArrayList<Recipe_DB>();
+        results = new ArrayList<>();
         adapter = new SavedRecipesAdapter(getApplicationContext(), R.layout.recipe_search_list, results);
         recipeResults = (ListView) findViewById(R.id.listOfRecipes);
         recipeResults.setAdapter(adapter);
