@@ -4,8 +4,6 @@ public class Ingredient {
     private String date;
     private float amount;
     private String name;
-
-
     private String unit;
 
     public Ingredient() {}

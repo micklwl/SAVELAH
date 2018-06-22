@@ -1,47 +1,47 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
 	package
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:7:5-61
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:7:5-61
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
 	android:versionName
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
 	android:versionCode
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:1-14:12
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:11-69
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:6:11-69
 uses-permission#android.permission.INTERNET
-ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:8:5-67
+ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:8:5-67
 	android:name
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:8:22-64
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:8:22-64
 application
-ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:9:5-12:19
+ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:9:5-12:19
 	android:label
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:10:9-41
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:10:9-41
 	android:allowBackup
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:9:18-44
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml:9:18-44
 uses-sdk
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-		ADDED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\User\AndroidStudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		ADDED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
+		INJECTED from D:\StudioProjects\SAVELAH\SpoonacularAPILib\src\main\AndroidManifest.xml
