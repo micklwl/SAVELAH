@@ -147,7 +147,7 @@ public class SharedListActivity extends AppCompatActivity implements AddGroceryD
 
     private void addGrocery(String quantity) {
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Integer.parseInt(quantity), "kg"));
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), "kg"));
     }
 
     @Override

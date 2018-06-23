@@ -15,7 +15,7 @@ public class Ingredient {
         this.unit = ingredientFull.getUnit();
     }
 
-    public Ingredient(String name, String date, Integer amount, String unit) {
+    public Ingredient(String name, String date, Float amount, String unit) {
         this.name = name;
         this.date = date;
         this.amount = amount;

@@ -20,7 +20,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseAuth mAuth;
-    TextView editTextEmail;
+    private TextView editTextEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

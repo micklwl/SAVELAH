@@ -25,11 +25,11 @@ public class Customer {
 
     public void initialiseList() {
         this.list = new HashMap<>();
-        list.put("fish", new Ingredient("fish", "default", 1,"kg"));
+        list.put("fish", new Ingredient("fish", "default", (float)1,"kg"));
         this.members = new HashMap<>();
         this.recipes =  new HashMap<>();
         HashMap<String,Ingredient> ingredientlist = new HashMap<>();
-        ingredientlist.put("Name-Jun Hui",new Ingredient("Name-Jun Hui", "1/1/2018", 20,"kg"));
+        ingredientlist.put("Name-Jun Hui",new Ingredient("Name-Jun Hui", "1/1/2018", (float)20,"kg"));
         recipes.put("chicken", new Recipe_DB("chicken",12,"https://spoonacular.com/recipeImages/123-556x370.jpg",12,12,ingredientlist,"test"));
     }
 
@@ -53,7 +53,7 @@ public class Customer {
         return recipes;
     }
 
-    public void addIngredient(String ingredient, String date, int amount,String unit) {
+    public void addIngredient(String ingredient, String date, float amount,String unit) {
         list.put(ingredient, new Ingredient(ingredient, date, amount,unit));
     }
 
