@@ -197,7 +197,10 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 rDB = dataSnapshot.getValue(Recipe_DB.class);
                 Textv.setText(recipeName);
-                Picasso.get().load(rDB.getImageUrl()).into(recipeImage);
+
+                if (!rDB.getImageUrl().equals("")) {
+                    Picasso.get().load(rDB.getImageUrl()).into(recipeImage);
+                }
 
                 String time = String.valueOf(rDB.getReadyInMinutes()) + " Minutes";
                 recipeTime.setText(time);

@@ -39,7 +39,9 @@ public class SavedRecipesAdapter extends ArrayAdapter<Recipe_DB> {
         }
         Recipe_DB recipe = this.getItem(position);
         ImageView image = convertView.findViewById(R.id.imageView);
-        Picasso.get().load(recipe.getImageUrl()).into(image);
+        if (!recipe.getImageUrl().equals("")) {
+            Picasso.get().load(recipe.getImageUrl()).into(image);
+        }
         TextView title = convertView.findViewById(R.id.recipeTitle);
         title.setText(recipe.getTitle());
 

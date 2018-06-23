@@ -1,6 +1,9 @@
 package com.example.junhu.savelah;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,11 +24,20 @@ import android.widget.Toast;
 import com.example.junhu.savelah.adapter.IngredientAdapter;
 import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.example.junhu.savelah.dataObjects.Recipe_DB;
+import com.example.junhu.savelah.dataObjects.Upload;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,11 +52,16 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     private ProgressBar progressBar;
     private RecyclerView mRecyclerView;
     private IngredientAdapter ingredientAdapter;
-
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri mImageUri;
+    private ImageView recipeImg;
 
     private Recipe_DB recipeDb;
     private FirebaseUser user;
     private DatabaseReference initDatabase;
+    private StorageReference mStorageRef;
+    private StorageTask mUploadTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +72,8 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         mRecyclerView   = (RecyclerView) findViewById(R.id.rv_add_custom_recipe_ingredients);
         progressBar = (ProgressBar)findViewById(R.id.save_recipe_progress);
         instructionsText = (EditText)findViewById(R.id.edit_add_custom_recipe_instructions);
-        ingredientAdapter     = new IngredientAdapter(this);
+        recipeImg = (ImageView)findViewById(R.id.img_custom_recipe);
+        ingredientAdapter = new IngredientAdapter(this);
         mRecyclerView.setAdapter(ingredientAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -61,6 +81,9 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.lbl_add_custom_recipe_ingredients).setOnClickListener(this);
         findViewById(R.id.btn_add_custom_recipe).setOnClickListener(this);
         findViewById(R.id.lbl_add_custom_recipe_instructions).setOnClickListener(this);
+        findViewById(R.id.img_custom_recipe).setOnClickListener(this);
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
 
     /*    BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
@@ -122,6 +145,9 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                     gist.setVisibility(View.VISIBLE);
                 }
                 break;
+            case R.id.img_custom_recipe:
+                openFileChooser();
+                break;
         }
     }
 
@@ -164,10 +190,16 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             }
         } else { error_msg += "Error: We need to know how long TIME REQUIRED to cook is!\n"; }
 
-        if (error_msg.length() ==0){
+        if (error_msg.length() == 0){
             user = FirebaseAuth.getInstance().getCurrentUser();
-            recipeDb = new Recipe_DB(title,0,"test",readyInMinutes,servingsInt,ingList,instructions);
+            recipeDb = new Recipe_DB(title,0,"",readyInMinutes,servingsInt,ingList,instructions);
             uploadRecipe(recipeDb);
+            if (mUploadTask != null && mUploadTask.isInProgress()) {
+                Toast.makeText(AddRecipeActivity.this,"Image Upload in progress",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                uploadFile();
+            }
         }
         else {
             progressBar.setVisibility(View.GONE);
@@ -175,12 +207,54 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    private void uploadFile() {
+        if (mImageUri != null){
+            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+ getFileExtension(mImageUri));
+            mUploadTask = fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(AddRecipeActivity.this,"Upload is successful",Toast.LENGTH_SHORT).show();
+                    Upload upload = new Upload(fileReference.getDownloadUrl().toString());
+                    initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).child("imageUrl").setValue(upload);
+                    finish();
+                    startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class));
+                }
+
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddRecipeActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    //double progress = (100.0 * taskSnapshot.getBytesTransferred() /taskSnapshot.getTotalByteCount());
+                    //progressBar.setProgress((int)progress);
+                }
+            });
+        }
+        else {
+            //Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddRecipeActivity.this,"No image was uploaded",Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+            finish();
+            startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class));
+        }
+    }
+
+    private String getFileExtension (Uri uri){
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
     private void uploadRecipe(Recipe_DB recipeDb) {
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
         initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).setValue(recipeDb);
-        progressBar.setVisibility(View.GONE);
-        finish();
-        startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class)) ;
+
     }
 
     private List<Ingredient> getRecipeIngredients() {
@@ -201,5 +275,23 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             ///* DEBUG: */ Log.d(TAG, "Added Ingredient: " + ingredient.toString()); /* END-DEBUG */
         }
         return  ingredientList;
+    }
+
+    private void openFileChooser(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            mImageUri = data.getData();
+            Picasso.get().load(mImageUri).into(recipeImg);
+            recipeImg.setImageURI(mImageUri);
+        }
     }
 }
