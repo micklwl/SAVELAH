@@ -77,9 +77,9 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         setContentView(R.layout.activity_single_recipe);
         Intent intent = getIntent();
         Recipe extras = intent.getParcelableExtra("Recipe");
-//        Bundle extras = intent.getExtras();
-        if(extras != null) {
-            type = Boolean.valueOf(extras.getString("type"));
+        Bundle extras_plus = intent.getExtras();
+        if(extras_plus != null) {
+            type = Boolean.valueOf(extras_plus.getString("type"));
             recipeName = extras.getTitle();
             suffix = extras.getImage();
             id = extras.getId();
