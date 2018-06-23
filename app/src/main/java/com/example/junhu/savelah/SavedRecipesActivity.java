@@ -29,6 +29,7 @@ public class SavedRecipesActivity extends AppCompatActivity {
                     case R.id.navigation_recipe:
                         break;
                     case R.id.navigation_calendar:
+                        startActivity(new Intent(SavedRecipesActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
                         startActivity(new Intent(SavedRecipesActivity.this, ProfileActivity.class));

@@ -32,7 +32,7 @@ public class RecipeActivity extends AppCompatActivity implements View.OnClickLis
                     case R.id.navigation_recipe:
                         break;
                     case R.id.navigation_calendar:
-
+                            startActivity(new Intent(RecipeActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
                         startActivity(new Intent(RecipeActivity.this, ProfileActivity.class)) ;

@@ -73,6 +73,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
                         startActivity(new Intent(RecipeSearchActivity.this, RecipeActivity.class));
                         break;
                     case R.id.navigation_calendar:
+                        startActivity(new Intent(RecipeSearchActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
                         startActivity(new Intent(RecipeSearchActivity.this, ProfileActivity.class));
@@ -108,10 +109,11 @@ public class RecipeSearchActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(RecipeSearchActivity.this, SingleRecipeActivity.class);
                 Recipe selectedRecipe =  (Recipe)recipeResults.getItemAtPosition(position);
-                intent.putExtra("title",selectedRecipe.getTitle());
-                intent.putExtra("suffix",selectedRecipe.getImage());
-                intent.putExtra("search_id",selectedRecipe.getIdString());
-                Log.d("hello", selectedRecipe.getIdString());
+                intent.putExtra("Recipe", new Recipe(selectedRecipe.getTitle(),
+                        selectedRecipe.getImage(), selectedRecipe.getId()));
+//                intent.putExtra("title",selectedRecipe.getTitle());
+//                intent.putExtra("suffix",selectedRecipe.getImage());
+//                intent.putExtra("search_id",selectedRecipe.getIdString());
                 startActivity(intent);
             }
         });

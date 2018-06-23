@@ -90,6 +90,7 @@ public class SharedListActivity extends AppCompatActivity implements AddGroceryD
                     startActivity(new Intent(SharedListActivity.this, RecipeActivity.class)) ;
                     break;
                 case R.id.navigation_calendar:
+                    startActivity(new Intent(SharedListActivity.this, CalendarActivity.class));
                     break;
                 case R.id.navigation_profile:
                     startActivity(new Intent(SharedListActivity.this, ProfileActivity.class)) ;

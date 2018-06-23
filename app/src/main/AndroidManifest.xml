@@ -37,7 +37,8 @@
         <activity android:name=".CalendarActivity" />
         <activity android:name=".SingleRecipeActivity" />
         <activity android:name=".SavedRecipesActivity" />
-        <activity android:name=".AddRecipeActivity"></activity>
+        <activity android:name=".AddRecipeActivity" />
+        <activity android:name=".RecipeToCalendar"></activity>
     </application>
 
 </manifest>
