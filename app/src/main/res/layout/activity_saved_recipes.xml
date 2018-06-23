@@ -18,15 +18,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/groceryItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:text="Saved Recipes" />
-
+                <TextView
+                    android:id="@+id/savedRecipes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_add_black_24dp"
+                    android:focusable="true"
+                    android:textSize="25sp"
+                    android:gravity="center"
+                    android:text="Saved Recipes" />
 
             <ListView
                 android:id="@+id/listOfRecipes"

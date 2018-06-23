@@ -1,7 +1,9 @@
 package com.example.junhu.savelah;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +11,27 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
+import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.example.junhu.savelah.dataObjects.Ingredient_Full;
 import com.example.junhu.savelah.dataObjects.Recipe;
+import com.example.junhu.savelah.dataObjects.Recipe_DB;
 import com.example.junhu.savelah.dataObjects.Recipe_Full;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.SpoonacularAPIClient;
@@ -27,26 +44,42 @@ import com.squareup.picasso.Picasso;
 import org.w3c.dom.Text;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class SingleRecipeActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView instructions;
-    TextView Textv;
-    ImageView recipeImage;
-    TextView recipeTime;
-    TextView ingredients;
-    TextView servings;
-    String suffix;
-    String recipeName;
+public class SingleRecipeActivity extends AppCompatActivity implements ChangeQuantityDialog.ChangeQuantityDialogListener {
+    private TextView instructions;
+    private TextView Textv;
+    private ImageView recipeImage;
+    private TextView recipeTime;
+    private TextView ingredients;
+    private TextView servings;
+    private Button saveButton;
+    private Button addButton;
+    private String suffix;
+    private String recipeName;
+    private Recipe_Full singleRecipe;
+    private boolean type;
+    private int id = 0;
+    private FirebaseUser user;
+    private DatabaseReference initDatabase;
+    private DatabaseReference mDatabase;
+    private DatabaseReference mRecipes;
+    private StorageReference mStorageRef;
+    private String save = "Save";
+    private String unSave = "UnSave";
+    private Recipe_DB rDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int id = 0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_recipe);
         Intent intent = getIntent();
         Recipe extras = intent.getParcelableExtra("Recipe");
 //        Bundle extras = intent.getExtras();
         if(extras != null) {
+            type = Boolean.valueOf(extras.getString("type"));
             recipeName = extras.getTitle();
             suffix = extras.getImage();
             id = extras.getId();
@@ -55,12 +88,19 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
 //            id = Integer.valueOf(extras.getString("search_id"));
         }
 
-        Textv = (TextView)findViewById(R.id.recipe_title);
+        Textv = (TextView)findViewById(R.id.recipeTitle);
         recipeImage = (ImageView) this.findViewById(R.id.recipeImage);
-        instructions = (TextView)findViewById(R.id.recipe_ins_f);
-        recipeTime = (TextView)findViewById(R.id.recipe_time_f);
+        instructions = (TextView)findViewById(R.id.recipeInstructionsList);
+        recipeTime = (TextView)findViewById(R.id.recipeTime);
         servings = (TextView)findViewById(R.id.recipeServes);
-        ingredients = (TextView)findViewById(R.id.recipe_ing_f);
+        ingredients = (TextView)findViewById(R.id.recipeIngredientsList);
+        saveButton = (Button)findViewById(R.id.saveRecipe);
+        addButton = (Button)findViewById(R.id.addList);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        initDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        mDatabase = initDatabase.child(user.getUid());
+
 
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
@@ -85,7 +125,122 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
                 return false;
             }
         });
+        if (type){
+            searchFromDatabase();
+            saveButton.setText(unSave);
+        }
+        else{
+            searchAPI();
+        }
 
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickSave();
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickAdd();
+            }
+        });
+
+    }
+
+    private void clickAdd() {
+        if (type){
+            HashMap<String, Ingredient> ingList = rDB.getIngList();
+            for (Map.Entry<String, Ingredient> entry : ingList.entrySet()) {
+                Ingredient value = entry.getValue();
+                addToList(value);
+            }
+        }
+        else {
+            List<Ingredient_Full> ingredientsFull = singleRecipe.getExtendedIngredients();
+            for (Ingredient_Full ing: ingredientsFull){
+                Ingredient ing1 = new Ingredient(ing);
+                addToList(ing1);
+            }
+        }
+    }
+
+    private void clickSave() {
+        if (type) {
+            if (saveButton.getText().toString().equalsIgnoreCase("unSave")) {
+                mDatabase.child("recipes").child(recipeName).removeValue();
+                Toast.makeText(SingleRecipeActivity.this,"This recipe has been removed from your list.", Toast.LENGTH_SHORT).show();
+                saveButton.setText(save);
+            } else if (saveButton.getText().toString().equalsIgnoreCase("Save")) {
+                Toast.makeText(SingleRecipeActivity.this,"This recipe has been added to your list.", Toast.LENGTH_SHORT).show();
+                mDatabase.child("recipes").child(rDB.getTitle()).setValue(rDB);
+                saveButton.setText(unSave);
+            }
+        } else {
+            if (saveButton.getText().toString().equalsIgnoreCase("Save")) {
+                Recipe_DB recipe_db = new Recipe_DB(singleRecipe, suffix);
+                mDatabase.child("recipes").child(recipe_db.getTitle()).setValue(recipe_db);
+                Toast.makeText(SingleRecipeActivity.this,"This recipe has been added to your list.", Toast.LENGTH_SHORT).show();
+                saveButton.setText(unSave);
+            } else if (saveButton.getText().toString().equalsIgnoreCase("unSave")) {
+                mDatabase.child("recipes").child(recipeName).removeValue();
+                Toast.makeText(SingleRecipeActivity.this,"This recipe has been removed from your list.", Toast.LENGTH_SHORT).show();
+                saveButton.setText(save);
+            }
+        }
+    }
+
+    private void searchFromDatabase() {
+        mRecipes = mDatabase.child("recipes").child(recipeName);
+        mRecipes.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                rDB = dataSnapshot.getValue(Recipe_DB.class);
+                Textv.setText(recipeName);
+                Picasso.get().load(rDB.getImageUrl()).into(recipeImage);
+
+                String time = String.valueOf(rDB.getReadyInMinutes()) + " Minutes";
+                recipeTime.setText(time);
+
+                String serve = String.valueOf(rDB.getServings()) + " People";
+                servings.setText(serve);
+
+                HashMap<String, Ingredient> ingList = new HashMap<String, Ingredient>();
+                ingList = rDB.getIngList();
+                ingredients.setText(readIngredientsDB(ingList));
+
+                String instruc = rDB.getInstructions();
+                if (instruc != null) {
+                    //Log.d("test", instruc);
+                    instructions.setText(instruc.replaceAll("<[^>]*>", "\n").trim());
+                }
+                else {
+                    String failInstruc = "No instructions was provided by Spoonacular! :(";
+                    instructions.setText(failInstruc);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private String readIngredientsDB(HashMap<String, Ingredient> ingList) {
+        String result = "";
+        if (ingList != null) {
+            for (Map.Entry<String, Ingredient> entry : ingList.entrySet()) {
+                Ingredient value = entry.getValue();
+                if (value.getUnit().length() > 1) {
+                    result += value.getAmount() + " " + value.getUnit() + " " + value.getName() + "\n";
+                }
+            }
+        }
+        return result;
+    }
+
+    private void searchAPI() {
         SpoonacularAPIClient client = new SpoonacularAPIClient();
         APIController clientController = client.getClient();
         clientController.getRecipeInformationAsync(id, new APICallBack<DynamicResponse>() {
@@ -98,11 +253,11 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
                         // END-DEBUG */
 
                     Gson gson = new Gson();
-                    Recipe_Full singleRecipe = gson.fromJson(response.parseAsString(), Recipe_Full.class);
+                    singleRecipe = gson.fromJson(response.parseAsString(), Recipe_Full.class);
                         /* DEBUG: TEST GSON:
                         * System.out.println("RESPONSE-GSON: " + view_single_recipe.getTitle());
                         // END-DEBUG */
-                    showOnScreen(singleRecipe);
+                    showAPIOnScreen(singleRecipe);
                 } catch (ParseException e) {
                     Log.e("hello", "Parsing recipe information failed!\n" + e.getLocalizedMessage());
                 }
@@ -114,27 +269,22 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
-        findViewById(R.id.saveRecipe).setOnClickListener(this);
-        findViewById(R.id.addList).setOnClickListener(this);
-
-
     }
 
-    private void showOnScreen(Recipe_Full singleRecipe) {
+    private void showAPIOnScreen(Recipe_Full singleRecipe) {
         Textv.setText(recipeName);
+
         String imageUrl = "https://spoonacular.com/recipeImages/";
         if (suffix.endsWith(".jpg")) {
             imageUrl = imageUrl + String.valueOf(singleRecipe.getId()) + "-556x370.jpg";
-        }
-        else if (suffix.endsWith(".png")){
+        } else if (suffix.endsWith(".png")) {
             imageUrl = imageUrl + String.valueOf(singleRecipe.getId()) + "-556x370.png";
-        }
-        else if (suffix.endsWith(".jpeg")){
+        } else if (suffix.endsWith(".jpeg")) {
             imageUrl = imageUrl + String.valueOf(singleRecipe.getId()) + "-556x370.jpeg";
         }
         Picasso.get().load(imageUrl).into(recipeImage);
 
-        String time = String.valueOf(singleRecipe.getReadyInMinutes())+" Minutes";
+        String time = String.valueOf(singleRecipe.getReadyInMinutes()) + " Minutes";
         recipeTime.setText(time);
 
         String serve = String.valueOf(singleRecipe.getServings()) + " People";
@@ -143,24 +293,61 @@ public class SingleRecipeActivity extends AppCompatActivity implements View.OnCl
         ingredients.setText(readIngredients(singleRecipe.getExtendedIngredients()));
 
         String instruc = singleRecipe.getInstructions();
+
         if (instruc != null) {
-            Log.d("test","instruc null");
+            Log.d("test", instruc);
             instructions.setText(instruc.replaceAll("<[^>]*>", "\n").trim());
         }
         else {
-            String failInstruc = "No instructions was provided by Spoonacular!:(";
+            String failInstruc = "No instructions was provided by Spoonacular! :(";
             instructions.setText(failInstruc);
         }
     }
 
+    private void addToList(final Ingredient ing) {
+        mDatabase.child("list").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(ing.getName()).exists()){
+                    Ingredient ingredientDB = dataSnapshot.child(ing.getName()).getValue(Ingredient.class);
+                    if (ingredientDB.getUnit().equals(ing.getUnit())){
+                        float endAmount = ing.getAmount()+ ingredientDB.getAmount();
+                        mDatabase.child("list").child(ing.getName()).child("amount").setValue(endAmount);
+                    }
+                    else {
+                        // ingredient present but unit on list and unit inside DB diff
+                        openDialog(ingredientDB, ing);
+                    }
+                }
+                else {
+                    mDatabase.child("list").child(ing.getName()).setValue(ing);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void openDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
+        ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
+        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName();
+        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit();
+        Bundle bundle = new Bundle();
+        bundle.putString("Database",ingDB);
+        bundle.putString("Adding",ingAdd);
+        bundle.putString("Name",ingredientDB.getName());
+        changeQuantityDialog.setArguments(bundle);
+        changeQuantityDialog.show(getSupportFragmentManager(),"change quantity dialog");
+    }
+
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.saveRecipe:
-                break;
-            case R.id.addList:
-                break;
-        }
+    public void applyTexts(float quantityResult, String unitResult, String name) {
+        //set the final amount inside database
+        mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
+        mDatabase.child("list").child(name).child("unit").setValue(unitResult);
     }
 
     private String readIngredients(List<Ingredient_Full> ingredientList) {

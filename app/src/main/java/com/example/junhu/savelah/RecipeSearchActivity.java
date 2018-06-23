@@ -49,10 +49,6 @@ public class RecipeSearchActivity extends AppCompatActivity{
     private String type;
     private ArrayList<Recipe> results;
     private CustomListAdapter adapter;
-    //FoodAdapter test;
-
-    //static final String xMashapeKey = "mFpLVZi0g1mshN4KsSrVPNXmfYATp1qkdk9jsnFqTeb4ks0NAc";
-    //static final String API_URL = "https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/recipes/search";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

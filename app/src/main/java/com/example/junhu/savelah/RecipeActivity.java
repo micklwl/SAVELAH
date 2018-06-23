@@ -41,7 +41,9 @@ public class RecipeActivity extends AppCompatActivity implements View.OnClickLis
                 return false;
             }
         });
+
         findViewById(R.id.searchButton).setOnClickListener(this);
+        findViewById(R.id.myRecipesButton).setOnClickListener(this);
     }
 
     @Override
@@ -49,6 +51,9 @@ public class RecipeActivity extends AppCompatActivity implements View.OnClickLis
         switch(view.getId()){
             case R.id.searchButton:
                 startActivity(new Intent(this, RecipeSearchActivity.class));
+                break;
+            case R.id.myRecipesButton:
+                startActivity(new Intent(this, SavedRecipesActivity.class));
                 break;
         }
     }
