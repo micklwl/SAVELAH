@@ -101,7 +101,6 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
         mDatabase = initDatabase.child(user.getUid());
 
-
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
         bottombar.enableShiftingMode(false);

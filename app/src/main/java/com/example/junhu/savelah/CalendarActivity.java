@@ -84,6 +84,7 @@ public class CalendarActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SingleRecipeActivity.class);
         if(eventDay instanceof Recipe){
             intent.putExtra("Recipe", (Recipe) eventDay);
+            intent.putExtra("type", "false");
             startActivity(intent);
         } else {
             Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
