@@ -9,6 +9,8 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -66,7 +68,6 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
     private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
     private DatabaseReference mRecipes;
-    private StorageReference mStorageRef;
     private String save = "Save";
     private String unSave = "UnSave";
     private Recipe_DB rDB;
@@ -146,6 +147,33 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.recipe,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (type) {
+            switch (item.getItemId()) {
+                case R.id.recipe_share:
+                    break;
+                case R.id.recipe_edit:
+                    Intent intent1 = new Intent(SingleRecipeActivity.this, AddRecipeActivity.class);
+                    intent1.putExtra("view",false);
+                    intent1.putExtra("data",rDB);
+                    startActivity(intent1);
+                    return(true);
+            }
+        }
+        else {
+            Toast.makeText(SingleRecipeActivity.this,"Save the recipe, then open it from your saved recipes list for these actions!", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void clickAdd() {

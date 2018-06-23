@@ -53,10 +53,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         }
     }
 
-    public IngredientAdapter(Context context) {
+    public IngredientAdapter(Context context, Boolean load) {
         this.data       = new ArrayList<>();
         this.context    = context;
-        addBlankItem();
+        if (load){
+            addBlankItem();
+        }
     }
 
     public void addBlankItem() {
@@ -64,6 +66,14 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
             data.add(0, new Ingredient("","01/01/1996", (float)0, ""));
             notifyItemInserted(0);
         }
+    }
+
+    public void addItem(Ingredient ing){
+        if (data != null) {
+            data.add(0, new Ingredient(ing.getName(),"01/01/1996", (float)ing.getAmount(), ing.getUnit()));
+            notifyItemInserted(0);
+        }
+
     }
 
     public boolean removeItemAt(int position) {

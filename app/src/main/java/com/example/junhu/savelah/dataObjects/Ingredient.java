@@ -1,9 +1,9 @@
 package com.example.junhu.savelah.dataObjects;
 
 public class Ingredient {
+    private String name;
     private String date;
     private float amount;
-    private String name;
     private String unit;
 
     public Ingredient() {}
@@ -35,6 +35,22 @@ public class Ingredient {
     }
 
     public String getUnit() { return unit; }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 }
 
 
