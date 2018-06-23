@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.example.junhu.savelah.adapter.SavedRecipesAdapter;
 import com.example.junhu.savelah.dataObjects.Customer;
+import com.example.junhu.savelah.dataObjects.Recipe;
 import com.example.junhu.savelah.dataObjects.Recipe_DB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,6 +58,7 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
                         startActivity(new Intent(SavedRecipesActivity.this, RecipeActivity.class));
                         break;
                     case R.id.navigation_calendar:
+                        startActivity(new Intent(SavedRecipesActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
                         startActivity(new Intent(SavedRecipesActivity.this, ProfileActivity.class));
@@ -107,9 +109,11 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SavedRecipesActivity.this, SingleRecipeActivity.class);
                 Recipe_DB selectedRecipe =  (Recipe_DB)recipeResults.getItemAtPosition(position);
-                intent.putExtra("title",selectedRecipe.getTitle());
-                intent.putExtra("suffix",selectedRecipe.getImageUrl());
-                intent.putExtra("search_id",String.valueOf(selectedRecipe.getId()));
+                Recipe temp = new Recipe(selectedRecipe.getTitle(), selectedRecipe.getImageUrl(), selectedRecipe.getId());
+                intent.putExtra("Recipe", temp);
+//                intent.putExtra("title",selectedRecipe.getTitle());
+//                intent.putExtra("suffix",selectedRecipe.getImageUrl());
+//                intent.putExtra("search_id",String.valueOf(selectedRecipe.getId()));
                 intent.putExtra("type","true");
                // Log.d("hello", selectedRecipe.getIdString());
                 startActivity(intent);

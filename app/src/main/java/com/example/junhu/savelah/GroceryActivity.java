@@ -94,6 +94,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
 
             }
         });
+
    // Toast.makeText(this, user.getEmail(), Toast.LENGTH_LONG).show();
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);

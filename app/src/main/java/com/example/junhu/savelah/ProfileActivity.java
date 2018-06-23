@@ -46,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         startActivity(new Intent(ProfileActivity.this, RecipeActivity.class)) ;
                         break;
                     case R.id.navigation_calendar:
-
+                        startActivity(new Intent(ProfileActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
 

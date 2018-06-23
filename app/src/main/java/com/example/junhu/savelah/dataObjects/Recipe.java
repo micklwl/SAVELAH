@@ -2,6 +2,7 @@ package com.example.junhu.savelah.dataObjects;
 import android.icu.util.Calendar;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.EventLog;
 import android.util.Log;
 
 import com.applandeo.materialcalendarview.EventDay;
@@ -10,34 +11,48 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Recipe {
-        //extends EventDay implements Parcelable {
+public class Recipe extends EventDay implements Parcelable {
     private String title;
     private String image;
     private String instructions;
     private int id;
     private List<Ingredient> extendedIngredients;
+    public static final Parcelable.Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel source) {
+            return new Recipe(source);
+        }
 
-    public Recipe() {}
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 
-    public Recipe(String title, String image, int id) {
+    public Recipe() {
+        super(null, 0);
+    }
+
+    public Recipe(java.util.Calendar day, int imageResource, String title, String image, int id) {
+        super(day, imageResource);
         this.title = title;
         this.image = image;
         this.id = id;
-        Log.d("hello", title) ;
     }
 
-//    public Recipe(java.util.Calendar day, int imageResource, String title, String image) {
-//        super(day, imageResource);
-//        this.title = title;
-//        this.image = image;
-//    }
+    private Recipe(Parcel in) {
+        super((java.util.Calendar) in.readSerializable(), in.readInt());
+        title = in.readString();
+        image = in.readString();
+        id = in.readInt();
+    }
 
-//    public Recipe(String title, String image) {
-//        super(null, 0);
-//        this.title = title;
-//        this.image = image;
-//    }
+    public Recipe(String title, String image, int id) {
+        super(null, 0);
+        this.title = title;
+        this.image = image;
+        this.id = id;
+    }
 
     public String getTitle() {
         return this.title.replaceAll("\\p{Pd}", "-");
@@ -47,12 +62,17 @@ public class Recipe {
         return this.image;
     }
 
-    public String getInstructions() { return instructions; }
+    public String getInstructions() {
+        return instructions;
+    }
 
     public int getId() {
         return id;
     }
-    public String getIdString() { return String.valueOf(id);}
+
+    public String getIdString() {
+        return String.valueOf(id);
+    }
 
     public void setTitle(String name) {
         this.title = name;
@@ -62,32 +82,26 @@ public class Recipe {
         this.image = str;
     }
 
-    public void setInstructions(String instructions) { this.instructions = instructions; }
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
 
     public void setId(int id) {
         this.id = id;
     }
 
-//    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
-//        @Override
-//        public Recipe createFromParcel(Parcel source) {
-//            return new Recipe(source);
-//        }
-//
-//        @Override
-//        public Recipe[] newArray(int size) {
-//            return new Recipe[size];
-//        }
-//    }
-//
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeSerializable(getCalendar());
-//        dest.writeString(title);
-//        dest.writeString(image);
-//    }
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(getCalendar());
+        dest.writeInt(getImageResource());
+        dest.writeString(title);
+        dest.writeString(image);
+        dest.writeInt(id);
+    }
 }
+

@@ -2,6 +2,7 @@ package com.example.junhu.savelah;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -75,12 +76,16 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_recipe);
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if(extras != null) {
-            recipeName = (String) extras.getString("title");
-            suffix = (String) extras.getString("suffix");
-            id = Integer.valueOf(extras.getString("search_id"));
-            type = Boolean.valueOf(extras.getString("type"));
+        Recipe extras = intent.getParcelableExtra("Recipe");
+        Bundle extras_plus = intent.getExtras();
+        if(extras_plus != null) {
+            type = Boolean.valueOf(extras_plus.getString("type"));
+            recipeName = extras.getTitle();
+            suffix = extras.getImage();
+            id = extras.getId();
+//            recipeName = (String) extras.getString("title");
+//            suffix = (String) extras.getString("suffix");
+//            id = Integer.valueOf(extras.getString("search_id"));
         }
 
         Textv = (TextView)findViewById(R.id.recipeTitle);
@@ -95,7 +100,6 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         user = FirebaseAuth.getInstance().getCurrentUser();
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
         mDatabase = initDatabase.child(user.getUid());
-
 
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);

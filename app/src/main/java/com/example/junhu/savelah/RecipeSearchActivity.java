@@ -54,7 +54,6 @@ public class RecipeSearchActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_search);
-
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
         bottombar.enableAnimation(false);
         bottombar.enableShiftingMode(false);
@@ -70,6 +69,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
                         startActivity(new Intent(RecipeSearchActivity.this, RecipeActivity.class));
                         break;
                     case R.id.navigation_calendar:
+                        startActivity(new Intent(RecipeSearchActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
                         startActivity(new Intent(RecipeSearchActivity.this, ProfileActivity.class));
@@ -78,12 +78,10 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 return false;
             }
         });
-
         recipeResults = (ListView) findViewById(R.id.listOfRecipes);
         results = new ArrayList<Recipe>();
         adapter = new CustomListAdapter(getApplicationContext(), R.layout.recipe_search_list, results);
         recipeResults.setAdapter(adapter);
-
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         searchItem = (EditText) findViewById(R.id.groceryItem);
         Button queryButton = (Button) findViewById(R.id.queryButton);
@@ -107,11 +105,11 @@ public class RecipeSearchActivity extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(RecipeSearchActivity.this, SingleRecipeActivity.class);
                 Recipe selectedRecipe =  (Recipe)recipeResults.getItemAtPosition(position);
-                intent.putExtra("title",selectedRecipe.getTitle());
-                intent.putExtra("suffix",selectedRecipe.getImage());
-                intent.putExtra("search_id",selectedRecipe.getIdString());
-                intent.putExtra("type", "false");
-                Log.d("hello", selectedRecipe.getIdString());
+                intent.putExtra("Recipe", new Recipe(selectedRecipe.getTitle(),
+                        selectedRecipe.getImage(), selectedRecipe.getId()));
+//                intent.putExtra("title",selectedRecipe.getTitle());
+//                intent.putExtra("suffix",selectedRecipe.getImage());
+//                intent.putExtra("search_id",selectedRecipe.getIdString());
                 startActivity(intent);
             }
         });
