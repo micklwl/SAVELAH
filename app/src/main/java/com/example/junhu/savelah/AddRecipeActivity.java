@@ -1,6 +1,9 @@
 package com.example.junhu.savelah;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,15 +24,25 @@ import android.widget.Toast;
 import com.example.junhu.savelah.adapter.IngredientAdapter;
 import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.example.junhu.savelah.dataObjects.Recipe_DB;
+import com.example.junhu.savelah.dataObjects.Upload;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddRecipeActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText titleText;
@@ -38,11 +53,19 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     private ProgressBar progressBar;
     private RecyclerView mRecyclerView;
     private IngredientAdapter ingredientAdapter;
-
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri mImageUri;
+    private ImageView recipeImg;
+    private boolean type = true;
+    private String loadedImage;
 
     private Recipe_DB recipeDb;
+    private Recipe_DB recipeLoad;
     private FirebaseUser user;
     private DatabaseReference initDatabase;
+    private StorageReference mStorageRef;
+    private StorageTask mUploadTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,39 +76,49 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         mRecyclerView   = (RecyclerView) findViewById(R.id.rv_add_custom_recipe_ingredients);
         progressBar = (ProgressBar)findViewById(R.id.save_recipe_progress);
         instructionsText = (EditText)findViewById(R.id.edit_add_custom_recipe_instructions);
-        ingredientAdapter     = new IngredientAdapter(this);
-        mRecyclerView.setAdapter(ingredientAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recipeImg = (ImageView)findViewById(R.id.img_custom_recipe);
 
         findViewById(R.id.btn_custom_recipe_ing).setOnClickListener(this);
         findViewById(R.id.lbl_add_custom_recipe_ingredients).setOnClickListener(this);
         findViewById(R.id.btn_add_custom_recipe).setOnClickListener(this);
         findViewById(R.id.lbl_add_custom_recipe_instructions).setOnClickListener(this);
+        findViewById(R.id.img_custom_recipe).setOnClickListener(this);
 
-    /*    BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
-        bottombar.enableAnimation(false);
-        bottombar.enableShiftingMode(false);
-        bottombar.enableItemShiftingMode(false);
-        bottombar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.navigation_grocery:
-                        startActivity(new Intent(AddRecipeActivity.this, GroceryActivity.class)) ;
-                        break;
-                    case R.id.navigation_recipe:
-                        startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class)) ;
-                        break;
-                    case R.id.navigation_calendar:
-                        startActivity(new Intent(AddRecipeActivity.this, CalendarActivity.class));
-                        break;
-                    case R.id.navigation_profile:
-                        startActivity(new Intent(AddRecipeActivity.this, ProfileActivity.class)) ;
-                        break;
-                }
-                return false;
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
+
+        Intent intent = getIntent();
+        Bundle extras_plus = intent.getExtras();
+        if(extras_plus != null) {
+            type = extras_plus.getBoolean("view");
+            recipeLoad = intent.getParcelableExtra("data");
+        }
+
+        ingredientAdapter = new IngredientAdapter(this,type);
+        mRecyclerView.setAdapter(ingredientAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        loadData(type);
+
+    }
+
+    // Load data if previous page was a SingleRecipleActivity
+    private void loadData(boolean type) {
+        if (!type){
+            titleText.setText(recipeLoad.getTitle());
+            servingsText.setText(String.valueOf(recipeLoad.getServings()));
+            timeText.setText(String.valueOf(recipeLoad.getReadyInMinutes()));
+            instructionsText.setText(recipeLoad.getInstructions());
+            loadedImage = recipeLoad.getImageUrl();
+
+            //check if imageUrl is empty
+            if (loadedImage != null && !loadedImage.equals("")) {
+                Picasso.get().load(loadedImage).into(recipeImg);
             }
-        }); */
+            HashMap<String, Ingredient> ingList = recipeLoad.getIngList();
+            for (Map.Entry<String, Ingredient> entry : ingList.entrySet()){
+                ingredientAdapter.addItem(entry.getValue());
+            }
+        }
     }
 
     @Override
@@ -100,7 +133,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                 progressBar.setVisibility(View.VISIBLE);
                 saveRecipe();
                 break;
-
+            //hide or unhide the instructions
             case R.id.lbl_add_custom_recipe_instructions:
                 gist = findViewById(R.id.edit_add_custom_recipe_instructions);
                 if (gist.isShown()) {
@@ -111,7 +144,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                     gist.setVisibility(View.VISIBLE);
                 }
                 break;
-
+            //hide or unhide the ingredients
             case R.id.btn_custom_recipe_ing:
                 gist = findViewById(R.id.rv_add_custom_recipe_ingredients);
                 if (gist.isShown()) {
@@ -121,6 +154,10 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                     ((ImageButton) view).setImageResource(R.drawable.ic_arrow_down);
                     gist.setVisibility(View.VISIBLE);
                 }
+                break;
+
+            case R.id.img_custom_recipe:
+                openFileChooser();
                 break;
         }
     }
@@ -139,12 +176,12 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         }
 
         if (title.length() < 5)
-            error_msg += "Error: You need to provide a descriptive TITLE!\n";
+            error_msg += "Error: You need to provide a descriptive title!\n";
 
         if (instructions.length() < 5)
             error_msg += "Error: You need to provide some instructions!\n";
 
-
+        // Checking for Servings given + of correct format:
         int servingsInt = 0;
         if (servings.length() > 0) {
             try {
@@ -155,7 +192,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         } else { error_msg += "Error: We need to know how many SERVINGS this recipe makes!\n"; }
 
         // Checking for ReadyInMinutes given + of correct format:
-        int     readyInMinutes  = 0;
+        int readyInMinutes  = 0;
         if (time.length() > 0) {
             try {
                 readyInMinutes = Integer.valueOf(time);
@@ -164,23 +201,29 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             }
         } else { error_msg += "Error: We need to know how long TIME REQUIRED to cook is!\n"; }
 
-        if (error_msg.length() ==0){
+        if (error_msg.length() == 0){
             user = FirebaseAuth.getInstance().getCurrentUser();
-            recipeDb = new Recipe_DB(title,0,"test",readyInMinutes,servingsInt,ingList,instructions);
+            recipeDb = new Recipe_DB(title, 0, "", readyInMinutes, servingsInt, ingList, instructions);
             uploadRecipe(recipeDb);
+            if (!type) {
+                initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).child("imageUrl").setValue(loadedImage);
+                Toast.makeText(AddRecipeActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                finish();
+                startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class));
+            }
+            else if (mUploadTask != null && mUploadTask.isInProgress()) {
+                Toast.makeText(AddRecipeActivity.this,"Image Upload in progress!",Toast.LENGTH_SHORT).show();
+            }
+            else{
+                    uploadFile();
+            }
         }
         else {
             progressBar.setVisibility(View.GONE);
-            Toast.makeText(AddRecipeActivity.this,error_msg, Toast.LENGTH_LONG).show();
+            Toast.makeText(AddRecipeActivity.this, error_msg, Toast.LENGTH_LONG).show();
+            error_msg = "";
         }
-    }
-
-    private void uploadRecipe(Recipe_DB recipeDb) {
-        initDatabase = FirebaseDatabase.getInstance().getReference("Users");
-        initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).setValue(recipeDb);
-        progressBar.setVisibility(View.GONE);
-        finish();
-        startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class)) ;
     }
 
     private List<Ingredient> getRecipeIngredients() {
@@ -190,16 +233,80 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         // Loop through RecyclerView and get the Ingredient details:
         for (int i=0; i < mRecyclerView.getChildCount(); i++) {
             IngredientAdapter.ViewHolder vh = (IngredientAdapter.ViewHolder) mRecyclerView.findViewHolderForLayoutPosition(i);
-
             Ingredient ingredient = vh.getIngredient();
-
             if (ingredient == null) {
                 return null;
             }
-
             ingredientList.add(ingredient);
-            ///* DEBUG: */ Log.d(TAG, "Added Ingredient: " + ingredient.toString()); /* END-DEBUG */
         }
         return  ingredientList;
+    }
+
+    private void uploadRecipe(Recipe_DB recipeDb) {
+        initDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).setValue(recipeDb);
+
+    }
+
+    private void uploadFile() {
+        if (mImageUri != null){
+            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+ getFileExtension(mImageUri));
+            mUploadTask = fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(AddRecipeActivity.this,"Changes saved!",Toast.LENGTH_SHORT).show();
+                    Upload upload = new Upload(fileReference.getDownloadUrl().toString());
+                    initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).child("imageUrl").setValue(upload);
+                    finish();
+                    startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class));
+                }
+
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                Toast.makeText(AddRecipeActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    //double progress = (100.0 * taskSnapshot.getBytesTransferred() /taskSnapshot.getTotalByteCount());
+                    //progressBar.setProgress((int)progress);
+                }
+            });
+        }
+        else {
+            Toast.makeText(AddRecipeActivity.this,"No image was uploaded for your recipe!",Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+            finish();
+            startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class));
+        }
+    }
+
+    private String getFileExtension (Uri uri){
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void openFileChooser(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            mImageUri = data.getData();
+            Picasso.get().load(mImageUri).into(recipeImg);
+            recipeImg.setImageURI(mImageUri);
+            type = true;
+        }
     }
 }
