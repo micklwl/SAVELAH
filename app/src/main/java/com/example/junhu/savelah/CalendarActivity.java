@@ -1,6 +1,8 @@
 package com.example.junhu.savelah;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -15,14 +17,17 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.junhu.savelah.dataObjects.Recipe;
+import com.google.gson.Gson;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
     private static final int ADD_RECIPE = 44;
+    public static final String MY_PREFS_NAME = "calendar";
     private CalendarView mCalendarView;
     private FloatingActionButton Button;
     private List<EventDay> mEventDays = new ArrayList<>();
@@ -31,7 +36,23 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+        SharedPreferences preferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+//        preferences.edit().clear();
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+        Map<String, ?> keys = preferences.getAll();
         mCalendarView = findViewById(R.id.calendarView);
+//      mCalendarView = new Gson().fromJson(json, CalendarView.class);
+        // String json = preferences.getString("Calendar", null);
+        if (keys != null) {
+            for (Map.Entry<String, ?> entry : keys.entrySet()) {
+                Calendar key = new Gson().fromJson(entry.getKey(), Calendar.class);
+                Recipe value = new Gson().fromJson(preferences.getString(entry.getKey(),null), Recipe.class);
+                List<EventDay> EventDays = new ArrayList<>();
+                EventDays.add(value);
+                mCalendarView.setDate(key);
+                mCalendarView.setEvents(EventDays);
+            }
+        }
         Button = findViewById(R.id.floatingActionButton);
         Button.setOnClickListener(new View.OnClickListener() {
             @Override 
@@ -78,13 +99,19 @@ public class CalendarActivity extends AppCompatActivity {
             mCalendarView.setDate(dayRecipe.getCalendar());
             mEventDays.add(dayRecipe);
             mCalendarView.setEvents(mEventDays);
+            SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+            Gson gson = new Gson();
+            String jKey = gson.toJson(dayRecipe.getCalendar());
+            String jValue = gson.toJson(dayRecipe);
+            editor.putString(jKey, jValue);
+            editor.apply();
         }
     }
     private void previewRecipe(EventDay eventDay) {
         Intent intent = new Intent(this, SingleRecipeActivity.class);
         if(eventDay instanceof Recipe){
             intent.putExtra("Recipe", (Recipe) eventDay);
-            intent.putExtra("type", "false");
+            intent.putExtra("type", "true");
             startActivity(intent);
         } else {
             Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();

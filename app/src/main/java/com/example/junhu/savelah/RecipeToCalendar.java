@@ -59,10 +59,12 @@ public class RecipeToCalendar extends AppCompatActivity {
                     results.clear();
                     HashMap<String, Recipe_DB> map = c.getRecipes();
                     ArrayList<Recipe> temp = new ArrayList<>();
-                    for (Recipe_DB value: map.values()) {
-                        temp.add(new Recipe(value.getTitle(), value.getImageUrl(), value.getId()));
-                        results.addAll(temp);
-                        adapter.notifyDataSetChanged();
+                    if (map != null) {
+                        for (Recipe_DB value : map.values()) {
+                            temp.add(new Recipe(value.getTitle(), value.getImageUrl(), value.getId()));
+                            results.addAll(temp);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 }
 
