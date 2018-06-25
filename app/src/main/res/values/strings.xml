@@ -33,6 +33,7 @@
     <string name="ingredient_name">name</string>
     <string name="ingredient_amount">amount</string>
     <string name="ingredient_unit">unit</string>
+    <string name="clear_all">CLEAR ALL</string>
 
 
     <!-- Strings related to login -->

@@ -55,16 +55,16 @@ public class RecipeToCalendar extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Customer c = dataSnapshot.getValue(Customer.class);
+                results.clear();
                 if (c != null) {
-                    results.clear();
                     HashMap<String, Recipe_DB> map = c.getRecipes();
                     ArrayList<Recipe> temp = new ArrayList<>();
                     if (map != null) {
                         for (Recipe_DB value : map.values()) {
                             temp.add(new Recipe(value.getTitle(), value.getImageUrl(), value.getId()));
-                            results.addAll(temp);
-                            adapter.notifyDataSetChanged();
                         }
+                        results.addAll(temp);
+                        adapter.notifyDataSetChanged();
                     }
                 }
 

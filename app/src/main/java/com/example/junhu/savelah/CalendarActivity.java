@@ -28,7 +28,7 @@ import java.util.Map;
 public class CalendarActivity extends AppCompatActivity {
     private static final int ADD_RECIPE = 44;
     public static final String MY_PREFS_NAME = "calendar";
-    private CalendarView mCalendarView;
+    private android.widget.CalendarView mCalendarView;
     private FloatingActionButton Button;
     private List<EventDay> mEventDays = new ArrayList<>();
 
@@ -36,23 +36,10 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
-        SharedPreferences preferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-//        preferences.edit().clear();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-        Map<String, ?> keys = preferences.getAll();
         mCalendarView = findViewById(R.id.calendarView);
 //      mCalendarView = new Gson().fromJson(json, CalendarView.class);
         // String json = preferences.getString("Calendar", null);
-        if (keys != null) {
-            for (Map.Entry<String, ?> entry : keys.entrySet()) {
-                Calendar key = new Gson().fromJson(entry.getKey(), Calendar.class);
-                Recipe value = new Gson().fromJson(preferences.getString(entry.getKey(),null), Recipe.class);
-                List<EventDay> EventDays = new ArrayList<>();
-                EventDays.add(value);
-                mCalendarView.setDate(key);
-                mCalendarView.setEvents(EventDays);
-            }
-        }
         Button = findViewById(R.id.floatingActionButton);
         Button.setOnClickListener(new View.OnClickListener() {
             @Override 
@@ -60,11 +47,10 @@ public class CalendarActivity extends AppCompatActivity {
                 addRecipeToCalendar(); 
             }
         });
-        mCalendarView.setOnDayClickListener(new OnDayClickListener() {
+        mCalendarView.setOnDateChangeListener(new android.widget.CalendarView.OnDateChangeListener() {
             @Override
-            public void onDayClick(EventDay eventDay) {
-                Log.d("OnDayClickListener", (eventDay instanceof Recipe) + "");
-                previewRecipe(eventDay);
+            public void onSelectedDayChange(@NonNull android.widget.CalendarView view, int year, int month, int dayOfMonth) {
+                previewRecipe(year, month, dayOfMonth);
             }
         });
 
@@ -96,23 +82,38 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ADD_RECIPE && resultCode == RESULT_OK) {
             Recipe dayRecipe = data.getParcelableExtra("Result");
-            mCalendarView.setDate(dayRecipe.getCalendar());
-            mEventDays.add(dayRecipe);
-            mCalendarView.setEvents(mEventDays);
+//            mCalendarView.setDate(dayRecipe.getCalendar());
+//            mEventDays.add(dayRecipe);
+//            mCalendarView.setEvents(mEventDays);
             SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
             Gson gson = new Gson();
             String jKey = gson.toJson(dayRecipe.getCalendar());
+            Log.d("On activity result", jKey);
             String jValue = gson.toJson(dayRecipe);
             editor.putString(jKey, jValue);
             editor.apply();
         }
     }
-    private void previewRecipe(EventDay eventDay) {
+    private void previewRecipe(int year, int month, int day) {
+     //   Log.d("preview", day + "");
+        SharedPreferences preferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        Map<String, ?> keys = preferences.getAll();
+        Log.d("preview",  keys + "");
         Intent intent = new Intent(this, SingleRecipeActivity.class);
-        if(eventDay instanceof Recipe){
-            intent.putExtra("Recipe", (Recipe) eventDay);
-            intent.putExtra("type", "true");
-            startActivity(intent);
+        if (keys != null) {
+            for (Map.Entry<String, ?> entry : keys.entrySet()) {
+                com.example.junhu.savelah.dataObjects.Calendar key = new Gson().fromJson(entry.getKey(),
+                        com.example.junhu.savelah.dataObjects.Calendar.class);
+                Log.d("preview",  + key.getDayOfMonth() + "");
+                if (key.getYear() == year && key.getMonth() == month && key.getDayOfMonth() == day) {
+                    intent.putExtra("Recipe", new Gson().fromJson
+                            (preferences.getString(entry.getKey(),null), Recipe.class));
+                    intent.putExtra("type", "true");
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
+                }
+            }
         } else {
             Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
         }
@@ -123,6 +124,9 @@ public class CalendarActivity extends AppCompatActivity {
         startActivityForResult(intent, ADD_RECIPE);
     }
 
-
-
+    public void clearAll(View view) {
+        SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+    }
 }
