@@ -27,6 +27,7 @@ public class Customer {
         this.list = new HashMap<>();
         list.put("fish", new Ingredient("fish", "default", (float)1,"kg"));
         this.members = new HashMap<>();
+        this.members.put(this.uid, "owner");
         this.recipes =  new HashMap<>();
         HashMap<String,Ingredient> ingredientlist = new HashMap<>();
         ingredientlist.put("Name-Jun Hui",new Ingredient("Name-Jun Hui", "1/1/2018", (float)20,"kg"));

@@ -1,5 +1,6 @@
 package com.example.junhu.savelah;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -184,7 +185,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                     String key  = dataSnapshot.getValue(t).keySet().toArray(a)[0];
                     Customer sharee = map.get(key);
                     HashMap<String, String> members = sharee.getMembers();
-                    if ((!(members == null)) && members.containsKey(currentEmail)) {
+                    if ((!(members == null)) && members.containsValue(sharedEmail)) {
                         Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
                         intent.putExtra(EXTRA_MESSAGE, sharee.getUid());
                         startActivity(intent);
@@ -206,8 +207,8 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     public void shareListListener(View view) {
         final String emailToShare = findList.getText().toString().trim();
         // encode email by replacing . with ,
-        final String newEmail = emailToShare.replace(".", ",");
-        Log.d("Listener", newEmail);
+//        final String newEmail = emailToShare.replace(".", ",");
+//        Log.d("Listener", newEmail);
         Query query = initDatabase.orderByChild("email").equalTo(emailToShare);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -216,7 +217,8 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                     GenericTypeIndicator<HashMap<String, Customer>> t = new GenericTypeIndicator<HashMap<String,Customer>>() {};
                     String[] a = new String[1];
                     String[] b = dataSnapshot.getValue(t).keySet().toArray(a);
-                    mDatabase.child("members").child(newEmail).setValue(b[0]);
+                    mDatabase.child("members").child(b[0]).setValue(emailToShare);
+                    Toast.makeText(GroceryActivity.this,"User added successfully", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(GroceryActivity.this,"No such user in SAVELAH", Toast.LENGTH_SHORT).show();
                 }

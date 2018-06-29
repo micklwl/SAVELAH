@@ -107,13 +107,13 @@ public class CalendarActivity extends AppCompatActivity {
                 Log.d("preview",  + key.getDayOfMonth() + "");
                 if (key.getYear() == year && key.getMonth() == month && key.getDayOfMonth() == day) {
                     intent.putExtra("Recipe", new Gson().fromJson
-                            (preferences.getString(entry.getKey(),null), Recipe.class));
+                            (preferences.getString(entry.getKey(), null), Recipe.class));
                     intent.putExtra("type", "true");
                     startActivity(intent);
-                } else {
-                    Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
+                    return;
                 }
             }
+                Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
         }

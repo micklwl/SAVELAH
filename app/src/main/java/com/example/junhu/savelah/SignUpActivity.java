@@ -82,6 +82,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     Customer c = new Customer(email,fUser.getUid());
                     c.initialiseList();
                     mDatabase.child("Users").child(fUser.getUid()).setValue(c);
+                    mDatabase.child("currentUsers").push().setValue(email);
                     Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 } else {

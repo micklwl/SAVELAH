@@ -25,17 +25,15 @@ tools:context=".GroceryActivity">
             android:hint="@string/email_of_shared_users_list"
             android:inputType="textAutoComplete" />
 
-        <ImageButton
+        <Button
             android:id="@+id/shareList"
             android:text="@string/go"
-            app:srcCompat="@drawable/ic_forward_black_24dp"
             android:onClick="findListListener"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ImageButton
+        <Button
             android:id="@+id/findButton"
-            app:srcCompat="@drawable/ic_send_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
