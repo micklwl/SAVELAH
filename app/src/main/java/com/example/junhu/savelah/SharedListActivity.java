@@ -146,14 +146,14 @@ public class SharedListActivity extends AppCompatActivity implements AddGroceryD
         dialog.show(getSupportFragmentManager(), "add grocery dialog");
     }
 
-    private void addGrocery(String quantity) {
+    private void addGrocery(String quantity, String unit) {
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), "kg"));
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
     }
 
     @Override
-    public void applyText(String quantity) {
-        addGrocery(quantity);
+    public void applyText(String quantity, String unit) {
+        addGrocery(quantity, unit);
     }
 
     public void addGroceryListener(View view) {

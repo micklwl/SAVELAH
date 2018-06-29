@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.DatePicker;
@@ -23,8 +25,10 @@ public class DatePickerFragment extends DialogFragment
     private String toUpdate;
     private String uid;
     private DatabaseReference ref;
+    private DatabaseReference refII;
     private AlarmManager am;
     Calendar cal = Calendar.getInstance();
+    private int requestCode;
 //    private int[] date = new int[3];
 //
     public String getDate(int day, int month, int year) {
@@ -46,6 +50,8 @@ public class DatePickerFragment extends DialogFragment
         Log.d("Fragment", toUpdate + uid);
         ref = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("list")
                 .child(toUpdate).child("date");
+        refII = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("list")
+                .child(toUpdate).child("alarmID");
         // Create a new instance of DatePickerDialog and return it
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
@@ -60,8 +66,11 @@ public class DatePickerFragment extends DialogFragment
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.AM_PM, Calendar.AM );
         long interval = 60 * 60 * 1000;
-//        am.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-//                cal.getTimeInMillis(), interval , broadcast);
-//        ref.setValue(date);
+        Intent myIntent = new Intent(getActivity(), AlarmBroadcastReceiver.class);
+        PendingIntent intent = PendingIntent.getBroadcast(getActivity(), requestCode, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                cal.getTimeInMillis(), interval , intent);
+        ref.setValue(date);
+        refII.setValue(requestCode + "");
     }
 }

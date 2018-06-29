@@ -49,6 +49,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     private EditText findList;
     private ListView groceryList;
     private ArrayList<String> list = new ArrayList<>();
+    private HashMap<String, String> alarmID;
     private FirebaseUser user;
     private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
@@ -161,9 +162,9 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         }
     }
 
-    private void addGrocery(String quantity) {
+    private void addGrocery(String quantity, String unit) {
         final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), "kg"));
+        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
       //  mDatabase.child("list").child(nextIndex + "").setValue(str);
     }
 
@@ -239,7 +240,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
 
 
     @Override
-    public void applyText(String quantity) {
-        addGrocery(quantity);
+    public void applyText(String quantity, String unit) {
+        addGrocery(quantity, unit);
     }
 }

@@ -5,6 +5,7 @@ public class Ingredient {
     private String date;
     private float amount;
     private String unit;
+    private String alarmID;
 
     public Ingredient() {}
 
@@ -13,6 +14,7 @@ public class Ingredient {
         this.amount = ingredientFull.getAmount();
         this.name = ingredientFull.getName();
         this.unit = ingredientFull.getUnit();
+        this.alarmID = "FALSE";
     }
 
     public Ingredient(String name, String date, Float amount, String unit) {
@@ -20,6 +22,7 @@ public class Ingredient {
         this.date = date;
         this.amount = amount;
         this.unit = unit;
+        this.alarmID = "FALSE";
     }
 
     public String getDate() {
