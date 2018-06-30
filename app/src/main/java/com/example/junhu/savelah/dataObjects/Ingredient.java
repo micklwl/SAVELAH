@@ -14,7 +14,7 @@ public class Ingredient {
         this.amount = ingredientFull.getAmount();
         this.name = ingredientFull.getName();
         this.unit = ingredientFull.getUnit();
-        this.alarmID = "FALSE";
+        this.alarmID = 0 + "" ;
     }
 
     public Ingredient(String name, String date, Float amount, String unit) {
@@ -22,7 +22,7 @@ public class Ingredient {
         this.date = date;
         this.amount = amount;
         this.unit = unit;
-        this.alarmID = "FALSE";
+        this.alarmID = 0 + "";
     }
 
     public String getDate() {
@@ -39,6 +39,10 @@ public class Ingredient {
 
     public String getUnit() { return unit; }
 
+    public String getAlarmID() {
+        return this.alarmID;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -53,6 +57,10 @@ public class Ingredient {
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    public void setAlarmID(String id) {
+        this.alarmID = id;
     }
 }
 

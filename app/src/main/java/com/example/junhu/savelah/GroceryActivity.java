@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,8 +49,9 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     private EditText toAdd;
     private EditText findList;
     private ListView groceryList;
+    private AlarmManager am;
     private ArrayList<String> list = new ArrayList<>();
-    private HashMap<String, String> alarmID;
+    private HashMap<String, String> requestID;
     private FirebaseUser user;
     private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
@@ -60,6 +62,8 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         setContentView(R.layout.activity_grocery);
         // Initalise widgets
         toAdd = findViewById(R.id.addText);
+        am =  (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        requestID = new HashMap<>();
         findList = findViewById(R.id.findText);
         groceryList = findViewById(R.id.groceryList);
         registerForContextMenu(groceryList);
@@ -75,13 +79,15 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                 Customer c = dataSnapshot.getValue(Customer.class);
                 if (c != null) {
                     list.clear();
+                    requestID.clear();
                     HashMap<String, Ingredient> map = c.getList();
                     ArrayList<String> temp = new ArrayList<>();
                     if (map != null) {
                         for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
                             String key = entry.getKey();
                             Ingredient value = entry.getValue();
-                            temp.add(key + " " + value.getAmount());
+                            requestID.put(key, value.getAlarmID());
+                            temp.add(key + " " + value.getAmount() + " " + value.getUnit());
                         }
                         list.addAll(temp);
                         // list.addAll(new ArrayList<String>(c.getList().keySet()));
@@ -131,15 +137,31 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     }
 
     private void deleteGrocery(int key) {
-        String item = findItem(key);
+        String item = findItem(key).get("Name");
         mDatabase.child("list").child(item).removeValue();
+        if(!(requestID.get(item).equals(0 + ""))) {
+            Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast( this, Integer.parseInt(requestID.get(item)), myIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            am.cancel(pendingIntent);
+        }
     }
 
-    public String findItem(int position) {
+    public HashMap<String, String> findItem(int position) {
+        //regex: .split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[0];
+        HashMap<String, String> result = new HashMap<>();
         String item = list.get(position);
-        item = item.substring(0, item.lastIndexOf(" "));
-        return item;
+        String[] temp = item.split(" ");
+        String name = temp[0];
+        String quantity = temp[1];
+        String unit = temp[2];
+        Log.d("MyUnits", unit);
+        result.put("Name", name);
+        result.put("Quantity", quantity);
+        result.put("Unit", unit);
+        return result;
     }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -152,8 +174,12 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                 int p = info.position;
                 DatePickerFragment newFragment = new DatePickerFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("item", findItem(p));
+                String ingredient = findItem(p).get("Name");
+                bundle.putString("item", ingredient);
+                bundle.putFloat("Quantity", Float.parseFloat(findItem(p).get("Quantity")));
+                bundle.putString("Unit", findItem(p).get("Unit") );
                 bundle.putString("User", user.getUid());
+                bundle.putInt("requestCode", Integer.parseInt(requestID.get(ingredient)));
                 newFragment.setArguments(bundle);
              //   setDate(newFragment.getDate(), p);
                 newFragment.show(getFragmentManager(), "datePicker");

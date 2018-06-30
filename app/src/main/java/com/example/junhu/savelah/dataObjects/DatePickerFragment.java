@@ -8,9 +8,11 @@ import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.DatePicker;
 
+import com.example.junhu.savelah.AlarmBroadcastReceiver;
 import com.example.junhu.savelah.GroceryActivity;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -20,7 +22,6 @@ import java.util.Calendar;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
-
 
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
@@ -33,7 +34,7 @@ public class DatePickerFragment extends DialogFragment
     Calendar cal = Calendar.getInstance();
     private int requestCode;
     private int newCode;
-    private int quantity;
+    private float quantity;
     private String unit;
 //    private int[] date = new int[3];
 //
@@ -48,7 +49,11 @@ public class DatePickerFragment extends DialogFragment
         final Calendar c = Calendar.getInstance();
         am =  (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
         SharedPreferences preferences = this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-        newCode = Integer.parseInt(preferences.getString("Number", null));
+        if (preferences.contains("Number")) {
+            newCode = Integer.parseInt(preferences.getString("Number", null));
+        } else {
+            newCode = 1;
+        }
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -57,7 +62,7 @@ public class DatePickerFragment extends DialogFragment
         unit = bundle.getString("Unit");
         uid = bundle.getString("User");
         requestCode = bundle.getInt("requestCode");
-        quantity = bundle.getInt("Quantity");
+        quantity = bundle.getFloat("Quantity");
         Log.d("Fragment", toUpdate + uid);
         ref = FirebaseDatabase.getInstance().getReference("Users").child(uid).child("list")
                 .child(toUpdate).child("date");
@@ -76,14 +81,17 @@ public class DatePickerFragment extends DialogFragment
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.AM_PM, Calendar.AM );
-        long interval = 60 * 60 * 1000;
+        // for testing:
+       // long futureInMillis = SystemClock.elapsedRealtime() + 5000;
+        long interval = 30;
         if (requestCode == 0) {
             Intent myIntent = new Intent(getActivity(), AlarmBroadcastReceiver.class);
             myIntent.putExtra("itemName", toUpdate);
             myIntent.putExtra("Quantity", quantity);
             myIntent.putExtra("Unit", unit);
+            myIntent.putExtra("Request", newCode);
             PendingIntent intent = PendingIntent.getBroadcast(getActivity(), newCode, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), interval, intent);
+            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() , interval, intent);
             ref.setValue(date);
             refII.setValue(newCode + "");
             SharedPreferences.Editor editor = this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
@@ -100,8 +108,9 @@ public class DatePickerFragment extends DialogFragment
             nextIntent.putExtra("itemName", toUpdate);
             nextIntent.putExtra("Quantity", quantity);
             nextIntent.putExtra("Unit", unit);
+            nextIntent.putExtra("Request", requestCode);
             PendingIntent intent = PendingIntent.getBroadcast(getActivity(), requestCode, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), interval, intent);
+            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() , interval, intent);
             ref.setValue(date);
         }
     }
