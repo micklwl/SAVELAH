@@ -39,15 +39,16 @@ public class CustomListAdapter extends ArrayAdapter<Recipe> {
             convertView = inflater.inflate(R.layout.recipe_search_list, null, true);
         }
         Recipe recipe = this.getItem(position);
-        ImageView image = convertView.findViewById(R.id.imageView);
-        Picasso.get().load(recipe.getImage()).into(image);
+        if(recipe.getImage() != null || !(recipe.getImage().equals(""))) {
+            ImageView image = convertView.findViewById(R.id.imageView);
+            Picasso.get().load(recipe.getImage()).into(image);
+        }
         TextView title = convertView.findViewById(R.id.recipeTitle);
      //   if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
      //       title.setText(Html.fromHtml(recipe.getTitle(), Html.FROM_HTML_MODE_LEGACY));
      //   } else {
      //       title.setText(Html.fromHtml(recipe.getTitle()));
      //   }
-
         title.setText(recipe.getTitle());
         return convertView;
     }

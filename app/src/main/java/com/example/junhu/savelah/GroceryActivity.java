@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
 import com.example.junhu.savelah.dataObjects.Customer;
 import com.example.junhu.savelah.dataObjects.DatePickerFragment;
 import com.example.junhu.savelah.dataObjects.Ingredient;
@@ -44,7 +45,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GroceryActivity extends AppCompatActivity implements AddGroceryDialogListener {
+public class GroceryActivity extends AppCompatActivity
+        implements AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener {
     public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
     private EditText toAdd;
     private EditText findList;
@@ -188,11 +190,11 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         }
     }
 
-    private void addGrocery(String quantity, String unit) {
-        final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
-      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
-    }
+//    private void addGrocery(String quantity, String unit) {
+//        final String str = toAdd.getText().toString().trim();
+//        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
+//      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
+//    }
 
     public void addGroceryListener(View view) {
         openDialog();
@@ -258,15 +260,62 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         });
 
     }
-
     private void openDialog() {
         AddGroceryDialog dialog = new AddGroceryDialog();
         dialog.show(getSupportFragmentManager(), "add grocery dialog");
     }
 
+    private void openQuantityDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
+        ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
+        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName();
+        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit();
+        Bundle bundle = new Bundle();
+        bundle.putString("Database",ingDB);
+        bundle.putString("Adding",ingAdd);
+        bundle.putString("Name",ingredientDB.getName());
+        changeQuantityDialog.setArguments(bundle);
+        changeQuantityDialog.show(getSupportFragmentManager(),"change quantity dialog");
+    }
 
     @Override
     public void applyText(String quantity, String unit) {
         addGrocery(quantity, unit);
     }
+
+    @Override
+    public void applyTexts(float quantityResult, String unitResult, String name) {
+        //set the final amount inside database
+        mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
+        mDatabase.child("list").child(name).child("unit").setValue(unitResult);
+    }
+
+    public void addGrocery(String quantity, String unit) {
+        final float qty = Float.parseFloat(quantity);
+        final String ut = unit;
+        final String name = toAdd.getText().toString().trim();
+        final Ingredient newIngredient = new Ingredient(name, "default", Float.parseFloat(quantity), unit);
+        mDatabase.child("list").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(name).exists()) {
+                    Ingredient ingredientDB = dataSnapshot.child(name).getValue(Ingredient.class);
+                    if (ingredientDB.getUnit().equals(ut)) {
+                        float endAmount = qty + ingredientDB.getAmount();
+                        mDatabase.child("list").child(name).child("amount").setValue(endAmount);
+                    } else {
+                        // ingredient present but unit on list and unit inside DB diff
+                        openQuantityDialog(ingredientDB, newIngredient);
+                    }
+                } else {
+                    mDatabase.child("list").child(name).setValue(newIngredient);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }
