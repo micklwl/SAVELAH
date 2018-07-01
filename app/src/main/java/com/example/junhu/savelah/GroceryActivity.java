@@ -81,7 +81,7 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                         for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
                             String key = entry.getKey();
                             Ingredient value = entry.getValue();
-                            temp.add(key + " " + value.getAmount());
+                            temp.add(key + " " + value.getAmount() + " " + value.getUnit());
                         }
                         list.addAll(temp);
                         // list.addAll(new ArrayList<String>(c.getList().keySet()));
