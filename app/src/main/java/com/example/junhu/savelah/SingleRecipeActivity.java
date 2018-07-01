@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.SpoonacularAPIClient;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.controllers.APIController;
@@ -278,12 +279,8 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
             @Override
             public void onSuccess(HttpContext context, DynamicResponse response) {
                 try {
-                        /* DEBUG: TEST GSON:
-                        System.out.println("RESPONSE-HEADERS: " + response.getHeaders());
-                        System.out.println("RESPONSE-STRING: " + response.parseAsString());
-                        // END-DEBUG */
 
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
                     singleRecipe = gson.fromJson(response.parseAsString(), Recipe_Full.class);
                         /* DEBUG: TEST GSON:
                         * System.out.println("RESPONSE-GSON: " + view_single_recipe.getTitle());
@@ -293,7 +290,10 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
                     Log.e("hello", "Parsing recipe information failed!\n" + e.getLocalizedMessage());
                 }
             }
-
+            /* DEBUG: TEST GSON:
+            System.out.println("RESPONSE-HEADERS: " + response.getHeaders());
+            System.out.println("RESPONSE-STRING: " + response.parseAsString());
+            // END-DEBUG */
             @Override
             public void onFailure(HttpContext context, Throwable error) {
                 Log.e("hello", "Getting recipe information failed! See below:\n" + error.getLocalizedMessage());
