@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
 import com.example.junhu.savelah.dataObjects.Customer;
 import com.example.junhu.savelah.dataObjects.DatePickerFragment;
 import com.example.junhu.savelah.dataObjects.Ingredient;
@@ -43,13 +45,15 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GroceryActivity extends AppCompatActivity implements AddGroceryDialogListener {
+public class GroceryActivity extends AppCompatActivity
+        implements AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener {
     public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
     private EditText toAdd;
     private EditText findList;
     private ListView groceryList;
+    private AlarmManager am;
     private ArrayList<String> list = new ArrayList<>();
-    private HashMap<String, String> alarmID;
+    private HashMap<String, String> requestID;
     private FirebaseUser user;
     private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
@@ -60,6 +64,8 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         setContentView(R.layout.activity_grocery);
         // Initalise widgets
         toAdd = findViewById(R.id.addText);
+        am =  (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        requestID = new HashMap<>();
         findList = findViewById(R.id.findText);
         groceryList = findViewById(R.id.groceryList);
         registerForContextMenu(groceryList);
@@ -75,13 +81,15 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                 Customer c = dataSnapshot.getValue(Customer.class);
                 if (c != null) {
                     list.clear();
+                    requestID.clear();
                     HashMap<String, Ingredient> map = c.getList();
                     ArrayList<String> temp = new ArrayList<>();
                     if (map != null) {
                         for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
                             String key = entry.getKey();
                             Ingredient value = entry.getValue();
-                            temp.add(key + " " + value.getAmount() + " " + value.getUnit());
+                            requestID.put(key, value.getAlarmID());
+                            temp.add(key + "(" + value.getAmount() + " " + value.getUnit() + ")");
                         }
                         list.addAll(temp);
                         // list.addAll(new ArrayList<String>(c.getList().keySet()));
@@ -131,15 +139,32 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
     }
 
     private void deleteGrocery(int key) {
-        String item = findItem(key);
+        String item = findItem(key).get("Name");
         mDatabase.child("list").child(item).removeValue();
+        if(!(requestID.get(item).equals(0 + ""))) {
+            Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast( this, Integer.parseInt(requestID.get(item)), myIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            am.cancel(pendingIntent);
+        }
     }
 
-    public String findItem(int position) {
+    public HashMap<String, String> findItem(int position) {
+        //regex: .split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[0];
+        HashMap<String, String> result = new HashMap<>();
         String item = list.get(position);
-        item = item.substring(0, item.lastIndexOf(" "));
-        return item;
+        String[] temp = item.split("\\(");
+        String name = temp[0];
+        String str = temp[1].substring(0, temp[1].length() -1);
+        String quantity = str.split(" ")[0];
+        String unit = str.split(" ")[1];
+        Log.d("MyUnits", unit);
+        result.put("Name", name);
+        result.put("Quantity", quantity);
+        result.put("Unit", unit);
+        return result;
     }
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -152,8 +177,12 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
                 int p = info.position;
                 DatePickerFragment newFragment = new DatePickerFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("item", findItem(p));
+                String ingredient = findItem(p).get("Name");
+                bundle.putString("item", ingredient);
+                bundle.putFloat("Quantity", Float.parseFloat(findItem(p).get("Quantity")));
+                bundle.putString("Unit", findItem(p).get("Unit") );
                 bundle.putString("User", user.getUid());
+                bundle.putInt("requestCode", Integer.parseInt(requestID.get(ingredient)));
                 newFragment.setArguments(bundle);
              //   setDate(newFragment.getDate(), p);
                 newFragment.show(getFragmentManager(), "datePicker");
@@ -162,11 +191,11 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         }
     }
 
-    private void addGrocery(String quantity, String unit) {
-        final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
-      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
-    }
+//    private void addGrocery(String quantity, String unit) {
+//        final String str = toAdd.getText().toString().trim();
+//        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
+//      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
+//    }
 
     public void addGroceryListener(View view) {
         openDialog();
@@ -232,15 +261,62 @@ public class GroceryActivity extends AppCompatActivity implements AddGroceryDial
         });
 
     }
-
     private void openDialog() {
         AddGroceryDialog dialog = new AddGroceryDialog();
         dialog.show(getSupportFragmentManager(), "add grocery dialog");
     }
 
+    private void openQuantityDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
+        ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
+        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName();
+        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit();
+        Bundle bundle = new Bundle();
+        bundle.putString("Database",ingDB);
+        bundle.putString("Adding",ingAdd);
+        bundle.putString("Name",ingredientDB.getName());
+        changeQuantityDialog.setArguments(bundle);
+        changeQuantityDialog.show(getSupportFragmentManager(),"change quantity dialog");
+    }
 
     @Override
     public void applyText(String quantity, String unit) {
         addGrocery(quantity, unit);
     }
+
+    @Override
+    public void applyTexts(float quantityResult, String unitResult, String name) {
+        //set the final amount inside database
+        mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
+        mDatabase.child("list").child(name).child("unit").setValue(unitResult);
+    }
+
+    public void addGrocery(String quantity, String unit) {
+        final float qty = Float.parseFloat(quantity);
+        final String ut = unit;
+        final String name = toAdd.getText().toString().trim();
+        final Ingredient newIngredient = new Ingredient(name, "default", Float.parseFloat(quantity), unit);
+        mDatabase.child("list").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(name).exists()) {
+                    Ingredient ingredientDB = dataSnapshot.child(name).getValue(Ingredient.class);
+                    if (ingredientDB.getUnit().equals(ut)) {
+                        float endAmount = qty + ingredientDB.getAmount();
+                        mDatabase.child("list").child(name).child("amount").setValue(endAmount);
+                    } else {
+                        // ingredient present but unit on list and unit inside DB diff
+                        openQuantityDialog(ingredientDB, newIngredient);
+                    }
+                } else {
+                    mDatabase.child("list").child(name).setValue(newIngredient);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }

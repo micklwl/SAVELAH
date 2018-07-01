@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <application
         android:allowBackup="true"
@@ -38,6 +39,7 @@
         <activity android:name=".SavedRecipesActivity" />
         <activity android:name=".AddRecipeActivity" />
         <activity android:name=".RecipeToCalendar"></activity>
+        <receiver android:name=".AlarmBroadcastReceiver" android:enabled="true" android:exported="true" />
     </application>
 
 </manifest>
