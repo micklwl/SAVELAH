@@ -72,7 +72,7 @@ public class GroceryActivity extends AppCompatActivity
         user = FirebaseAuth.getInstance().getCurrentUser();
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
-        Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
         mDatabase = initDatabase.child(user.getUid());
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -140,13 +140,14 @@ public class GroceryActivity extends AppCompatActivity
 
     private void deleteGrocery(int key) {
         String item = findItem(key).get("Name");
+        Toast.makeText(this, item, Toast.LENGTH_LONG).show();
         mDatabase.child("list").child(item).removeValue();
-        if(!(requestID.get(item).equals(0 + ""))) {
+        /* if(!(requestID.get(item).equals(0 + ""))) {
             Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast( this, Integer.parseInt(requestID.get(item)), myIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             am.cancel(pendingIntent);
-        }
+        } */
     }
 
     public HashMap<String, String> findItem(int position) {
@@ -174,7 +175,7 @@ public class GroceryActivity extends AppCompatActivity
              deleteGrocery(position);
              return true;
             case R.id.updateDate :
-                int p = info.position;
+              /*  int p = info.position;
                 DatePickerFragment newFragment = new DatePickerFragment();
                 Bundle bundle = new Bundle();
                 String ingredient = findItem(p).get("Name");
@@ -185,7 +186,8 @@ public class GroceryActivity extends AppCompatActivity
                 bundle.putInt("requestCode", Integer.parseInt(requestID.get(ingredient)));
                 newFragment.setArguments(bundle);
              //   setDate(newFragment.getDate(), p);
-                newFragment.show(getFragmentManager(), "datePicker");
+                newFragment.show(getFragmentManager(), "datePicker"); */
+              return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -310,6 +312,7 @@ public class GroceryActivity extends AppCompatActivity
                 } else {
                     mDatabase.child("list").child(name).setValue(newIngredient);
                 }
+                toAdd.setText("");
             }
 
             @Override

@@ -185,6 +185,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
                 Ingredient value = entry.getValue();
                 addToList(value);
             }
+            Toast.makeText(this, "Ingredients added", Toast.LENGTH_SHORT).show();
         }
         else {
             List<Ingredient_Full> ingredientsFull = singleRecipe.getExtendedIngredients();
