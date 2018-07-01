@@ -66,7 +66,7 @@ public class CalendarActivity extends AppCompatActivity {
                         startActivity(new Intent(CalendarActivity.this, GroceryActivity.class));
                         break;
                     case R.id.navigation_recipe:
-                        startActivity(new Intent(CalendarActivity.this, RecipeSearchActivity.class)) ;
+                        startActivity(new Intent(CalendarActivity.this, RecipeActivity.class)) ;
                         break;
                     case R.id.navigation_calendar:
                         break;
