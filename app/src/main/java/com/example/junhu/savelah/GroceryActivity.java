@@ -89,7 +89,7 @@ public class GroceryActivity extends AppCompatActivity
                             String key = entry.getKey();
                             Ingredient value = entry.getValue();
                             requestID.put(key, value.getAlarmID());
-                            temp.add(key + " " + value.getAmount() + " " + value.getUnit());
+                            temp.add(key + "(" + value.getAmount() + " " + value.getUnit() + ")");
                         }
                         list.addAll(temp);
                         // list.addAll(new ArrayList<String>(c.getList().keySet()));
@@ -153,10 +153,11 @@ public class GroceryActivity extends AppCompatActivity
         //regex: .split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[0];
         HashMap<String, String> result = new HashMap<>();
         String item = list.get(position);
-        String[] temp = item.split(" ");
+        String[] temp = item.split("\\(");
         String name = temp[0];
-        String quantity = temp[1];
-        String unit = temp[2];
+        String str = temp[1].substring(0, temp[1].length() -1);
+        String quantity = str.split(" ")[0];
+        String unit = str.split(" ")[1];
         Log.d("MyUnits", unit);
         result.put("Name", name);
         result.put("Quantity", quantity);

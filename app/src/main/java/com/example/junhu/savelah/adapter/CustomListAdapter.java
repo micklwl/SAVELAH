@@ -39,7 +39,7 @@ public class CustomListAdapter extends ArrayAdapter<Recipe> {
             convertView = inflater.inflate(R.layout.recipe_search_list, null, true);
         }
         Recipe recipe = this.getItem(position);
-        if(recipe.getImage() != null || !(recipe.getImage().equals(""))) {
+        if(recipe.getImage() != null && !(recipe.getImage().equals(""))) {
             ImageView image = convertView.findViewById(R.id.imageView);
             Picasso.get().load(recipe.getImage()).into(image);
         }
