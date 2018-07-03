@@ -139,15 +139,16 @@ public class GroceryActivity extends AppCompatActivity
     }
 
     private void deleteGrocery(int key) {
-        String item = findItem(key).get("Name");
+        String item = findItem(key).get("Name").trim();
+        Log.d("delGrocery", item);
         Toast.makeText(this, item, Toast.LENGTH_LONG).show();
         mDatabase.child("list").child(item).removeValue();
-        /* if(!(requestID.get(item).equals(0 + ""))) {
+        if(!(requestID.get(item).equals(0 + ""))) {
             Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast( this, Integer.parseInt(requestID.get(item)), myIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             am.cancel(pendingIntent);
-        } */
+        }
     }
 
     public HashMap<String, String> findItem(int position) {
@@ -155,10 +156,10 @@ public class GroceryActivity extends AppCompatActivity
         HashMap<String, String> result = new HashMap<>();
         String item = list.get(position);
         String[] temp = item.split("\\(");
-        String name = temp[0];
+        String name = temp[0].trim();
         String str = temp[1].substring(0, temp[1].length() -1);
-        String quantity = str.split(" ")[0];
-        String unit = str.split(" ")[1];
+        String quantity = str.split(" ")[0].trim();
+        String unit = str.split(" ")[1].trim();
         Log.d("MyUnits", unit);
         result.put("Name", name);
         result.put("Quantity", quantity);
@@ -171,11 +172,11 @@ public class GroceryActivity extends AppCompatActivity
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.delGrocery :
-             int position = info.position;
-             deleteGrocery(position);
-             return true;
+                 int position = info.position;
+                 deleteGrocery(position);
+                return true;
             case R.id.updateDate :
-              /*  int p = info.position;
+               int p = info.position;
                 DatePickerFragment newFragment = new DatePickerFragment();
                 Bundle bundle = new Bundle();
                 String ingredient = findItem(p).get("Name");
@@ -186,7 +187,7 @@ public class GroceryActivity extends AppCompatActivity
                 bundle.putInt("requestCode", Integer.parseInt(requestID.get(ingredient)));
                 newFragment.setArguments(bundle);
              //   setDate(newFragment.getDate(), p);
-                newFragment.show(getFragmentManager(), "datePicker"); */
+                newFragment.show(getFragmentManager(), "datePicker");
               return true;
             default:
                 return super.onContextItemSelected(item);
