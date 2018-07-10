@@ -113,6 +113,10 @@ public class Recipe_DB implements Parcelable {
 
     }
 
+    public Recipe convertToRecipe() {
+        return new Recipe(this.title, this.imageUrl, this.id);
+    }
+
     private Recipe_DB(Parcel in) {
         title = in.readString();
         id = in.readInt();

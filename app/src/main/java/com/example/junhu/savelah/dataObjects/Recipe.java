@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Recipe extends EventDay implements Parcelable {
+public class Recipe implements Parcelable {
     private String title;
     private String image;
     private String instructions;
@@ -29,29 +29,16 @@ public class Recipe extends EventDay implements Parcelable {
         }
     };
 
-    public Recipe() {
-        super(null, 0);
-    }
-
-    public Recipe(java.util.Calendar day, int imageResource, String title, String image, int id) {
-        super(day, imageResource);
+    public Recipe(String title, String image, int id) {
         this.title = title;
         this.image = image;
         this.id = id;
     }
 
     private Recipe(Parcel in) {
-        super((java.util.Calendar) in.readSerializable(), in.readInt());
         title = in.readString();
         image = in.readString();
         id = in.readInt();
-    }
-
-    public Recipe(String title, String image, int id) {
-        super(null, 0);
-        this.title = title;
-        this.image = image;
-        this.id = id;
     }
 
     public String getTitle() {
@@ -97,8 +84,6 @@ public class Recipe extends EventDay implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeSerializable(getCalendar());
-        dest.writeInt(getImageResource());
         dest.writeString(title);
         dest.writeString(image);
         dest.writeInt(id);

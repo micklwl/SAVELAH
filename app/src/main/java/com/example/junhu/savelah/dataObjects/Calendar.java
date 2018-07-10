@@ -10,6 +10,15 @@ package com.example.junhu.savelah.dataObjects;
 
         Calendar() {}
 
+       public Calendar(int year, int month, int day) {
+            this.year = year;
+            this.month = month;
+            this.dayOfMonth = day;
+            this.hourOfDay = 0;
+            this.minute = 0;
+            this.second = 0;
+        }
+
         public int getDayOfMonth() {
             return dayOfMonth;
         }

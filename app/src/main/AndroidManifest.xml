@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.junhu.savelah">
+
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -8,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -20,9 +21,11 @@
         <meta-data
             android:name="xmashapekey"
             android:value="XDldRKNWBVmshAwM842H5IykN8TLp1PF0BrjsnHZvSIqrmdtt1" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,8 +41,14 @@
         <activity android:name=".SingleRecipeActivity" />
         <activity android:name=".SavedRecipesActivity" />
         <activity android:name=".AddRecipeActivity" />
-        <activity android:name=".RecipeToCalendar"></activity>
-        <receiver android:name=".AlarmBroadcastReceiver" android:enabled="true" android:exported="true" />
+        <activity android:name=".RecipeToCalendar" />
+
+        <receiver
+            android:name=".AlarmBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".PreviewRecipes"></activity>
     </application>
 
 </manifest>
