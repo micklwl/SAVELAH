@@ -37,6 +37,8 @@ public class RecipeActivity extends AppCompatActivity implements View.OnClickLis
                     case R.id.navigation_profile:
                         startActivity(new Intent(RecipeActivity.this, ProfileActivity.class)) ;
                         break;
+                    case R.id.sharing:
+                        startActivity(new Intent(RecipeActivity.this, SharingActivity.class));
                 }
                 return false;
             }

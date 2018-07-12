@@ -74,6 +74,8 @@ public class RecipeSearchActivity extends AppCompatActivity{
                     case R.id.navigation_profile:
                         startActivity(new Intent(RecipeSearchActivity.this, ProfileActivity.class));
                         break;
+                    case R.id.sharing:
+                        startActivity(new Intent(RecipeSearchActivity.this, SharingActivity.class));
                 }
                 return false;
             }
@@ -120,7 +122,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
         APIController clientController = client.getClient();
         progressBar.setVisibility(View.VISIBLE);
         // key-value map for optional query parameters
-        Map<String, Object> queryParams = new LinkedHashMap<String, Object>();
+        Map<String, Object> queryParams = new LinkedHashMap<>();
         // Invoking the API call with sample inputs
         query = searchItem.getText().toString();
         cuisine = "";
@@ -154,7 +156,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 // Get the recipe results:
                 List<Recipe_Short> data = handler.getResults();
 
-                List<Recipe> temp = new ArrayList<Recipe>();
+                List<Recipe> temp = new ArrayList<>();
                 results.clear();
                 for (Recipe_Short i : data) {
                     String title = i.getTitle();

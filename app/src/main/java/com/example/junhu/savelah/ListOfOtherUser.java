@@ -1,15 +1,9 @@
 package com.example.junhu.savelah;
 
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,27 +21,23 @@ import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
 import com.example.junhu.savelah.dataObjects.Customer;
 import com.example.junhu.savelah.dataObjects.DatePickerFragment;
 import com.example.junhu.savelah.dataObjects.Ingredient;
-import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GroceryActivity extends AppCompatActivity
-        implements AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener {
-    public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
+public class ListOfOtherUser extends AppCompatActivity
+        implements AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener{
+
     private EditText toAdd;
+    private String message;
     private ListView groceryList;
     private AlarmManager am;
     private ArrayList<String> list = new ArrayList<>();
@@ -60,19 +49,20 @@ public class GroceryActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_grocery);
-        // Initalise widgets
+        setContentView(R.layout.activity_list_of_other_user);
+        Intent intent = getIntent();
+        message = intent.getStringExtra("UID");
         toAdd = findViewById(R.id.addText);
         am =  (AlarmManager) this.getSystemService(ALARM_SERVICE);
         requestID = new HashMap<>();
-        groceryList = findViewById(R.id.groceryList);
+        groceryList = findViewById(R.id.sharedList);
         registerForContextMenu(groceryList);
         user = FirebaseAuth.getInstance().getCurrentUser();
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
         //Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
-        mDatabase = initDatabase.child(user.getUid());
+        mDatabase = initDatabase.child(message);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -102,35 +92,8 @@ public class GroceryActivity extends AppCompatActivity
 
             }
         });
-
-   // Toast.makeText(this, user.getEmail(), Toast.LENGTH_LONG).show();
-        BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
-        bottombar.enableAnimation(false);
-        bottombar.enableShiftingMode(false);
-        bottombar.enableItemShiftingMode(false);
-        bottombar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.navigation_grocery:
-                        break;
-                    case R.id.navigation_recipe:
-                        startActivity(new Intent(GroceryActivity.this, RecipeActivity.class)) ;
-                        break;
-                    case R.id.navigation_calendar:
-                        startActivity(new Intent(GroceryActivity.this, CalendarActivity.class));
-                        break;
-                    case R.id.navigation_profile:
-                        startActivity(new Intent(GroceryActivity.this, ProfileActivity.class)) ;
-                        break;
-                    case R.id.sharing:
-                        startActivity(new Intent(GroceryActivity.this, SharingActivity.class));
-                }
-                return false;
-            }
-        });
     }
-    // to create options list to delete grocery
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -172,11 +135,11 @@ public class GroceryActivity extends AppCompatActivity
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.delGrocery :
-                 int position = info.position;
-                 deleteGrocery(position);
+                int position = info.position;
+                deleteGrocery(position);
                 return true;
             case R.id.updateDate :
-               int p = info.position;
+                int p = info.position;
                 DatePickerFragment newFragment = new DatePickerFragment();
                 Bundle bundle = new Bundle();
                 String ingredient = findItem(p).get("Name");
@@ -186,9 +149,9 @@ public class GroceryActivity extends AppCompatActivity
                 bundle.putString("User", user.getUid());
                 bundle.putInt("requestCode", Integer.parseInt(requestID.get(ingredient)));
                 newFragment.setArguments(bundle);
-             //   setDate(newFragment.getDate(), p);
+                //   setDate(newFragment.getDate(), p);
                 newFragment.show(getFragmentManager(), "datePicker");
-              return true;
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -215,6 +178,7 @@ public class GroceryActivity extends AppCompatActivity
         changeQuantityDialog.show(getSupportFragmentManager(),"change quantity dialog");
     }
 
+
     @Override
     public void applyText(String quantity, String unit) {
         addGrocery(quantity, unit);
@@ -222,7 +186,6 @@ public class GroceryActivity extends AppCompatActivity
 
     @Override
     public void applyTexts(float quantityResult, String unitResult, String name) {
-        //set the final amount inside database
         mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
         mDatabase.child("list").child(name).child("unit").setValue(unitResult);
     }
@@ -256,43 +219,4 @@ public class GroceryActivity extends AppCompatActivity
             }
         });
     }
-
 }
-//    private void addGrocery(String quantity, String unit) {
-//        final String str = toAdd.getText().toString().trim();
-//        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
-//      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
-//    }
-
-//    public void findListListener(View view) {
-//        final String sharedEmail = findList.getText().toString().trim();
-//        final String currentEmail = user.getEmail().replace(".", ",");
-//        Query query = initDatabase.orderByChild("email").equalTo(sharedEmail);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.exists()) {
-//                    GenericTypeIndicator<HashMap<String, Customer>> t = new GenericTypeIndicator<HashMap<String,Customer>>() {};
-//                    HashMap<String,Customer> map = dataSnapshot.getValue(t);
-//                    String[] a = new String[1];
-//                    String key  = dataSnapshot.getValue(t).keySet().toArray(a)[0];
-//                    Customer sharee = map.get(key);
-//                    HashMap<String, String> members = sharee.getMembers();
-//                    if ((!(members == null)) && members.containsValue(sharedEmail)) {
-//                        Intent intent = new Intent(GroceryActivity.this, SharedListActivity.class);
-//                        intent.putExtra(EXTRA_MESSAGE, sharee.getUid());
-//                        startActivity(intent);
-//                    } else {
-//                        Toast.makeText(GroceryActivity.this,"You do not have access to this email", Toast.LENGTH_SHORT).show();
-//                    }
-//                } else{
-//                    Toast.makeText(GroceryActivity.this,"No such User in SAVELAH", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }

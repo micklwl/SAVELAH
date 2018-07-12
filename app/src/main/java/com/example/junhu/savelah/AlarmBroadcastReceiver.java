@@ -3,6 +3,7 @@ package com.example.junhu.savelah;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +35,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle("Reminder").setContentText("Remember to buy " + name + "(" + quantity + " " + unit + ")" )
                 .setSmallIcon(R.drawable.ic_stars_black_24dp);
-
+        builder.setAutoCancel(true);
         // add intent to launch app when user clicks notification.
         Notification notification = builder.build();
         nm.notify(notificationID,notification);

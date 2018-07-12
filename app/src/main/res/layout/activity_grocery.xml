@@ -14,37 +14,6 @@ tools:context=".GroceryActivity">
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:rowCount="1">
-
-        <EditText
-            android:id="@+id/findText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:hint="@string/email_of_shared_users_list"
-            android:inputType="textAutoComplete" />
-
-        <Button
-            android:id="@+id/shareList"
-            android:text="@string/go"
-            android:onClick="findListListener"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/findButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:onClick="shareListListener"
-            android:text="@string/share" />
-
-    </GridLayout>
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:columnCount="2"
         android:rowCount="1">
 
@@ -69,7 +38,6 @@ tools:context=".GroceryActivity">
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
-
 
 </LinearLayout>
 

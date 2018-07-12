@@ -49,8 +49,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         startActivity(new Intent(ProfileActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
-
                         break;
+                    case R.id.sharing:
+                        startActivity(new Intent(ProfileActivity.this, SharingActivity.class));
                 }
                 return false;
             }

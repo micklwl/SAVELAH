@@ -9,6 +9,7 @@ public class Customer {
     private String email;
     private HashMap<String, Ingredient> list;
     private HashMap<String, String> members;
+    private HashMap<String, String> access;
 
     private HashMap<String, Recipe_DB> recipes;
     private Customer() {}
@@ -36,6 +37,10 @@ public class Customer {
 
     public String getUid(){
         return this.uid;
+    }
+
+    public HashMap<String, String> getAccess(){
+        return this.access;
     }
 
     public String getEmail() {

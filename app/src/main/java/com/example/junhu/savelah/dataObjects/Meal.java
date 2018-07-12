@@ -3,9 +3,9 @@ package com.example.junhu.savelah.dataObjects;
 import com.example.junhu.savelah.dataObjects.Recipe;
 
 public class Meal {
-    Recipe recipe;
-    int hour;
-    int minute;
+    private Recipe recipe;
+    private int hour;
+    private int minute;
 
     public void setTime(int hour, int min) {
         this.hour = hour;
@@ -33,7 +33,12 @@ public class Meal {
     }
 
     public String getTime() {
-        return this.hour + ":" + this.minute;
+        if(this.minute >= 0 && this.minute < 10) {
+            return this.hour + ":0" + this.minute;
+        } else {
+            return this.hour + ":" + this.minute;
+        }
+
     }
 
 }

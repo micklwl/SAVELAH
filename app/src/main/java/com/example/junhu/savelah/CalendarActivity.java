@@ -8,20 +8,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.applandeo.materialcalendarview.EventDay;
-import com.example.junhu.savelah.dataObjects.Recipe;
 import com.google.gson.Gson;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CalendarActivity extends AppCompatActivity {
     private static final int ADD_RECIPE = 44;
@@ -73,6 +69,8 @@ public class CalendarActivity extends AppCompatActivity {
                     case R.id.navigation_profile:
                         startActivity(new Intent(CalendarActivity.this, ProfileActivity.class)) ;
                         break;
+                    case R.id.sharing:
+                        startActivity(new Intent(CalendarActivity.this, SharingActivity.class));
                 }
                 return false;
             }

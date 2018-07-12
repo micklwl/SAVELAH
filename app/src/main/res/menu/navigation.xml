@@ -16,6 +16,11 @@
         android:title="@string/calendar"/>
 
     <item
+        android:id ="@+id/sharing"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="Sharing" />
+
+    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/profile"
         android:title="@string/profile"/>

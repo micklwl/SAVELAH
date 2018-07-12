@@ -123,6 +123,8 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
                     case R.id.navigation_profile:
                         startActivity(new Intent(SingleRecipeActivity.this, ProfileActivity.class));
                         break;
+                    case R.id.sharing:
+                        startActivity(new Intent(SingleRecipeActivity.this, SharingActivity.class));
                 }
                 return false;
             }

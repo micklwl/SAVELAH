@@ -63,6 +63,8 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
                     case R.id.navigation_profile:
                         startActivity(new Intent(SavedRecipesActivity.this, ProfileActivity.class));
                         break;
+                    case R.id.sharing:
+                        startActivity(new Intent(SavedRecipesActivity.this, SharingActivity.class));
                 }
                 return false;
             }

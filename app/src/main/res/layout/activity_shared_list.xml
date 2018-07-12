@@ -6,40 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".SharedListActivity">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/instruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tap_to_access"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/userEmails"/>
+
+    <ListView
+        android:id="@+id/userEmails"
+        app:layout_constraintTop_toBottomOf="@+id/instruction"
         android:layout_width="match_parent"
-        android:layout_height="457dp"
-        android:orientation="vertical">
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="1">
-
-            <EditText
-                android:id="@+id/addText"
-                android:layout_width="323dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="fill_horizontal"
-                android:hint="Add Grocery"
-                android:inputType="textAutoComplete" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_add_black_24dp"
-                android:onClick="addGroceryListener"/>
-
-        </GridLayout>
-
-        <ListView
-            android:id="@+id/groceryList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
-
-    </LinearLayout>
+        android:layout_height="wrap_content">
+    </ListView>
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
         android:id="@+id/navigation"

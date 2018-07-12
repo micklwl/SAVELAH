@@ -34,6 +34,10 @@
     <string name="ingredient_amount">amount</string>
     <string name="ingredient_unit">unit</string>
     <string name="clear_all">CLEAR ALL</string>
+    <string name="email_of_user">Email of User</string>
+    <string name="tap_to_access">Tap to access</string>
+    <string name="add_new_members_to_list">Add new Members to List</string>
+    <string name="access_shared_lists">Access Shared Lists</string>
 
 
     <!-- Strings related to login -->

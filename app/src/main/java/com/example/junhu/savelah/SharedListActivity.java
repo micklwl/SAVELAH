@@ -1,5 +1,6 @@
 package com.example.junhu.savelah;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,9 @@ import android.widget.ListView;
 import com.example.junhu.savelah.dataObjects.Customer;
 import com.example.junhu.savelah.dataObjects.DatePickerFragment;
 import com.example.junhu.savelah.dataObjects.Ingredient;
+import com.example.junhu.savelah.dataObjects.Recipe_DB;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,43 +33,39 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SharedListActivity extends AppCompatActivity implements AddGroceryDialogListener {
-    private EditText toAdd;
-    private ListView groceryList;
+public class SharedListActivity extends AppCompatActivity {
+    private ListView ListOfemails;
     private ArrayList<String> list = new ArrayList<>();
     private DatabaseReference initDatabase;
+    private FirebaseUser user;
     private DatabaseReference mDatabase;
-    private String message;
+    private HashMap<String,String> emailToUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shared_list);
-        Intent intent = getIntent();
-        message = intent.getStringExtra(GroceryActivity.EXTRA_MESSAGE);
+        user = FirebaseAuth.getInstance().getCurrentUser();
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
-        mDatabase = initDatabase.child(message);
-        toAdd = findViewById(R.id.addText);
-        groceryList = findViewById(R.id.groceryList);
-        registerForContextMenu(groceryList);
+        mDatabase = initDatabase.child(user.getUid());
+        ListOfemails = findViewById(R.id.userEmails);
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
-        groceryList.setAdapter(adapter);
+        ListOfemails.setAdapter(adapter);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Customer c = dataSnapshot.getValue(Customer.class);
-                list.clear();
-                HashMap<String, Ingredient> map = c.getList();
-                ArrayList<String> temp = new ArrayList<>();
-                if (map != null) {
-                    for (Map.Entry<String, Ingredient> entry : map.entrySet()) {
-                        String key = entry.getKey();
-                        Ingredient value = entry.getValue();
-                        temp.add(key + " " + value.getAmount());
+                if (c.getAccess() != null) {
+                    list.clear();
+                    ArrayList<String> temp = new ArrayList<>();
+                    HashMap<String, String> map = c.getAccess();
+                    emailToUID = map;
+                    for (String s : map.keySet()) {
+                        s.replace(",", ".");
+                        temp.add(s);
                     }
                     list.addAll(temp);
                     // list.addAll(new ArrayList<String>(c.getList().keySet()));
-                    Log.d("hello", "onDataChange: " + list);
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -73,6 +73,17 @@ public class SharedListActivity extends AppCompatActivity implements AddGroceryD
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        ListOfemails.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String email = (String) ListOfemails.getItemAtPosition(position);
+                String decoded = email.replace(".", ",");
+                Intent intent = new Intent(SharedListActivity.this, ListOfOtherUser.class);
+                intent.putExtra("UID", emailToUID.get(decoded));
+                startActivity(intent);
             }
         });
         BottomNavigationViewEx bottombar = (BottomNavigationViewEx) findViewById(R.id.navigation);
@@ -95,68 +106,13 @@ public class SharedListActivity extends AppCompatActivity implements AddGroceryD
                 case R.id.navigation_profile:
                     startActivity(new Intent(SharedListActivity.this, ProfileActivity.class)) ;
                     break;
+                case R.id.sharing:
+                    startActivity(new Intent(SharedListActivity.this, SharingActivity.class));
             }
             return false;
             }
         });
     }
 
-    // to create options list to delete grocery
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.grocery, menu);
-    }
 
-    private void deleteGrocery(int key) {
-        String item = findItem(key);
-        mDatabase.child("list").child(item).removeValue();
-    }
-
-    public String findItem(int position) {
-        String item = list.get(position);
-        item = item.substring(0, item.lastIndexOf(" "));
-        return item;
-    }
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.delGrocery :
-                int position = info.position;
-                deleteGrocery(position);
-                return true;
-            case R.id.updateDate :
-                int p = info.position;
-                DatePickerFragment newFragment = new DatePickerFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("item", findItem(p));
-                bundle.putString("User", message);
-                newFragment.setArguments(bundle);
-                //   setDate(newFragment.getDate(), p);
-                newFragment.show(getFragmentManager(), "datePicker");
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    private void openDialog() {
-        AddGroceryDialog dialog = new AddGroceryDialog();
-        dialog.show(getSupportFragmentManager(), "add grocery dialog");
-    }
-
-    private void addGrocery(String quantity, String unit) {
-        final String str = toAdd.getText().toString().trim();
-        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
-    }
-
-    @Override
-    public void applyText(String quantity, String unit) {
-        addGrocery(quantity, unit);
-    }
-
-    public void addGroceryListener(View view) {
-        openDialog();
-    }
 }
