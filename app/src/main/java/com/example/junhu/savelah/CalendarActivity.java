@@ -94,30 +94,6 @@ public class CalendarActivity extends AppCompatActivity {
 //            editor.putString(jKey, jValue);
 //            editor.apply(); }
     }
-//    private void previewRecipe(int year, int month, int day) {
-//     //   Log.d("preview", day + "");
-////        SharedPreferences preferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
-////        Map<String, ?> keys = preferences.getAll();
-////        Log.d("preview",  keys + "");
-////        Intent intent = new Intent(this, SingleRecipeActivity.class);
-////        if (keys != null) {
-////            for (Map.Entry<String, ?> entry : keys.entrySet()) {
-////                com.example.junhu.savelah.dataObjects.Calendar key = new Gson().fromJson(entry.getKey(),
-////                        com.example.junhu.savelah.dataObjects.Calendar.class);
-////                Log.d("preview",  + key.getDayOfMonth() + "");
-////                if (key.getYear() == year && key.getMonth() == month && key.getDayOfMonth() == day) {
-////                    intent.putExtra("Recipe", new Gson().fromJson
-////                            (preferences.getString(entry.getKey(), null), PreviewRecipes.class));
-////                    intent.putExtra("type", "true");
-////                    startActivity(intent);
-////                    return;
-////                }
-////            }
-////                Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
-////        } else {
-////            Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
-////        }
-////    }
 
     private void  previewRecipe(com.example.junhu.savelah.dataObjects.Calendar date) {
         String key = new Gson().toJson(date);
@@ -149,4 +125,29 @@ public class CalendarActivity extends AppCompatActivity {
         editor.clear();
         editor.apply();
     }
+    //    private void previewRecipe(int year, int month, int day) {
+//     //   Log.d("preview", day + "");
+////        SharedPreferences preferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+////        Map<String, ?> keys = preferences.getAll();
+////        Log.d("preview",  keys + "");
+////        Intent intent = new Intent(this, SingleRecipeActivity.class);
+////        if (keys != null) {
+////            for (Map.Entry<String, ?> entry : keys.entrySet()) {
+////                com.example.junhu.savelah.dataObjects.Calendar key = new Gson().fromJson(entry.getKey(),
+////                        com.example.junhu.savelah.dataObjects.Calendar.class);
+////                Log.d("preview",  + key.getDayOfMonth() + "");
+////                if (key.getYear() == year && key.getMonth() == month && key.getDayOfMonth() == day) {
+////                    intent.putExtra("Recipe", new Gson().fromJson
+////                            (preferences.getString(entry.getKey(), null), PreviewRecipes.class));
+////                    intent.putExtra("type", "true");
+////                    startActivity(intent);
+////                    return;
+////                }
+////            }
+////                Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
+////        } else {
+////            Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_LONG).show();
+////        }
+////    }
+
 }

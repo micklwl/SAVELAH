@@ -36,7 +36,14 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                 .setContentTitle("Reminder").setContentText("Remember to buy " + name + "(" + quantity + " " + unit + ")" )
                 .setSmallIcon(R.drawable.ic_stars_black_24dp);
         builder.setAutoCancel(true);
+        Intent repeating_intent = new Intent(context,GroceryActivity.class);
+        repeating_intent.putExtra("ID", notificationID);
+        Log.d("notificationID", notificationID + "");
+        repeating_intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,notificationID,repeating_intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
         // add intent to launch app when user clicks notification.
+
         Notification notification = builder.build();
         nm.notify(notificationID,notification);
     }

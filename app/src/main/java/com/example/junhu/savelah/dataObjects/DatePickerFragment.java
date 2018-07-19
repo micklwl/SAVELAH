@@ -86,32 +86,30 @@ public class DatePickerFragment extends DialogFragment
         long interval = 30;
         if (requestCode == 0) {
             Intent myIntent = new Intent(getActivity(), AlarmBroadcastReceiver.class);
-            myIntent.putExtra("itemName", toUpdate);
-            myIntent.putExtra("Quantity", quantity);
-            myIntent.putExtra("Unit", unit);
-            myIntent.putExtra("Request", newCode);
-            PendingIntent intent = PendingIntent.getBroadcast(getActivity(), newCode, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() , interval, intent);
-            ref.setValue(date);
             refII.setValue(newCode + "");
             SharedPreferences.Editor editor = this.getActivity().getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
             editor.putString("Number", (newCode + 1) + "");
             editor.apply();
+            setAlarm(myIntent, interval);
+            ref.setValue(date);
 
         } else { // requestCode >  0
             Intent myIntent = new Intent(getActivity(), AlarmBroadcastReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast( getActivity(), requestCode, myIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             am.cancel(pendingIntent);
-
             Intent nextIntent = new Intent(getActivity(), AlarmBroadcastReceiver.class);
-            nextIntent.putExtra("itemName", toUpdate);
-            nextIntent.putExtra("Quantity", quantity);
-            nextIntent.putExtra("Unit", unit);
-            nextIntent.putExtra("Request", requestCode);
-            PendingIntent intent = PendingIntent.getBroadcast(getActivity(), requestCode, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() , interval, intent);
+            setAlarm(nextIntent, interval);
             ref.setValue(date);
         }
+    }
+
+    public void setAlarm(Intent it, long interval) {
+        it.putExtra("itemName", toUpdate);
+        it.putExtra("Quantity", quantity);
+        it.putExtra("Unit", unit);
+        it.putExtra("Request", newCode);
+        PendingIntent intent = PendingIntent.getBroadcast(getActivity(), newCode, it, PendingIntent.FLAG_UPDATE_CURRENT);
+        am.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() , interval, intent);
     }
 }

@@ -52,6 +52,7 @@ public class GroceryActivity extends AppCompatActivity
     private ListView groceryList;
     private AlarmManager am;
     private ArrayList<String> list = new ArrayList<>();
+    private int notificationID;
     private HashMap<String, String> requestID;
     private FirebaseUser user;
     private DatabaseReference initDatabase;
@@ -61,9 +62,18 @@ public class GroceryActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery);
+        am =  (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        Intent it = this.getIntent();
+        notificationID = it.getIntExtra("ID", -1);
+        Log.d("Notification ID", notificationID + "");
+        if (notificationID != -1) {
+            Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast( this, notificationID, myIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            am.cancel(pendingIntent);
+        }
         // Initalise widgets
         toAdd = findViewById(R.id.addText);
-        am =  (AlarmManager) this.getSystemService(ALARM_SERVICE);
         requestID = new HashMap<>();
         groceryList = findViewById(R.id.groceryList);
         registerForContextMenu(groceryList);
