@@ -38,6 +38,18 @@
     <string name="tap_to_access">Tap to access</string>
     <string name="add_new_members_to_list">Add new Members to List</string>
     <string name="access_shared_lists">Access Shared Lists</string>
+    <string name="search_online">Search Online</string>
+    <string name="see_my_saved_recipes">See My Saved Recipes</string>
+    <string name="unit">Unit</string>
+    <string name="enter_your_desired_result">Enter your desired result:</string>
+    <string name="ingredient_to_add">Ingredient to Add</string>
+    <string name="results_in_database">Results in Database</string>
+    <string name="alert">ALERT!</string>
+    <string name="type_in_instructions_here">Type in instructions here</string>
+    <string name="ppl_servings">ppl servings</string>
+    <string name="time_required">Time required</string>
+    <string name="mins">Mins</string>
+    <string name="saved_recipes">Saved Recipes</string>
 
 
     <!-- Strings related to login -->

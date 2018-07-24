@@ -195,6 +195,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
                 Ingredient ing1 = new Ingredient(ing);
                 addToList(ing1);
             }
+            Toast.makeText(this, "Ingredients added", Toast.LENGTH_SHORT).show();
         }
     }
 

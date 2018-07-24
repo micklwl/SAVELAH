@@ -122,7 +122,7 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
-        findViewById(R.id.savedRecipes).setOnClickListener(this);
+        findViewById(R.id.btn_add_more).setOnClickListener(this);
     }
 
     @Override

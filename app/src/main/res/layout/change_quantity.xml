@@ -4,14 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding = "3dp">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:hint="@string/alert"
+        android:gravity="center"/>
 
     <TextView
         android:id="@+id/resultsDB"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/title"
         android:textSize="15sp"
-        android:hint="Results in Database" />
+        android:hint="@string/results_in_database" />
 
     <TextView
         android:id="@+id/toAdd"
@@ -21,7 +32,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/resultsDB"
         android:textSize="15sp"
-        android:hint="Ingredient to Add" />
+        android:hint="@string/ingredient_to_add" />
     <TextView
         android:id="@+id/finalResult"
         android:layout_width="match_parent"
@@ -30,7 +41,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toAdd"
         android:textSize="15sp"
-        android:text="Enter your desired result:" />
+        android:text="@string/enter_your_desired_result" />
 
     <EditText
         android:id="@+id/quantity"
@@ -41,7 +52,7 @@
         android:layout_below="@+id/finalResult"
         android:textSize="15sp"
         android:hint="@string/quantity"
-        android:inputType="textAutoComplete" />
+        android:inputType="numberDecimal" />
 
     <EditText
         android:id="@+id/unit"
@@ -51,7 +62,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/quantity"
         android:textSize="15sp"
-        android:hint="Unit"
+        android:hint="@string/unit"
         android:inputType="textAutoComplete" />
 
 </RelativeLayout>

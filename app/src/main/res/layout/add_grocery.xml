@@ -16,7 +16,7 @@
         android:layout_gravity="fill_horizontal"
         android:layout_marginStart="16dp"
         android:hint="@string/quantity"
-        android:inputType="textAutoComplete"
+        android:inputType="numberDecimal"
        />
 
     <EditText

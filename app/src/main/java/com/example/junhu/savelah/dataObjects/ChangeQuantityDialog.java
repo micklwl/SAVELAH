@@ -30,8 +30,7 @@ public class ChangeQuantityDialog extends AppCompatDialogFragment {
         String ingDB = bundle.getString("Database","");
         String ingAdd = bundle.getString("Adding","");
         final String name = bundle.getString("Name","");
-        builder.setView(view).setTitle("Change Quantity")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setView(view).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

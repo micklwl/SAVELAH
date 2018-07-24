@@ -205,6 +205,11 @@ public class GroceryActivity extends AppCompatActivity
     }
 
     public void addGroceryListener(View view) {
+        final String name = toAdd.getText().toString().trim();
+        if (name.equals("")){
+            Toast.makeText(getApplicationContext(), "No text inputted", Toast.LENGTH_SHORT).show();
+            return;
+        }
         openDialog();
     }
 
@@ -215,8 +220,8 @@ public class GroceryActivity extends AppCompatActivity
 
     private void openQuantityDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
         ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
-        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName();
-        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit();
+        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName() + ".";
+        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit() + ".";
         Bundle bundle = new Bundle();
         bundle.putString("Database",ingDB);
         bundle.putString("Adding",ingAdd);
@@ -242,6 +247,7 @@ public class GroceryActivity extends AppCompatActivity
         final String ut = unit;
         final String name = toAdd.getText().toString().trim();
         final Ingredient newIngredient = new Ingredient(name, "default", Float.parseFloat(quantity), unit);
+
         mDatabase.child("list").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
