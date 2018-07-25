@@ -264,6 +264,11 @@ public class GroceryActivity extends AppCompatActivity
 
     @Override
     public void applyTexts(float quantityResult, String unitResult, String name) {
+
+        //DO SOMETHING HERE FOR THE CHANGE QUANTITY MAKE SURE THEY TYPED SOMETHING
+
+
+
         //set the final amount inside database
         mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
         mDatabase.child("list").child(name).child("unit").setValue(unitResult);
