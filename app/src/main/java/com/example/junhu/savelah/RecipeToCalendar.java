@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.junhu.savelah.adapter.CustomListAdapter;
 import com.example.junhu.savelah.adapter.SavedRecipesAdapter;
@@ -35,6 +36,7 @@ public class RecipeToCalendar extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private ListView savedRecipes;
+    private TextView recipesCheck;
     private CalendarView mCalendarView;
     private Button button;
     private ArrayList<Recipe_DB> results;
@@ -48,6 +50,7 @@ public class RecipeToCalendar extends AppCompatActivity {
 //        mCalendarView = findViewById(R.id.datePicker);
         mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
         savedRecipes= findViewById(R.id.listOfSavedRecipes);
+        recipesCheck = findViewById(R.id.noRecipes);
         results = new ArrayList<Recipe_DB>();
         adapter = new SavedRecipesAdapter(this, R.layout.activity_recipe_to_calendar, results);
         Log.d("adapter", adapter.toString());
@@ -106,6 +109,7 @@ public class RecipeToCalendar extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 }
+                if (results.isEmpty()) recipesCheck.setVisibility(View.VISIBLE);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

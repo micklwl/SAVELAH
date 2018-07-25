@@ -100,7 +100,7 @@ public class CalendarActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String result =  preferences.getString(key, null);
         if (result == null) {
-            Toast.makeText(this, "No Recipe to preview", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No Recipes to preview", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(this, PreviewRecipes.class);
             int month = date.getMonth();
@@ -124,6 +124,7 @@ public class CalendarActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
         editor.clear();
         editor.apply();
+        Toast.makeText(this, "All saved recipes have been cleared!", Toast.LENGTH_SHORT).show();
     }
     //    private void previewRecipe(int year, int month, int day) {
 //     //   Log.d("preview", day + "");

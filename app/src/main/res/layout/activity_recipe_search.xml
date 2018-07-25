@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textAutoComplete"
                 android:focusable="true"
-                android:hint="@string/enter_grocery_item" />
+                android:hint="@string/enter_recipe_query" />
 
             <Button
                 android:id="@+id/queryButton"

@@ -118,7 +118,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
                         startActivity(new Intent(SingleRecipeActivity.this, RecipeActivity.class));
                         break;
                     case R.id.navigation_calendar:
-                        startActivity(new Intent(SingleRecipeActivity.this, RecipeActivity.class));
+                        startActivity(new Intent(SingleRecipeActivity.this, CalendarActivity.class));
                         break;
                     case R.id.navigation_profile:
                         startActivity(new Intent(SingleRecipeActivity.this, ProfileActivity.class));
