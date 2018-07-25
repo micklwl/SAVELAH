@@ -18,7 +18,7 @@
     <item
         android:id ="@+id/sharing"
         android:icon="@drawable/ic_share_black_24dp"
-        android:title="Sharing" />
+        android:title="@string/sharing" />
 
     <item
         android:id="@+id/navigation_profile"

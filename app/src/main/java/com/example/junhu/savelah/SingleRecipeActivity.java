@@ -60,6 +60,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
     private TextView servings;
     private Button saveButton;
     private Button addButton;
+    private Button editButton;
     private String suffix;
     private String recipeName;
     private Recipe_Full singleRecipe;
@@ -85,9 +86,6 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
             recipeName = extras.getTitle();
             suffix = extras.getImage();
             id = extras.getId();
-//            recipeName = (String) extras.getString("title");
-//            suffix = (String) extras.getString("suffix");
-//            id = Integer.valueOf(extras.getString("search_id"));
         }
 
         Textv = (TextView)findViewById(R.id.recipeTitle);
@@ -98,6 +96,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         ingredients = (TextView)findViewById(R.id.recipeIngredientsList);
         saveButton = (Button)findViewById(R.id.saveRecipe);
         addButton = (Button)findViewById(R.id.addList);
+        editButton = (Button)findViewById(R.id.editRecipe);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
@@ -151,9 +150,23 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
             }
         });
 
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (type){
+                    Intent intent1 = new Intent(SingleRecipeActivity.this, AddRecipeActivity.class);
+                    intent1.putExtra("view",false);
+                    intent1.putExtra("data",rDB);
+                    startActivity(intent1);
+                }
+                else {
+                    Toast.makeText(SingleRecipeActivity.this,"Save the recipe, then open it from your saved recipes list to edit it!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.recipe,menu);
@@ -179,7 +192,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         }
         return super.onOptionsItemSelected(item);
     }
-
+*/
     private void clickAdd() {
         if (type){
             HashMap<String, Ingredient> ingList = rDB.getIngList();
@@ -268,9 +281,9 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         if (ingList != null) {
             for (Map.Entry<String, Ingredient> entry : ingList.entrySet()) {
                 Ingredient value = entry.getValue();
-                if (value.getUnit().length() > 1) {
+                //if (value.getUnit().length() > 1) {
                     result += value.getAmount() + " " + value.getUnit() + " " + value.getName() + "\n";
-                }
+                //}
             }
         }
         return result;
@@ -292,6 +305,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
                     showAPIOnScreen(singleRecipe);
                 } catch (ParseException e) {
                     Log.e("hello", "Parsing recipe information failed!\n" + e.getLocalizedMessage());
+                    Toast.makeText(SingleRecipeActivity.this,"There was some error in showing the recipe :(. Try again later!", Toast.LENGTH_SHORT).show();
                 }
             }
             /* DEBUG: TEST GSON:
@@ -301,6 +315,8 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
             @Override
             public void onFailure(HttpContext context, Throwable error) {
                 Log.e("hello", "Getting recipe information failed! See below:\n" + error.getLocalizedMessage());
+                Toast.makeText(SingleRecipeActivity.this,"There was some error in reaching the server :(. Try again later!", Toast.LENGTH_SHORT).show();
+
             }
         });
 

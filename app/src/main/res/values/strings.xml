@@ -59,6 +59,11 @@
     <string name="key_in_your_email_here">Key in your email here</string>
     <string name="key_in_your_password_here">Key in your password here</string>
     <string name="units">Units</string>
+    <string name="delete">Delete</string>
+    <string name="set_reminder">Set Reminder</string>
+    <string name="sharing">Sharing</string>
+    <string name="edit">Edit</string>
+    <string name="welcome_to_savelah">Welcome to SaveLAH!</string>
 
 
     <!-- Strings related to login -->
