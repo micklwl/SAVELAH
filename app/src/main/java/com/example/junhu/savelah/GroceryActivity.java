@@ -2,7 +2,8 @@ package com.example.junhu.savelah;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.app.Dialog;import android.app.AlarmManager;
+import
 import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -161,7 +162,7 @@ public class GroceryActivity extends AppCompatActivity
     private void deleteGrocery(int key) {
         String item = findItem(key).get("Name").trim();
         Log.d("delGrocery", item);
-        Toast.makeText(this, item, Toast.LENGTH_LONG).show();
+    //    Toast.makeText(this, item, Toast.LENGTH_LONG).show();
         mDatabase.child("list").child(item).removeValue();
         adapter.notifyDataSetChanged();
         if(!(requestID.get(item).trim().equals(0 + ""))) {
