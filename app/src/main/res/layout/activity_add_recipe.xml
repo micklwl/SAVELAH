@@ -33,6 +33,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 
+        <Button android:id="@+id/btn_cancel"
+            style="Base.Widget.AppCompat.Button"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+
     </LinearLayout>
 
     <!-- Scroll View: -->
@@ -89,11 +96,10 @@
 
             <EditText android:id="@+id/edit_add_custom_recipe_title"
                 android:hint="Enter Title here"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:inputType="textShortMessage|textCapWords|textImeMultiLine"
                 android:lines="2"
                 android:maxLines="2"
-
                 android:layout_below="@id/lbl_add_custom_recipe_title"
                 android:layout_toEndOf="@id/img_custom_recipe"
                 android:layout_width="match_parent"
@@ -101,26 +107,47 @@
 
             <EditText android:id="@+id/edit_add_custom_recipe_servings"
                 android:hint="Enter Servings"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
-
-                android:layout_marginEnd="10dp"
                 android:layout_below="@id/edit_add_custom_recipe_title"
                 android:layout_toEndOf="@id/img_custom_recipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/ppl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_add_custom_recipe_title"
+                android:layout_marginTop="12sp"
+                android:layout_toEndOf="@id/edit_add_custom_recipe_servings"
+                android:maxLines="1"
+                android:text="@string/ppl_servings"
+                android:textStyle="bold"
+                android:textSize="13sp" />
+
             <EditText android:id="@+id/edit_add_custom_recipe_minutes"
-                android:hint="Time required"
-                android:textSize="15sp"
+                android:hint="@string/time_required"
+                android:textSize="12sp"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
-
-                android:layout_below="@id/edit_add_custom_recipe_title"
-                android:layout_toEndOf="@id/edit_add_custom_recipe_servings"
+                android:layout_below="@id/edit_add_custom_recipe_servings"
+                android:layout_toEndOf="@id/img_custom_recipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/edit_add_custom_recipe_servings"
+                android:layout_marginTop="12sp"
+                android:layout_toEndOf="@id/edit_add_custom_recipe_minutes"
+                android:maxLines="1"
+                android:text="@string/mins"
+                android:textStyle="bold"
+                android:textSize="13sp" />
 
             <!-- Recipe Ingredients List -->
             <ImageButton
@@ -136,7 +163,7 @@
                 android:src="@drawable/ic_arrow_down" />
 
             <TextView android:id="@+id/lbl_add_custom_recipe_ingredients"
-                android:drawableEnd="@drawable/ic_add_black_24dp"
+                android:drawableEnd="@drawable/ic_add_white_24dp"
                 android:background="@color/colorPrimaryDark"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
@@ -163,7 +190,7 @@
                 android:focusable="true"
                 android:scrollbars="vertical"
                 android:nestedScrollingEnabled="true"
-
+                android:background="@color/grey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -190,6 +217,8 @@
                 android:layout_height="wrap_content" />
 
             <EditText android:id="@+id/edit_add_custom_recipe_instructions"
+                android:background="@color/grey"
+                android:hint="@string/type_in_instructions_here"
                 android:gravity="start"
                 android:focusable="true"
                 android:inputType="textLongMessage|textAutoCorrect|textMultiLine"

@@ -81,6 +81,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.btn_custom_recipe_ing).setOnClickListener(this);
         findViewById(R.id.lbl_add_custom_recipe_ingredients).setOnClickListener(this);
         findViewById(R.id.btn_add_custom_recipe).setOnClickListener(this);
+        findViewById(R.id.btn_cancel).setOnClickListener(this);
         findViewById(R.id.lbl_add_custom_recipe_instructions).setOnClickListener(this);
         findViewById(R.id.img_custom_recipe).setOnClickListener(this);
 
@@ -137,7 +138,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             case R.id.lbl_add_custom_recipe_instructions:
                 gist = findViewById(R.id.edit_add_custom_recipe_instructions);
                 if (gist.isShown()) {
-                    ((TextView) view).setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0);
+                    ((TextView) view).setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_white, 0);
                     gist.setVisibility(View.GONE);
                 } else {
                     ((TextView) view).setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
@@ -148,7 +149,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn_custom_recipe_ing:
                 gist = findViewById(R.id.rv_add_custom_recipe_ingredients);
                 if (gist.isShown()) {
-                    ((ImageButton) view).setImageResource(R.drawable.ic_arrow_up);
+                    ((ImageButton) view).setImageResource(R.drawable.ic_arrow_up_white);
                     gist.setVisibility(View.GONE);
                 } else {
                     ((ImageButton) view).setImageResource(R.drawable.ic_arrow_down);
@@ -158,6 +159,9 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
 
             case R.id.img_custom_recipe:
                 openFileChooser();
+                break;
+            case R.id.btn_cancel:
+                finish();
                 break;
         }
     }
@@ -174,12 +178,15 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                 ingList.put(i.getName(),i);
             }
         }
+        else{
+            error_msg += "Error: Check your list of ingredients for missing information!\n";
+        }
 
         if (title.length() < 5)
             error_msg += "Error: You need to provide a descriptive title!\n";
 
-        if (instructions.length() < 5)
-            error_msg += "Error: You need to provide some instructions!\n";
+       // if (instructions.length() < 5)
+       //     error_msg += "Error: You need to provide some instructions!\n";
 
         // Checking for Servings given + of correct format:
         int servingsInt = 0;
@@ -189,7 +196,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             } catch (NumberFormatException ex) {
                 error_msg += "Error: SERVINGS need to be a whole number!\n";
             }
-        } else { error_msg += "Error: We need to know how many SERVINGS this recipe makes!\n"; }
+        } else { error_msg += "Error: We need to know how many servings this recipe makes!\n"; }
 
         // Checking for ReadyInMinutes given + of correct format:
         int readyInMinutes  = 0;
@@ -199,7 +206,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
             } catch (NumberFormatException ex) {
                 error_msg += "Error: TIME REQUIRED needs to be a number of minutes!\n";
             }
-        } else { error_msg += "Error: We need to know how long TIME REQUIRED to cook is!\n"; }
+        } else { error_msg += "Error: We need to know how long is the time required for cooking is!\n"; }
 
         if (error_msg.length() == 0){
             user = FirebaseAuth.getInstance().getCurrentUser();
@@ -234,12 +241,12 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         for (int i=0; i < mRecyclerView.getChildCount(); i++) {
             IngredientAdapter.ViewHolder vh = (IngredientAdapter.ViewHolder) mRecyclerView.findViewHolderForLayoutPosition(i);
             Ingredient ingredient = vh.getIngredient();
-            if (ingredient == null) {
+            if (ingredient == null || ingredient.getAmount() == 0) {
                 return null;
             }
             ingredientList.add(ingredient);
         }
-        return  ingredientList;
+        return ingredientList;
     }
 
     private void uploadRecipe(Recipe_DB recipeDb) {
