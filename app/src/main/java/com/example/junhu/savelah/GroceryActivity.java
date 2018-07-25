@@ -100,6 +100,10 @@ public class GroceryActivity extends AppCompatActivity
                         // list.addAll(new ArrayList<String>(c.getList().keySet()));
                         Log.d("hello", "onDataChange: " + list);
                         adapter.notifyDataSetChanged();
+                    } else { // map == null
+                        list.clear();
+                        requestID.clear();
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -169,13 +173,27 @@ public class GroceryActivity extends AppCompatActivity
 
     public HashMap<String, String> findItem(int position) {
         //regex: .split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[0];
+
         HashMap<String, String> result = new HashMap<>();
         String item = list.get(position);
         String[] temp = item.split("\\(");
+        Log.d("findItem", item + "");
         String name = temp[0].trim();
+        // take away the ")"
         String str = temp[1].substring(0, temp[1].length() -1);
-        String quantity = str.split(" ")[0].trim();
-        String unit = str.split(" ")[1].trim();
+        Log.d("test", str);
+        String[] array = str.split(" ");
+        String quantity;
+        String unit;
+        if (array.length == 1) {
+            quantity = array[0].trim();
+            unit = "";
+        } else {
+            quantity = array[0].trim();
+            unit = array[1].trim();
+        }
+//        String quantity = str.split(" ")[0].trim();
+//        String unit = str.split(" ")[1].trim();
         Log.d("MyUnits", unit);
         result.put("Name", name);
         result.put("Quantity", quantity);
@@ -249,11 +267,18 @@ public class GroceryActivity extends AppCompatActivity
     }
 
     public void addGrocery(String quantity, String unit) {
-        final float qty = Float.parseFloat(quantity);
+        Log.d("tocheck", quantity + " "+ unit);
+        final float qty;
         final String ut = unit;
         final String name = toAdd.getText().toString().trim();
-        final Ingredient newIngredient = new Ingredient(name, "default", Float.parseFloat(quantity), unit);
-
+        final Ingredient newIngredient;
+        if (quantity.isEmpty()) {
+           newIngredient = new Ingredient(name, "default", Float.parseFloat("1.0"), unit);
+           qty =  Float.parseFloat("1.0");
+        } else {
+            newIngredient = new Ingredient(name, "default", Float.parseFloat(quantity), unit);
+            qty = Float.parseFloat(quantity);
+        }
         mDatabase.child("list").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
