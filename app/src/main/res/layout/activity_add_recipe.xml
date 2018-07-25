@@ -6,13 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ProgressBar android:id="@+id/save_recipe_progress"
-        style="?android:progressBarStyleLarge"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <!-- Static Bottom Bar: -->
     <LinearLayout android:id="@+id/ll_add_custom_recipe"
         android:orientation="horizontal"
@@ -38,7 +31,7 @@
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
 
     </LinearLayout>
 
@@ -95,7 +88,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText android:id="@+id/edit_add_custom_recipe_title"
-                android:hint="Enter Title here"
+                android:hint="@string/enter_title_here"
                 android:textSize="13sp"
                 android:inputType="textShortMessage|textCapWords|textImeMultiLine"
                 android:lines="2"
@@ -106,7 +99,7 @@
                 android:layout_height="wrap_content" />
 
             <EditText android:id="@+id/edit_add_custom_recipe_servings"
-                android:hint="Enter Servings"
+                android:hint="@string/enter_servings"
                 android:textSize="12sp"
                 android:inputType="numberDecimal"
                 android:maxLines="1"
@@ -229,9 +222,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-
-
-
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/save_recipe_progress"
+        style="?android:progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
 </RelativeLayout>

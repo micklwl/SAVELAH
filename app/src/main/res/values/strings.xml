@@ -51,6 +51,14 @@
     <string name="mins">Mins</string>
     <string name="saved_recipes">Saved Recipes</string>
     <string name="enter_recipe_query">Enter recipe query</string>
+    <string name="enter_servings">Enter Servings</string>
+    <string name="enter_title_here">Enter Title here</string>
+    <string name="cancel">Cancel</string>
+    <string name="key_in_grocery_item_to_add_to_list">Key in grocery item to add to list</string>
+    <string name="no_recipes_to_display_press_back">No recipes to display! Press back!</string>
+    <string name="key_in_your_email_here">Key in your email here</string>
+    <string name="key_in_your_password_here">Key in your password here</string>
+    <string name="units">Units</string>
 
 
     <!-- Strings related to login -->

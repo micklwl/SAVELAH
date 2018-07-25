@@ -22,7 +22,7 @@ tools:context=".GroceryActivity">
             android:layout_width="323dp"
             android:layout_height="wrap_content"
             android:layout_gravity="fill_horizontal"
-            android:hint="Key in grocery item to add to list"
+            android:hint="@string/key_in_grocery_item_to_add_to_list"
             android:inputType="textAutoComplete" />
 
         <ImageButton

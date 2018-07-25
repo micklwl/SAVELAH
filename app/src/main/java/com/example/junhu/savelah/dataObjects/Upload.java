@@ -1,21 +1,21 @@
 package com.example.junhu.savelah.dataObjects;
 
 public class Upload {
-    private String mImageUrl;
+    private String imageUrl;
 
     public Upload(){}
 
-    public Upload(String imageUrl){
-        mImageUrl = imageUrl;
+    public Upload(String ImageUrl){
+        imageUrl = ImageUrl;
     }
 
 
     public String getmImageUrl() {
-        return mImageUrl;
+        return imageUrl;
     }
 
     public void setmImageUrl(String mImageUrl) {
-        this.mImageUrl = mImageUrl;
+        this.imageUrl = mImageUrl;
     }
 
 

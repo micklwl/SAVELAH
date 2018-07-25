@@ -258,15 +258,29 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
 
     private void uploadFile() {
         if (mImageUri != null){
-            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()+"."+ getFileExtension(mImageUri));
+            final String current = System.currentTimeMillis() + "." + getFileExtension(mImageUri);
+            final StorageReference fileReference = mStorageRef.child(current);
             mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressBar.setVisibility(View.GONE);
+                    mStorageRef.child(current).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            // Got the download URL for 'users/me/profile.png'
+                            Upload upload = new Upload(uri.toString());
+                            initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).child("imageUrl").setValue(upload.getmImageUrl());
+                            Log.d("uri", "onSuccess: " + upload.getmImageUrl());
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
+                        }
+                    });
+
                     Toast.makeText(AddRecipeActivity.this,"Changes saved!",Toast.LENGTH_SHORT).show();
-                    Upload upload = new Upload(fileReference.getDownloadUrl().toString());
-                    initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).child("imageUrl").setValue(upload);
+                    progressBar.setVisibility(View.GONE);
                     finish();
                     startActivity(new Intent(AddRecipeActivity.this, RecipeActivity.class));
                 }
