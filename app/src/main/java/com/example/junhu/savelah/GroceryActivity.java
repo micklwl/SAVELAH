@@ -68,10 +68,7 @@ public class GroceryActivity extends AppCompatActivity
         notificationID = it.getIntExtra("ID", -1);
         Log.d("Notification ID", notificationID + "");
         if (notificationID != -1) {
-            Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast( this, notificationID, myIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            am.cancel(pendingIntent);
+            cancelNotification(notificationID);
         }
         // Initalise widgets
         toAdd = findViewById(R.id.addText);
@@ -141,6 +138,14 @@ public class GroceryActivity extends AppCompatActivity
             }
         });
     }
+
+    private void cancelNotification(int notificationID) {
+        Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast( this, notificationID, myIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        am.cancel(pendingIntent);
+    }
+
     // to create options list to delete grocery
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -155,11 +160,12 @@ public class GroceryActivity extends AppCompatActivity
         Toast.makeText(this, item, Toast.LENGTH_LONG).show();
         mDatabase.child("list").child(item).removeValue();
         adapter.notifyDataSetChanged();
-        if(!(requestID.get(item).equals(0 + ""))) {
-            Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast( this, Integer.parseInt(requestID.get(item)), myIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            am.cancel(pendingIntent);
+        if(!(requestID.get(item).trim().equals(0 + ""))) {
+//            Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
+////            PendingIntent pendingIntent = PendingIntent.getBroadcast( this, Integer.parseInt(requestID.get(item)), myIntent,
+////                    PendingIntent.FLAG_UPDATE_CURRENT);
+////            am.cancel(pendingIntent);
+            cancelNotification(Integer.parseInt(requestID.get(item).trim()));
         }
     }
 
