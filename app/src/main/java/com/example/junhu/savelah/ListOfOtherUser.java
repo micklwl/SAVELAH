@@ -83,6 +83,10 @@ public class ListOfOtherUser extends AppCompatActivity
                         // list.addAll(new ArrayList<String>(c.getList().keySet()));
                         Log.d("hello", "onDataChange: " + list);
                         adapter.notifyDataSetChanged();
+                    } else {
+                        list.clear();
+                        requestID.clear();
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -104,7 +108,7 @@ public class ListOfOtherUser extends AppCompatActivity
     private void deleteGrocery(int key) {
         String item = findItem(key).get("Name").trim();
         Log.d("delGrocery", item);
-        Toast.makeText(this, item, Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, item, Toast.LENGTH_LONG).show();
         mDatabase.child("list").child(item).removeValue();
         if(!(requestID.get(item).equals(0 + ""))) {
             Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
@@ -116,19 +120,34 @@ public class ListOfOtherUser extends AppCompatActivity
 
     public HashMap<String, String> findItem(int position) {
         //regex: .split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)")[0];
+
         HashMap<String, String> result = new HashMap<>();
         String item = list.get(position);
         String[] temp = item.split("\\(");
+        Log.d("findItem", item + "");
         String name = temp[0].trim();
+        // take away the ")"
         String str = temp[1].substring(0, temp[1].length() -1);
-        String quantity = str.split(" ")[0].trim();
-        String unit = str.split(" ")[1].trim();
+        Log.d("test", str);
+        String[] array = str.split(" ");
+        String quantity;
+        String unit;
+        if (array.length == 1) {
+            quantity = array[0].trim();
+            unit = "";
+        } else {
+            quantity = array[0].trim();
+            unit = array[1].trim();
+        }
+//        String quantity = str.split(" ")[0].trim();
+//        String unit = str.split(" ")[1].trim();
         Log.d("MyUnits", unit);
         result.put("Name", name);
         result.put("Quantity", quantity);
         result.put("Unit", unit);
         return result;
     }
+
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
