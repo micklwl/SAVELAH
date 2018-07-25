@@ -57,6 +57,7 @@ public class GroceryActivity extends AppCompatActivity
     private FirebaseUser user;
     private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class GroceryActivity extends AppCompatActivity
         groceryList = findViewById(R.id.groceryList);
         registerForContextMenu(groceryList);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
         //Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
         initDatabase = FirebaseDatabase.getInstance().getReference("Users");
@@ -162,6 +163,7 @@ public class GroceryActivity extends AppCompatActivity
         Log.d("delGrocery", item);
         Toast.makeText(this, item, Toast.LENGTH_LONG).show();
         mDatabase.child("list").child(item).removeValue();
+        adapter.notifyDataSetChanged();
         if(!(requestID.get(item).trim().equals(0 + ""))) {
 //            Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
 ////            PendingIntent pendingIntent = PendingIntent.getBroadcast( this, Integer.parseInt(requestID.get(item)), myIntent,

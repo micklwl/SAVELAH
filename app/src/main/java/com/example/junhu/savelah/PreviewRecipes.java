@@ -52,7 +52,7 @@ public class PreviewRecipes extends AppCompatActivity {
         month = intent.getIntExtra("Month", 0) + 1;
         year = intent.getIntExtra("Year", 2018);
         text = findViewById(R.id.text);
-        String txt = "Meal for " + day + "/" + month + "/" + year;
+        String txt = "Meal plan for " + day + "/" + month + "/" + year;
         text.setText(txt);
         MealResults = findViewById(R.id.listOfMeals);
         list = new ArrayList<Meal>();

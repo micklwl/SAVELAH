@@ -61,7 +61,7 @@ public class SharedListActivity extends AppCompatActivity {
                     HashMap<String, String> map = c.getAccess();
                     emailToUID = map;
                     for (String s : map.keySet()) {
-                        s.replace(",", ".");
+                        s = s.replace(",", ".");
                         temp.add(s);
                     }
                     list.addAll(temp);

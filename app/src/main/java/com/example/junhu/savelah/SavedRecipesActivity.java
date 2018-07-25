@@ -128,7 +128,7 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
-            case R.id.savedRecipes:
+            case R.id.btn_add_more:
                 startActivity(new Intent(SavedRecipesActivity.this, AddRecipeActivity.class));
                 break;
         }

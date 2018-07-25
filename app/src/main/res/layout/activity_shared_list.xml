@@ -8,10 +8,12 @@
 
     <TextView
         android:id="@+id/instruction"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tap_to_access"
-        android:textSize="28sp"
+        android:text="Tap on the email to access the list!"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
         app:layout_constraintBottom_toTopOf="@+id/userEmails"/>
 
     <ListView

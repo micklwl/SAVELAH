@@ -83,12 +83,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     c.initialiseList();
                     mDatabase.child("Users").child(fUser.getUid()).setValue(c);
                     mDatabase.child("currentUsers").push().setValue(email);
-                    Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "User Registration Successful. Return to login page to login.", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 } else {
                     Log.w(TAG, "signInWithCredential", task.getException());
                     if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                        Toast.makeText(getApplicationContext(), "User with Email id already exists", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "User with Email ID already exists", Toast.LENGTH_SHORT).show();
                     } else
                         Toast.makeText(getApplicationContext(), "Some Error Occurred", Toast.LENGTH_SHORT).show();
                 }

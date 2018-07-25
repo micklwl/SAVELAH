@@ -33,12 +33,20 @@ public class Meal {
     }
 
     public String getTime() {
-        if(this.minute >= 0 && this.minute < 10) {
-            return this.hour + ":0" + this.minute;
-        } else {
-            return this.hour + ":" + this.minute;
+        if (this.hour < 10){
+            if (this.minute >= 0 && this.minute < 10) {
+                return "0" + this.hour + ":0" + this.minute;
+            } else {
+                return "0" + this.hour + ":" + this.minute;
+            }
         }
-
+        else{
+            if (this.minute >= 0 && this.minute < 10) {
+                return this.hour + ":0" + this.minute;
+            } else {
+                return this.hour + ":" + this.minute;
+            }
+        }
     }
 
 }

@@ -183,8 +183,9 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         }
 
         if (title.length() < 5)
-            error_msg += "Error: You need to provide a descriptive title!\n";
-
+            error_msg += "Error: Title too short! Describe more!\n";
+        if (title.length() >= 60)
+            error_msg += "Error: Title too long! Shorten it!\n";
        // if (instructions.length() < 5)
        //     error_msg += "Error: You need to provide some instructions!\n";
 

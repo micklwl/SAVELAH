@@ -50,6 +50,7 @@
     <string name="time_required">Time required</string>
     <string name="mins">Mins</string>
     <string name="saved_recipes">Saved Recipes</string>
+    <string name="enter_recipe_query">Enter recipe query</string>
 
 
     <!-- Strings related to login -->
