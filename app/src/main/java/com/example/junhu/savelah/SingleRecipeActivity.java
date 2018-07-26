@@ -392,8 +392,8 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
 
     private void openDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
         ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
-        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName();
-        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit();
+        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName() + ".";
+        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit() + ".";
         Bundle bundle = new Bundle();
         bundle.putString("Database",ingDB);
         bundle.putString("Adding",ingAdd);

@@ -83,6 +83,7 @@ public class SharedListActivity extends AppCompatActivity {
                 String decoded = email.replace(".", ",");
                 Intent intent = new Intent(SharedListActivity.this, ListOfOtherUser.class);
                 intent.putExtra("UID", emailToUID.get(decoded));
+                intent.putExtra("originalEmail", email);
                 startActivity(intent);
             }
         });

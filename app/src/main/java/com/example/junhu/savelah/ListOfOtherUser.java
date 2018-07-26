@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
@@ -37,6 +38,7 @@ public class ListOfOtherUser extends AppCompatActivity
         implements AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener{
 
     private EditText toAdd;
+    private TextView listName;
     private String message;
     private ListView groceryList;
     private AlarmManager am;
@@ -53,11 +55,15 @@ public class ListOfOtherUser extends AppCompatActivity
         Intent intent = getIntent();
         message = intent.getStringExtra("UID");
         toAdd = findViewById(R.id.addText);
+        listName = findViewById(R.id.listName);
+        String pageTitle = "List of " + intent.getStringExtra("originalEmail");
+        listName.setText(pageTitle);
         am =  (AlarmManager) this.getSystemService(ALARM_SERVICE);
         requestID = new HashMap<>();
         groceryList = findViewById(R.id.sharedList);
         registerForContextMenu(groceryList);
         user = FirebaseAuth.getInstance().getCurrentUser();
+
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
         groceryList.setAdapter(adapter);
         //Toast.makeText(this, user.getUid(), Toast.LENGTH_LONG).show();
@@ -187,8 +193,8 @@ public class ListOfOtherUser extends AppCompatActivity
 
     private void openQuantityDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
         ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
-        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName();
-        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit();
+        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName() + ".";
+        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit() + ".";
         Bundle bundle = new Bundle();
         bundle.putString("Database",ingDB);
         bundle.putString("Adding",ingAdd);
