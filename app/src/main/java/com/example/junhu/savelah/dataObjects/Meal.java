@@ -1,5 +1,8 @@
 package com.example.junhu.savelah.dataObjects;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.example.junhu.savelah.dataObjects.Recipe;
 
 public class Meal {
@@ -13,6 +16,12 @@ public class Meal {
     }
 
     public Meal(Recipe recipe, int hour, int minute) {
+        if (recipe.getTitle().length() >= 70){
+            String fullTitle = recipe.getTitle();
+            String newTitle = fullTitle.substring(0,Math.min(fullTitle.length(),70)) + "...";
+            Log.d("correction", newTitle);
+            recipe.setTitle(newTitle);
+        }
         this.recipe = recipe;
         this.hour = hour;
         this.minute = minute;

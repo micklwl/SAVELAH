@@ -225,10 +225,15 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
             }
         } else {
             if (saveButton.getText().toString().equalsIgnoreCase("Save")) {
-                Recipe_DB recipe_db = new Recipe_DB(singleRecipe, suffix);
-                mDatabase.child("recipes").child(recipe_db.getTitle()).setValue(recipe_db);
-                Toast.makeText(SingleRecipeActivity.this,"This recipe has been added to your list.", Toast.LENGTH_SHORT).show();
-                saveButton.setText(unSave);
+                if (singleRecipe.getTitle().length() > 85){
+                    Toast.makeText(SingleRecipeActivity.this,"Sorry! The recipe's name is too long and cannot be saved!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Recipe_DB recipe_db = new Recipe_DB(singleRecipe, suffix);
+                    mDatabase.child("recipes").child(recipe_db.getTitle()).setValue(recipe_db);
+                    Toast.makeText(SingleRecipeActivity.this, "This recipe has been added to your list.", Toast.LENGTH_SHORT).show();
+                    saveButton.setText(unSave);
+                }
             } else if (saveButton.getText().toString().equalsIgnoreCase("unSave")) {
                 mDatabase.child("recipes").child(recipeName).removeValue();
                 Toast.makeText(SingleRecipeActivity.this,"This recipe has been removed from your list.", Toast.LENGTH_SHORT).show();
@@ -281,9 +286,12 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         if (ingList != null) {
             for (Map.Entry<String, Ingredient> entry : ingList.entrySet()) {
                 Ingredient value = entry.getValue();
-                //if (value.getUnit().length() > 1) {
+                if (value.getUnit().length() > 1) {
                     result += value.getAmount() + " " + value.getUnit() + " " + value.getName() + "\n";
-                //}
+                }
+                else {
+                    result += value.getAmount() + " " + value.getName() + "\n";
+                }
             }
         }
         return result;

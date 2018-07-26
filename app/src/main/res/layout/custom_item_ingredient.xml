@@ -16,7 +16,7 @@ android:layout_height="?android:attr/listPreferredItemHeight">
 
 <EditText android:id="@+id/edit_item_ingredient_qty"
     android:selectAllOnFocus="true"
-    android:hint="@string/ingredient_amount"
+    android:hint="@string/quantity"
     android:inputType="numberDecimal"
     android:layout_weight="0.2"
     android:layout_gravity="center_vertical"

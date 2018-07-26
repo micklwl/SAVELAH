@@ -22,6 +22,8 @@
                 android:id="@+id/groceryItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
                 android:inputType="textAutoComplete"
                 android:focusable="true"
                 android:hint="@string/enter_recipe_query" />
@@ -45,14 +47,14 @@
 
         <ProgressBar
             android:id="@+id/progressBar"
-            android:layout_width="match_parent"
+            style="?android:progressBarStyleLarge"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="57dp"
-            android:indeterminate="true"
+            android:layout_centerInParent="true"
             android:visibility="gone" />
 
     </RelativeLayout>
+
 
     <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
         android:id="@+id/navigation"

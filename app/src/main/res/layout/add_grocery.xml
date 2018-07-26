@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="fill_horizontal"
         android:layout_marginStart="16dp"
-        android:hint="@string/units"
+        android:hint="@string/unit"
         android:inputType="textAutoComplete"
         />
     </LinearLayout>
