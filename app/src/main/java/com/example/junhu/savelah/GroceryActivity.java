@@ -263,12 +263,11 @@ public class GroceryActivity extends AppCompatActivity
     }
 
     @Override
-    public void applyTexts(float quantityResult, String unitResult, String name) {
-
-        //DO SOMETHING HERE FOR THE CHANGE QUANTITY MAKE SURE THEY TYPED SOMETHING
-
-
-
+    public void applyTexts(String quantityResult, String unitResult, String name) {
+        if (unitResult.isEmpty() || quantityResult.isEmpty()) {
+            Toast.makeText(this,"Missing Values! Please try again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         //set the final amount inside database
         mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
         mDatabase.child("list").child(name).child("unit").setValue(unitResult);

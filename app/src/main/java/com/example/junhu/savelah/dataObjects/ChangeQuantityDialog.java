@@ -38,7 +38,8 @@ public class ChangeQuantityDialog extends AppCompatDialogFragment {
         }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Float quantity = Float.valueOf(changeQuantity.getText().toString().trim());
+                String quantity = changeQuantity.getText().toString().trim();
+         //       Float quantity = Float.valueOf(changeQuantity.getText().toString().trim());
                 String unit = changeUnit.getText().toString().trim();
                 listener.applyTexts(quantity,unit, name);
             }
@@ -64,6 +65,7 @@ public class ChangeQuantityDialog extends AppCompatDialogFragment {
     }
 
     public interface ChangeQuantityDialogListener{
-        void applyTexts(float quantityResult, String unitResult, String name);
+        // change float to String
+        void applyTexts(String quantityResult, String unitResult, String name);
     }
 }
