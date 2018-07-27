@@ -148,7 +148,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
         public void onSuccess(HttpContext context, DynamicResponse response) {
             // Hide spinner:
             progressBar.setVisibility(View.GONE);
-            Toast.makeText(getApplicationContext(), "testing", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "testing", Toast.LENGTH_SHORT).show();
             try {
                 // Convert resulting query into a set of Http result data (matching API):
                 HTTP_RecipeShort handler = new HTTP_RecipeShort(response.parseAsString());
