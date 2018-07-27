@@ -96,7 +96,7 @@ public class GroceryActivity extends AppCompatActivity
                             String key = entry.getKey();
                             Ingredient value = entry.getValue();
                             requestID.put(key, value.getAlarmID());
-                            if (value.getUnit().isEmpty()){
+                            if (value.getUnit() == null || value.getUnit().isEmpty()){
                                 temp.add(key + " (" + value.getAmount() + ")");
                             }
                             else{
