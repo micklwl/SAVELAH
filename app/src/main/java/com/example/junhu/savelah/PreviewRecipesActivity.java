@@ -30,7 +30,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-public class PreviewRecipes extends AppCompatActivity {
+public class PreviewRecipesActivity extends AppCompatActivity {
     public static final String MY_PREFS_NAME = "calendar";
     HashMap<String, Meal> meals;
     ArrayList<Meal> list;

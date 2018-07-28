@@ -45,7 +45,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".PreviewRecipes" />
+        <activity android:name=".PreviewRecipesActivity" />
         <activity android:name=".SharingActivity" />
         <activity android:name=".ListOfOtherUser"></activity>
     </application>

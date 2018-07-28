@@ -100,9 +100,9 @@ public class CalendarActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
         String result =  preferences.getString(key, null);
         if (result == null) {
-            Toast.makeText(this, "No Recipes to preview", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No recipes to preview.", Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(this, PreviewRecipes.class);
+            Intent intent = new Intent(this, PreviewRecipesActivity.class);
             int month = date.getMonth();
             int day = date.getDayOfMonth();
             int year = date.getYear();
