@@ -30,9 +30,9 @@ public class Customer {
         this.members = new HashMap<>();
         this.members.put(this.uid, "owner");
         this.recipes =  new HashMap<>();
-        HashMap<String,Ingredient> ingredientlist = new HashMap<>();
-        ingredientlist.put("Name-Jun Hui",new Ingredient("Name-Jun Hui", "1/1/2018", (float)20,"kg"));
-        recipes.put("chicken", new Recipe_DB("chicken",12,"https://spoonacular.com/recipeImages/123-556x370.jpg",12,12,ingredientlist,"test"));
+        HashMap<String,Ingredient> ingredientList = new HashMap<>();
+        ingredientList.put("Chicken",new Ingredient("chicken", "default", (float)20,"kg"));
+        recipes.put("chicken", new Recipe_DB("Chicken",12,"https://spoonacular.com/recipeImages/217777-556x370.jpg",12,12,ingredientList,"Fry the chicken"));
     }
 
     public String getUid(){
