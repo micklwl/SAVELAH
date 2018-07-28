@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ListOfOtherUser extends AppCompatActivity
+public class ListOfOtherUserActivity extends AppCompatActivity
         implements AddGroceryDialog.AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener{
 
     private EditText toAdd;
@@ -191,8 +191,20 @@ public class ListOfOtherUser extends AppCompatActivity
 
     private void openQuantityDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
         ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
-        String ingDB = "Current List has " + String.valueOf(ingredientDB.getAmount())+ " " + ingredientDB.getUnit() + " of " + ingredientDB.getName() + ".";
-        String ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit() + ".";
+        String ingDB;
+        if (ingredientDB.getUnit() == null || ingredientDB.getUnit().isEmpty()){
+            ingDB = "Current list has " + String.valueOf(ingredientDB.getAmount())+ " of " + ingredientDB.getName() + ".";
+        }
+        else {
+            ingDB = "Current list has " + String.valueOf(ingredientDB.getAmount()) + " " + ingredientDB.getUnit() + " of " + ingredientDB.getName() + ".";
+        }
+        String ingAdd;
+        if (ingredientAdd.getUnit() == null || ingredientAdd.getUnit().isEmpty()){
+            ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount())+ " of " + ingredientDB.getName() + ".";
+        }
+        else {
+            ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit() + " of " + ingredientDB.getName() + ".";
+        }
         Bundle bundle = new Bundle();
         bundle.putString("Database",ingDB);
         bundle.putString("Adding",ingAdd);
@@ -209,21 +221,34 @@ public class ListOfOtherUser extends AppCompatActivity
 
     @Override
     public void applyTexts(String quantityResult, String unitResult, String name) {
-        if (unitResult.isEmpty() || quantityResult.isEmpty()) {
-            Toast.makeText(this,"Missing Values! Please try again.", Toast.LENGTH_SHORT).show();
+        if (quantityResult.isEmpty() || Float.valueOf(quantityResult) == 0) {
+            Toast.makeText(this,"Missing or Wrong Values! Please try again.", Toast.LENGTH_SHORT).show();
             return;
         }
+
         //set the final amount inside database
-        mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
-        mDatabase.child("list").child(name).child("unit").setValue(unitResult);
+        mDatabase.child("list").child(name).child("amount").setValue(Float.valueOf(quantityResult));
+        if (unitResult.isEmpty()){
+            mDatabase.child("list").child(name).child("unit").setValue("");
+        }
+        else{
+            mDatabase.child("list").child(name).child("unit").setValue(unitResult);
+        }
     }
 
 
     public void addGrocery(String quantity, String unit) {
-        final float qty = Float.parseFloat(quantity);
+        final float qty;
         final String ut = unit;
         final String name = toAdd.getText().toString().trim();
-        final Ingredient newIngredient = new Ingredient(name, "default", Float.parseFloat(quantity), unit);
+        final Ingredient newIngredient;
+        if (quantity.isEmpty()) {
+            newIngredient = new Ingredient(name, "default", Float.parseFloat("1.0"), unit);
+            qty =  Float.parseFloat("1.0");
+        } else {
+            newIngredient = new Ingredient(name, "default", Float.parseFloat(quantity), unit);
+            qty = Float.parseFloat(quantity);
+        }
         mDatabase.child("list").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

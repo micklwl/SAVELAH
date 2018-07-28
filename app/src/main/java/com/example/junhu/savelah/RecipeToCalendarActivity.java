@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RecipeToCalendar extends AppCompatActivity {
+public class RecipeToCalendarActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private ListView savedRecipes;

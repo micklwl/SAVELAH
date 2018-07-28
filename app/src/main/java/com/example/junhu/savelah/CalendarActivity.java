@@ -116,7 +116,7 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void addRecipeToCalendar() {
-        Intent intent = new Intent(this, RecipeToCalendar.class);
+        Intent intent = new Intent(this, RecipeToCalendarActivity.class);
         startActivityForResult(intent, ADD_RECIPE);
     }
 

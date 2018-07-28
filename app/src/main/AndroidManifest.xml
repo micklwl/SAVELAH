@@ -38,7 +38,7 @@
         <activity android:name=".SingleRecipeActivity" />
         <activity android:name=".SavedRecipesActivity" />
         <activity android:name=".AddRecipeActivity" />
-        <activity android:name=".RecipeToCalendar" />
+        <activity android:name=".RecipeToCalendarActivity" />
 
         <receiver
             android:name=".AlarmBroadcastReceiver"
@@ -47,7 +47,7 @@
 
         <activity android:name=".PreviewRecipesActivity" />
         <activity android:name=".SharingActivity" />
-        <activity android:name=".ListOfOtherUser"></activity>
+        <activity android:name=".ListOfOtherUserActivity"></activity>
     </application>
 
 </manifest>

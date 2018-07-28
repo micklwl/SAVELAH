@@ -71,7 +71,7 @@ public class SharedListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String email = (String) ListOfemails.getItemAtPosition(position);
                 String decoded = email.replace(".", ",");
-                Intent intent = new Intent(SharedListActivity.this, ListOfOtherUser.class);
+                Intent intent = new Intent(SharedListActivity.this, ListOfOtherUserActivity.class);
                 intent.putExtra("UID", emailToUID.get(decoded));
                 intent.putExtra("originalEmail", email);
                 startActivity(intent);
