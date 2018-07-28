@@ -146,6 +146,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
                     Intent intent1 = new Intent(SingleRecipeActivity.this, AddRecipeActivity.class);
                     intent1.putExtra("view",false);
                     intent1.putExtra("data",rDB);
+                    Toast.makeText(SingleRecipeActivity.this,"Changing the title to one already present in your list will erase the other recipe! Please check!", Toast.LENGTH_LONG).show();
                     startActivity(intent1);
                 }
                 else {

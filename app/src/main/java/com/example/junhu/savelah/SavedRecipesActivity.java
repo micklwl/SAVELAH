@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.junhu.savelah.adapter.SavedRecipesAdapter;
 import com.example.junhu.savelah.dataObjects.Customer;
@@ -129,6 +130,7 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.btn_add_more:
+                Toast.makeText(SavedRecipesActivity.this,"Having a same title with one already present in your list will erase the other recipe! Please check!", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(SavedRecipesActivity.this, AddRecipeActivity.class));
                 break;
         }

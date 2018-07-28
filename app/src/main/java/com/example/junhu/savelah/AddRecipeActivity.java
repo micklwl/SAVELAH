@@ -29,8 +29,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -58,6 +61,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     private ImageView recipeImg;
     private boolean type = true;
     private String loadedImage;
+    private boolean present = false;
 
     private Recipe_DB recipeDb;
     private Recipe_DB recipeLoad;
@@ -210,10 +214,11 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         } else { error_msg += "Error: We need to know how long is the time required for cooking is!\n"; }
 
         if (error_msg.length() == 0){
-            user = FirebaseAuth.getInstance().getCurrentUser();
             recipeDb = new Recipe_DB(title, 0, "", readyInMinutes, servingsInt, ingList, instructions);
-            uploadRecipe(recipeDb);
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            initDatabase = FirebaseDatabase.getInstance().getReference("Users");
             if (!type) {
+                uploadRecipe(recipeDb);
                 initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).child("imageUrl").setValue(loadedImage);
                 Toast.makeText(AddRecipeActivity.this, "Changes saved!", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
@@ -224,7 +229,8 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                 Toast.makeText(AddRecipeActivity.this,"Image Upload in progress!",Toast.LENGTH_SHORT).show();
             }
             else{
-                    uploadFile();
+                uploadRecipe(recipeDb);
+                uploadFile();
             }
         }
         else {
@@ -251,9 +257,8 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void uploadRecipe(Recipe_DB recipeDb) {
-        initDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        if (!type) initDatabase.child(user.getUid()).child("recipes").child(recipeLoad.getTitle()).removeValue();
         initDatabase.child(user.getUid()).child("recipes").child(recipeDb.getTitle()).setValue(recipeDb);
-
     }
 
     private void uploadFile() {
