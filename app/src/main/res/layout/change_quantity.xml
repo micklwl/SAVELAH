@@ -23,7 +23,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/title"
         android:textSize="15sp"
-        android:hint="@string/results_in_database" />
+        android:textColor="@color/black"
+        android:text="@string/results_in_database" />
 
     <TextView
         android:id="@+id/toAdd"
@@ -33,7 +34,9 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/resultsDB"
         android:textSize="15sp"
-        android:hint="@string/ingredient_to_add" />
+        android:textColor="@color/black"
+        android:text="@string/ingredient_to_add" />
+
     <TextView
         android:id="@+id/finalResult"
         android:layout_width="match_parent"
@@ -42,6 +45,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toAdd"
         android:textSize="15sp"
+        android:textColor="@color/black"
         android:text="@string/enter_your_desired_result" />
 
     <EditText
@@ -52,6 +56,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/finalResult"
         android:textSize="15sp"
+        android:textColor="@color/black"
         android:hint="@string/quantity"
         android:inputType="numberDecimal" />
 
@@ -63,6 +68,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/quantity"
         android:textSize="15sp"
+        android:textColor="@color/black"
         android:hint="@string/unit"
         android:inputType="textAutoComplete" />
 

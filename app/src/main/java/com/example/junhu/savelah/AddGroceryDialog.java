@@ -48,6 +48,6 @@ public class AddGroceryDialog extends AppCompatDialogFragment {
     }
 }
 
- interface AddGroceryDialogListener {
+interface AddGroceryDialogListener {
     void applyText(String quantity, String unit);
 }

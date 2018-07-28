@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:focusable="false"
+    android:background="@color/white_light_blue"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -67,6 +68,7 @@
                 android:focusable="false"
                 android:gravity="center"
                 android:text="@string/recipe_title"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold|italic" />
 
@@ -109,6 +111,8 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="15dp"
                 android:layout_toEndOf="@id/recipeTimeImage"
+                android:text="10 Minutes"
+                android:textColor="@color/black"
                 android:focusable="false"
                 android:gravity="center"
                 android:textStyle="italic" />
@@ -136,6 +140,8 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="15dp"
                 android:layout_toEndOf="@id/recipeServesImage"
+                android:text="4 Servings"
+                android:textColor="@color/black"
                 android:focusable="false"
                 android:gravity="center"
                 android:textStyle="italic" />
@@ -149,11 +155,10 @@
                 android:layout_below="@id/recipeTimeImage"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-
                 android:layout_marginTop="30dp"
                 android:focusable="false"
                 android:gravity="center"
-
+                android:textColor="@color/black"
                 android:text="@string/ingredients_required"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -162,7 +167,7 @@
                 android:id="@+id/recipeIngredientsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/black"
                 android:layout_below="@id/recipeIngredients"
                 android:layout_margin="5dp"
                 android:focusable="true" />
@@ -176,11 +181,10 @@
                 android:layout_below="@id/recipeIngredientsList"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-
                 android:layout_marginTop="15dp"
                 android:focusable="false"
                 android:gravity="center"
-
+                android:textColor="@color/black"
                 android:text="@string/instructions"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -189,7 +193,7 @@
                 android:id="@+id/recipeInstructionsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/black"
                 android:layout_below="@id/recipeInstructions"
                 android:layout_margin="5dp"
                 android:focusable="true" />

@@ -82,6 +82,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:layout_toEndOf="@id/img_custom_recipe"
                 android:layout_below="@id/lbl_add_custom_recipe"
                 android:layout_width="match_parent"
