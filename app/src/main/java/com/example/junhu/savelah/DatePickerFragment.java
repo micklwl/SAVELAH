@@ -77,7 +77,7 @@ public class DatePickerFragment extends DialogFragment
         cal.set(Calendar.YEAR, year );
         cal.set(Calendar.MONTH, month); // January has value 0
         cal.set(Calendar.DAY_OF_MONTH, day);
-        cal.set(Calendar.HOUR_OF_DAY, 12);
+        cal.set(Calendar.HOUR_OF_DAY, 8);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.AM_PM, Calendar.AM );
