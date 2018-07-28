@@ -1,25 +1,18 @@
 package com.example.junhu.savelah;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.os.Parcelable;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
 import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.example.junhu.savelah.dataObjects.Ingredient_Full;
 import com.example.junhu.savelah.dataObjects.Recipe;
@@ -32,8 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -43,8 +34,6 @@ import com.mashape.p.spoonacularrecipefoodnutritionv1.http.client.APICallBack;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.http.client.HttpContext;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.models.DynamicResponse;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.util.HashMap;
@@ -416,13 +405,19 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
 
     @Override
     public void applyTexts(String quantityResult, String unitResult, String name) {
-        if (unitResult.isEmpty() || quantityResult.isEmpty()) {
-            Toast.makeText(this,"Missing Values! Please try again.", Toast.LENGTH_SHORT).show();
+        if (quantityResult.isEmpty() || Float.valueOf(quantityResult) == 0) {
+            Toast.makeText(this,"Missing or Wrong Values! Please try again.", Toast.LENGTH_SHORT).show();
             return;
         }
+
         //set the final amount inside database
-        mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
-        mDatabase.child("list").child(name).child("unit").setValue(unitResult);
+        mDatabase.child("list").child(name).child("amount").setValue(Float.valueOf(quantityResult));
+        if (unitResult.isEmpty()){
+            mDatabase.child("list").child(name).child("unit").setValue("");
+        }
+        else{
+            mDatabase.child("list").child(name).child("unit").setValue(unitResult);
+        }
     }
 
     private String readIngredients(List<Ingredient_Full> ingredientList) {

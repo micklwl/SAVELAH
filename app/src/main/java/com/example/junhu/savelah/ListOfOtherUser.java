@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
 import com.example.junhu.savelah.dataObjects.Customer;
 import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ListOfOtherUser extends AppCompatActivity
-        implements AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener{
+        implements AddGroceryDialog.AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener{
 
     private EditText toAdd;
     private TextView listName;

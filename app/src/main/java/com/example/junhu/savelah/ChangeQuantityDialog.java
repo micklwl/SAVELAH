@@ -1,4 +1,4 @@
-package com.example.junhu.savelah.dataObjects;
+package com.example.junhu.savelah;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

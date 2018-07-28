@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.junhu.savelah.dataObjects.ChangeQuantityDialog;
 import com.example.junhu.savelah.dataObjects.Customer;
 import com.example.junhu.savelah.dataObjects.Ingredient;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GroceryActivity extends AppCompatActivity
-        implements AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener {
+        implements AddGroceryDialog.AddGroceryDialogListener, ChangeQuantityDialog.ChangeQuantityDialogListener {
     public static final String EXTRA_MESSAGE = "com.example.junhu.savelah.GroceryActivity.MESSAGE";
     private EditText toAdd;
     private ListView groceryList;
@@ -268,13 +267,19 @@ public class GroceryActivity extends AppCompatActivity
 
     @Override
     public void applyTexts(String quantityResult, String unitResult, String name) {
-        if (unitResult.isEmpty() || quantityResult.isEmpty()) {
-            Toast.makeText(this,"Missing Values! Please try again.", Toast.LENGTH_SHORT).show();
+        if (quantityResult.isEmpty() || Float.valueOf(quantityResult) == 0) {
+            Toast.makeText(this,"Missing or Wrong Values! Please try again.", Toast.LENGTH_SHORT).show();
             return;
         }
+
         //set the final amount inside database
-        mDatabase.child("list").child(name).child("amount").setValue(quantityResult);
-        mDatabase.child("list").child(name).child("unit").setValue(unitResult);
+        mDatabase.child("list").child(name).child("amount").setValue(Float.valueOf(quantityResult));
+        if (unitResult.isEmpty()){
+            mDatabase.child("list").child(name).child("unit").setValue("");
+        }
+        else{
+            mDatabase.child("list").child(name).child("unit").setValue(unitResult);
+        }
     }
 
     public void addGrocery(String quantity, String unit) {

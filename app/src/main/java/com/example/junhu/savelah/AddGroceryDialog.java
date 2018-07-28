@@ -44,10 +44,15 @@ public class AddGroceryDialog extends AppCompatDialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        listener = (AddGroceryDialogListener) context;
+        try {
+            listener = (AddGroceryDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement AddQuantiyDialogListener");
+        }
+    }
+
+    public interface AddGroceryDialogListener{
+        void applyText(String quantity, String unit);
     }
 }
 
-interface AddGroceryDialogListener {
-    void applyText(String quantity, String unit);
-}
