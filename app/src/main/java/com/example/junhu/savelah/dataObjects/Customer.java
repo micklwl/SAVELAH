@@ -32,7 +32,7 @@ public class Customer {
         this.recipes =  new HashMap<>();
         HashMap<String,Ingredient> ingredientList = new HashMap<>();
         ingredientList.put("Chicken",new Ingredient("chicken", "default", (float)20,"kg"));
-        recipes.put("chicken", new Recipe_DB("Chicken",12,"https://spoonacular.com/recipeImages/217777-556x370.jpg",12,12,ingredientList,"Fry the chicken"));
+        recipes.put("chicken", new Recipe_DB("chicken",12,"https://spoonacular.com/recipeImages/217777-556x370.jpg",12,12,ingredientList,"Fry the chicken"));
     }
 
     public String getUid(){
