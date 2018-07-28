@@ -63,6 +63,7 @@
     <string name="sharing">Sharing</string>
     <string name="edit">Edit</string>
     <string name="welcome_to_savelah">Welcome to SaveLAH!</string>
+    <string name="tap_on_the_email_to_access_the_list">Tap on the email to access the list!</string>
 
 
     <!-- Strings related to login -->

@@ -155,7 +155,7 @@
                 android:layout_below="@id/recipeTimeImage"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:focusable="false"
                 android:gravity="center"
                 android:textColor="@color/black"
@@ -181,11 +181,10 @@
                 android:layout_below="@id/recipeIngredientsList"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="15dp"
                 android:focusable="false"
                 android:gravity="center"
-                android:textColor="@color/black"
                 android:text="@string/instructions"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

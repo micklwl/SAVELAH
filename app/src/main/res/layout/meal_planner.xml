@@ -12,29 +12,29 @@
         android:layout_marginStart="5dp"
         android:layout_centerVertical="true"
         android:text="24:24"
-        android:textColor="#000" />
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/recipeTitle"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/time"
-        android:layout_toLeftOf="@+id/imageView"
+        android:layout_toEndOf="@+id/time"
+        android:layout_toStartOf="@+id/imageView"
         android:layout_alignBaseline="@+id/time"
         android:layout_alignParentEnd="false"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:maxLines="2"
         android:text="The fastest, easiest, crispiest hash browns test test test"
-        android:textColor="#000" />
+        android:textColor="@color/black" />
 
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="?android:attr/listPreferredItemHeight"
         android:layout_height="?android:attr/listPreferredItemHeight"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:adjustViewBounds="true"
         android:contentDescription="Recipe Image"
         android:cropToPadding="false"

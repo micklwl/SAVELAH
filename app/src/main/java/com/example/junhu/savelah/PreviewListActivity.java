@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class PreviewRecipesActivity extends AppCompatActivity {
+public class PreviewListActivity extends AppCompatActivity {
     public static final String MY_PREFS_NAME = "calendar";
     HashMap<String, Meal> meals;
     ArrayList<Meal> list;
@@ -38,7 +38,7 @@ public class PreviewRecipesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preview_recipes);
+        setContentView(R.layout.activity_preview_list);
         Type mapType = new TypeToken<HashMap<String, Meal>>(){}.getType();
         Intent intent = getIntent();
         meals = new Gson().fromJson(intent.getStringExtra("Meal"), mapType);
@@ -51,7 +51,7 @@ public class PreviewRecipesActivity extends AppCompatActivity {
         MealResults = findViewById(R.id.listOfMeals);
         list = new ArrayList<Meal>();
         registerForContextMenu(MealResults);
-        adapter = new MealListAdapter(getApplicationContext(), R.layout.activity_preview_recipes, list);
+        adapter = new MealListAdapter(getApplicationContext(), R.layout.activity_preview_list, list);
         MealResults.setAdapter(adapter);
         list.clear();
         Meal[] arr = meals.values().toArray(new Meal[0]);
