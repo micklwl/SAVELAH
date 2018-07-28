@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,12 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.junhu.savelah.adapter.CustomListAdapter;
 import com.example.junhu.savelah.adapter.MealListAdapter;
-import com.example.junhu.savelah.dataObjects.DatePickerFragment;
 import com.example.junhu.savelah.dataObjects.Meal;
-import com.example.junhu.savelah.dataObjects.Recipe;
-import com.example.junhu.savelah.dataObjects.Recipe_Short;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 
 public class PreviewRecipesActivity extends AppCompatActivity {
     public static final String MY_PREFS_NAME = "calendar";

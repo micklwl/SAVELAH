@@ -5,12 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PreviewRecipes">
+    tools:context=".PreviewRecipesActivity">
 
     <TextView
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="@string/recipe_title"
         android:gravity="center"
         android:textColor="@color/black"
@@ -19,8 +20,10 @@
     <ListView
         android:id="@+id/listOfMeals"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/text">
+        android:layout_height="match_parent"
+        android:layout_marginTop="35sp"
+        app:layout_constraintTop_toBottomOf="@+id/text"
+        app:layout_constraintBottom_toBottomOf="parent">
     </ListView>
 
 </android.support.constraint.ConstraintLayout>

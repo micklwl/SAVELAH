@@ -1,26 +1,17 @@
 package com.example.junhu.savelah;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.junhu.savelah.dataObjects.Customer;
-import com.example.junhu.savelah.dataObjects.DatePickerFragment;
-import com.example.junhu.savelah.dataObjects.Ingredient;
-import com.example.junhu.savelah.dataObjects.Recipe_DB;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class SharedListActivity extends AppCompatActivity {
     private ListView ListOfemails;

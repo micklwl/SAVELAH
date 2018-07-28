@@ -1,4 +1,4 @@
-package com.example.junhu.savelah.dataObjects;
+package com.example.junhu.savelah;
 
 import android.app.AlarmManager;
 import android.content.SharedPreferences;
