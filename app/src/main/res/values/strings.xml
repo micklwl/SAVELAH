@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SaveLAH</string>
+    <string name="app_name">SAVELAH</string>
     <string name="title_activity_recipe">RecipeActivity</string>
     <string name="title_home">Home</string>
     <string name="change_password">Change Password</string>
