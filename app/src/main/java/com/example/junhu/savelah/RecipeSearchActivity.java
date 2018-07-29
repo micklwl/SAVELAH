@@ -93,7 +93,12 @@ public class RecipeSearchActivity extends AppCompatActivity{
             public void onClick(View view) {
                 switch (view.getId()) {
                     case R.id.queryButton:
-                        doSearch(false);
+                        if (!searchItem.getText().toString().isEmpty()) {
+                            doSearch(false);
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Empty search query! Key in something!", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
             }
