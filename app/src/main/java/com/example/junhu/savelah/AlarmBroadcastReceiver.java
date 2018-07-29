@@ -32,8 +32,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             notificationChannel.enableLights(true);
             nm.createNotificationChannel(notificationChannel);
         }
+        String notiMessage;
+        if (unit == null || unit.isEmpty()){
+            notiMessage = "Remember to buy " + quantity + " " + name + "!";
+        }
+        else {
+            notiMessage = "Remember to buy " + quantity + " " + unit + " of " + name + "!";
+        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setContentTitle("Reminder").setContentText("Remember to buy " + name + "(" + quantity + " " + unit + ")" )
+                .setContentTitle("Reminder").setContentText(notiMessage)
                 .setSmallIcon(R.drawable.ic_stars_black_24dp);
         builder.setAutoCancel(true);
         Intent repeating_intent = new Intent(context,GroceryActivity.class);
