@@ -83,10 +83,10 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
         recipeImg = (ImageView)findViewById(R.id.img_custom_recipe);
 
         findViewById(R.id.btn_custom_recipe_ing).setOnClickListener(this);
-        findViewById(R.id.lbl_add_custom_recipe_ingredients).setOnClickListener(this);
+        findViewById(R.id.add_custom_recipe_ingredients).setOnClickListener(this);
         findViewById(R.id.btn_add_custom_recipe).setOnClickListener(this);
         findViewById(R.id.btn_cancel).setOnClickListener(this);
-        findViewById(R.id.lbl_add_custom_recipe_instructions).setOnClickListener(this);
+        findViewById(R.id.add_custom_recipe_instructions).setOnClickListener(this);
         findViewById(R.id.img_custom_recipe).setOnClickListener(this);
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
@@ -130,7 +130,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         View gist;
         switch(view.getId()){
-            case R.id.lbl_add_custom_recipe_ingredients:
+            case R.id.add_custom_recipe_ingredients:
                 ingredientAdapter.addBlankItem();
                 break;
 
@@ -139,7 +139,7 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
                 saveRecipe();
                 break;
             //hide or unhide the instructions
-            case R.id.lbl_add_custom_recipe_instructions:
+            case R.id.add_custom_recipe_instructions:
                 gist = findViewById(R.id.edit_add_custom_recipe_instructions);
                 if (gist.isShown()) {
                     ((TextView) view).setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up_white, 0);
@@ -188,10 +188,9 @@ public class AddRecipeActivity extends AppCompatActivity implements View.OnClick
 
         if (title.length() < 5)
             error_msg += "Error: Title too short! Describe more!\n";
+
         if (title.length() > 85)
             error_msg += "Error: Title too long! Shorten it!\n";
-       // if (instructions.length() < 5)
-       //     error_msg += "Error: You need to provide some instructions!\n";
 
         // Checking for Servings given + of correct format:
         int servingsInt = 0;

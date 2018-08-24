@@ -8,9 +8,11 @@ import java.util.List;
 public class Recipe_Short implements Serializable {
     public int id;
     public String title;
-    private int readyInMinutes;
-    private String image;
-    private List<String> imageUrls;
+    public int readyInMinutes;
+    public String image;
+    public List<String> imageUrls;
+
+    public Recipe_Short(){};
 
     public Recipe_Short(int id, String image, List<String> imageUrls, int readyInMinutes, String title) {
         this.id = id;

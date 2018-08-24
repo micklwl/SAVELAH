@@ -1,10 +1,20 @@
 package com.example.junhu.savelah.dataObjects;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class HTTP_RecipeShort {
     private List<Recipe_Short> results;
@@ -37,6 +47,39 @@ public class HTTP_RecipeShort {
         this.processingTimeMs = handler.getProcessingTimeMs();
         this.results = handler.getResults();
         this.totalResults = handler.getTotalResults();
+    }
+
+    public HTTP_RecipeShort(JSONObject obj) {
+        try {
+            JSONArray array = obj.getJSONArray("results");
+            List<Recipe_Short> resultList = new ArrayList<Recipe_Short>();
+            for(int i = 0 ; i < array.length() ; i++){
+                Recipe_Short temp = new Recipe_Short();
+                JSONObject childJSONObject = array.getJSONObject(i);
+                temp.id = childJSONObject.getInt("id");
+                temp.title = childJSONObject.getString("title");
+                temp.readyInMinutes = childJSONObject.getInt("readyInMinutes");
+                temp.image = childJSONObject.getString("image");
+                JSONArray jArray = childJSONObject.getJSONArray("imageUrls");
+                List<String> returnList = new ArrayList<String>();
+                for (int t = 0; t < jArray.length(); t++) {
+                    String val = jArray.getString(t);
+                    returnList.add(val);
+                }
+                temp.imageUrls = returnList;
+                resultList.add(temp);
+            }
+            this.results = resultList;
+            this.baseUri = obj.getString("baseUri");
+            this.expires = obj.getLong("expires");
+            this.isStale = obj.getBoolean("isStale");
+            this.offset = obj.getInt("offset");
+            this.number = obj.getInt("number");
+            this.processingTimeMs = obj.getInt("processingTimeMs");
+            this.totalResults = obj.getInt("totalResults");
+            Log.d("initial", baseUri);
+        } catch (JSONException e) {
+        }
     }
 
     public String getBaseUri() {

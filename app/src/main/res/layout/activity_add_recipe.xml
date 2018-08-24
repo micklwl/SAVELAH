@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <!-- Static Bottom Bar: -->
-    <LinearLayout android:id="@+id/ll_add_custom_recipe"
+    <LinearLayout android:id="@+id/bottom_bar"
         android:orientation="horizontal"
         android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
@@ -39,7 +39,7 @@
     <android.support.v4.widget.NestedScrollView android:id="@+id/sv_add_custom_recipe"
         android:descendantFocusability="afterDescendants"
         android:fillViewport="false"
-        android:layout_above="@id/ll_add_custom_recipe"
+        android:layout_above="@id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
@@ -73,7 +73,7 @@
                 android:layout_height="150dp" />
 
             <!-- Recipe Title + Details -->
-            <TextView android:id="@+id/lbl_add_custom_recipe_title"
+            <TextView android:id="@+id/add_custom_recipe_title"
                 android:text="@string/recipe_details"
                 android:textColor="@color/white"
                 android:background="@color/colorPrimaryDark"
@@ -94,7 +94,7 @@
                 android:inputType="textShortMessage|textCapWords|textImeMultiLine"
                 android:lines="2"
                 android:maxLines="2"
-                android:layout_below="@id/lbl_add_custom_recipe_title"
+                android:layout_below="@id/add_custom_recipe_title"
                 android:layout_toEndOf="@id/img_custom_recipe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -156,7 +156,7 @@
                 android:scaleY="1"
                 android:src="@drawable/ic_arrow_down" />
 
-            <TextView android:id="@+id/lbl_add_custom_recipe_ingredients"
+            <TextView android:id="@+id/add_custom_recipe_ingredients"
                 android:drawableEnd="@drawable/ic_add_white_24dp"
                 android:background="@color/colorPrimaryDark"
                 android:paddingStart="15dp"
@@ -180,7 +180,7 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_add_custom_recipe_ingredients"
-                android:layout_below="@id/lbl_add_custom_recipe_ingredients"
+                android:layout_below="@id/add_custom_recipe_ingredients"
                 android:focusable="true"
                 android:scrollbars="vertical"
                 android:nestedScrollingEnabled="true"
@@ -188,8 +188,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView android:id="@+id/lbl_add_custom_recipe_instructions"
-
+            <TextView android:id="@+id/add_custom_recipe_instructions"
                 android:gravity="center_vertical"
                 android:background="@color/colorPrimaryDark"
                 android:drawableEnd="@drawable/ic_arrow_down"
@@ -219,7 +218,7 @@
                 android:textIsSelectable="true"
                 android:scrollbars="vertical"
                 android:lines="6"
-                android:layout_below="@id/lbl_add_custom_recipe_instructions"
+                android:layout_below="@id/add_custom_recipe_instructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

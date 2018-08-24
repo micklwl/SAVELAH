@@ -1,6 +1,7 @@
 package com.example.junhu.savelah;
 
 import android.content.Intent;
+import android.renderscript.ScriptGroup;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -28,11 +29,20 @@ import com.mashape.p.spoonacularrecipefoodnutritionv1.http.client.APICallBack;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.http.client.HttpContext;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.models.DynamicResponse;
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RecipeSearchActivity extends AppCompatActivity{
     private EditText searchItem;
@@ -94,7 +104,7 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 switch (view.getId()) {
                     case R.id.queryButton:
                         if (!searchItem.getText().toString().isEmpty()) {
-                            doSearch(false);
+                            doSearch();
                         }
                         else{
                             Toast.makeText(getApplicationContext(), "Empty search query! Key in something!", Toast.LENGTH_SHORT).show();
@@ -114,15 +124,12 @@ public class RecipeSearchActivity extends AppCompatActivity{
                 Recipe selectedRecipe =  (Recipe)recipeResults.getItemAtPosition(position);
                 intent.putExtra("Recipe", new Recipe(selectedRecipe.getTitle(),
                         selectedRecipe.getImage(), selectedRecipe.getId()));
-//                intent.putExtra("title",selectedRecipe.getTitle());
-//                intent.putExtra("suffix",selectedRecipe.getImage());
-//                intent.putExtra("search_id",selectedRecipe.getIdString());
                 startActivity(intent);
             }
         });
     }
 
-    private void doSearch(boolean nextSet) {
+    private void doSearch() {
         final SpoonacularAPIClient client = new SpoonacularAPIClient();
         APIController clientController = client.getClient();
         progressBar.setVisibility(View.VISIBLE);
@@ -136,74 +143,79 @@ public class RecipeSearchActivity extends AppCompatActivity{
         intolerances = "";
         offset = 0;
         type = "";
-        clientController.searchRecipesAsync(query, cuisine, dietQuery, excludeIngredients, intolerances, limitLicense, resultNumber, offset, type, queryParams, new myAPICallBack(nextSet));
+        clientController.searchRecipesAsync(query, cuisine, dietQuery, excludeIngredients, intolerances, limitLicense, resultNumber, offset, type, queryParams, new myAPICallBack());
     }
 
 
     private class myAPICallBack implements APICallBack<DynamicResponse> {
 
-        // Boolean for the type of query we are making (new or next).
-        private boolean nextSet;
-
-        myAPICallBack(boolean nextSet) {
-            this.nextSet = nextSet;
-        }
-
         @Override
         public void onSuccess(HttpContext context, DynamicResponse response) {
             // Hide spinner:
             progressBar.setVisibility(View.GONE);
-            //Toast.makeText(getApplicationContext(), "testing", Toast.LENGTH_SHORT).show();
-            try {
-                // Convert resulting query into a set of Http result data (matching API):
-                HTTP_RecipeShort handler = new HTTP_RecipeShort(response.parseAsString());
+
+                Map<String, String> example = response.getHeaders();
+                for (Map.Entry<String, String> entry : example.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    Log.d("mapping", key + " " + value);
+                }
+
+                String valid = null;
+                try {
+                    valid = IOUtils.toString(response.getRawBody(), "UTF-8");
+                    Log.d("initial", valid);
+                } catch (IOException e) {
+
+                }
+
+                JSONObject jObject = null;
+                try {
+                    jObject = new JSONObject(valid);
+                } catch (JSONException e) {
+                }
+                
+                HTTP_RecipeShort handler = new HTTP_RecipeShort(jObject);
 
                 // Get the recipe results:
                 List<Recipe_Short> data = handler.getResults();
-
+                Log.d("initial", "reached");
                 List<Recipe> temp = new ArrayList<>();
                 results.clear();
                 for (Recipe_Short i : data) {
+                    Log.d("initial", "empty");
                     String title = i.getTitle();
                     String id = String.valueOf(i.getId());
                     String suffix = i.getImage();
                     String urlFinal = "https://spoonacular.com/recipeImages/";
                     if (suffix.endsWith(".jpg")) {
                         urlFinal = urlFinal + id + "-556x370.jpg";
-                    }
-                    else if (suffix.endsWith(".png")){
+                    } else if (suffix.endsWith(".png")) {
                         urlFinal = urlFinal + id + "-556x370.png";
+                    } else if (suffix.endsWith(".jpeg")) {
+                        urlFinal = urlFinal + id + "-556x370.jpeg";
                     }
-                    else if (suffix.endsWith(".jpeg")){
-                        urlFinal = urlFinal+ id + "-556x370.jpeg";
-                    }
-                    Log.d("lol",title);
-                    temp.add(new Recipe(title, urlFinal,i.getId()));
+                    Log.d("lol", title);
+                    temp.add(new Recipe(title, urlFinal, i.getId()));
                 }
                 results.addAll(temp);
                 adapter.notifyDataSetChanged();
-                // Load data in handler:
-             //   PocketKitchenData pkData = PocketKitchenData.getInstance();
-                if (!nextSet) {
-               //     pkData.setRecipesDisplayed(data);
-                } else {
-              //      pkData.addRecipesDisplayed(data);
-                }
 
                 // Provides proper feedback when no results are returned:
                 if (data.size() == 0) {
                     ((TextView) recipeResults.getEmptyView()).setText("No Results");
                 }
-            } catch (ParseException e) { // Thrown by parseAsString()
-                Toast.makeText(getApplicationContext(), "Failed to parse", Toast.LENGTH_SHORT).show();
-            }
-
             }
         @Override
         public void onFailure(HttpContext context, Throwable error) {
             // Unknown error. Originating from API or Mashape Key most likely.
             progressBar.setVisibility(View.GONE);
+            Log.d("Why", error.getMessage());
             Toast.makeText(getApplicationContext(), "Recipe query failed", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }
+
+

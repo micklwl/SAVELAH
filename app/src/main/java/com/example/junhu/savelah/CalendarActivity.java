@@ -34,7 +34,7 @@ public class CalendarActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
         mCalendarView= findViewById(R.id.calendarView);
 //      mCalendarView = new Gson().fromJson(json, CalendarView.class);
-        // String json = preferences.getString("Calendar", null);
+//      String json = preferences.getString("Calendar", null);
         Button = findViewById(R.id.floatingActionButton);
         Button.setOnClickListener(new View.OnClickListener() {
             @Override 
@@ -127,7 +127,7 @@ public class CalendarActivity extends AppCompatActivity {
         Toast.makeText(this, "All saved lists have been cleared!", Toast.LENGTH_SHORT).show();
     }
     //    private void previewRecipe(int year, int month, int day) {
-//     //   Log.d("preview", day + "");
+//          Log.d("preview", day + "");
 ////        SharedPreferences preferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
 ////        Map<String, ?> keys = preferences.getAll();
 ////        Log.d("preview",  keys + "");

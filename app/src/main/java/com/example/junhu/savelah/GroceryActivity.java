@@ -157,10 +157,6 @@ public class GroceryActivity extends AppCompatActivity
         mDatabase.child("list").child(item).removeValue();
         adapter.notifyDataSetChanged();
         if(!(requestID.get(item).trim().equals(0 + ""))) {
-//            Intent myIntent = new Intent(this, AlarmBroadcastReceiver.class);
-////            PendingIntent pendingIntent = PendingIntent.getBroadcast( this, Integer.parseInt(requestID.get(item)), myIntent,
-////                    PendingIntent.FLAG_UPDATE_CURRENT);
-////            am.cancel(pendingIntent);
             cancelNotification(Integer.parseInt(requestID.get(item).trim()));
         }
     }
@@ -321,11 +317,6 @@ public class GroceryActivity extends AppCompatActivity
     }
 
 }
-//    private void addGrocery(String quantity, String unit) {
-//        final String str = toAdd.getText().toString().trim();
-//        mDatabase.child("list").child(str).setValue(new Ingredient(str, "default", Float.parseFloat(quantity), unit));
-//      //  mDatabase.child("list").child(nextIndex + "").setValue(str);
-//    }
 
 //    public void findListListener(View view) {
 //        final String sharedEmail = findList.getText().toString().trim();
