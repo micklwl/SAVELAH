@@ -38,7 +38,7 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
     private FirebaseUser user;
     private DatabaseReference initDatabase;
     private DatabaseReference mDatabase;
-    private StorageReference mStorageRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +103,7 @@ public class SavedRecipesActivity extends AppCompatActivity implements View.OnCl
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d("error", databaseError.getMessage());
             }
         });
 

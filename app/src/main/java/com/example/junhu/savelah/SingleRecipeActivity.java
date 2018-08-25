@@ -25,8 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.SpoonacularAPIClient;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.controllers.APIController;
@@ -35,7 +33,11 @@ import com.mashape.p.spoonacularrecipefoodnutritionv1.http.client.HttpContext;
 import com.mashape.p.spoonacularrecipefoodnutritionv1.models.DynamicResponse;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +55,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
     private String suffix;
     private String recipeName;
     private Recipe_Full singleRecipe;
-    private boolean type;
+    private boolean type; // true for accessing from SavedRecipes while false for accessing from RecipesSearch
     private int id = 0;
     private FirebaseUser user;
     private DatabaseReference initDatabase;
@@ -156,33 +158,6 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         });
     }
 
-/*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.recipe,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (type) {
-            switch (item.getItemId()) {
-                case R.id.recipe_share:
-                    break;
-                case R.id.recipe_edit:
-                    Intent intent1 = new Intent(SingleRecipeActivity.this, AddRecipeActivity.class);
-                    intent1.putExtra("view",false);
-                    intent1.putExtra("data",rDB);
-                    startActivity(intent1);
-                    return(true);
-            }
-        }
-        else {
-            Toast.makeText(SingleRecipeActivity.this,"Save the recipe, then open it from your saved recipes list for these actions!", Toast.LENGTH_SHORT).show();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-*/
     private void clickAdd() {
         if (type){
             HashMap<String, Ingredient> ingList = rDB.getIngList();
@@ -293,31 +268,57 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         clientController.getRecipeInformationAsync(id, new APICallBack<DynamicResponse>() {
             @Override
             public void onSuccess(HttpContext context, DynamicResponse response) {
+
+                Map<String, String> example = response.getHeaders();
+                for (Map.Entry<String, String> entry : example.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    Log.d("single recipe", key + " " + value);
+                }
+
+                String valid = null;
                 try {
+                    valid = IOUtils.toString(response.getRawBody(), "UTF-8");
+                    Log.d("initial", valid);
+                } catch (IOException e) {
+                    Toast.makeText(SingleRecipeActivity.this,"Error in conversion! Press back and try again.", Toast.LENGTH_SHORT).show();
+                }
+
+                JSONObject jObject = null;
+                try {
+                    jObject = new JSONObject(valid);
+                } catch (JSONException e) {
+                    Toast.makeText(SingleRecipeActivity.this,"Error in conversion! Press back and try again.", Toast.LENGTH_SHORT).show();
+                }
+
+                singleRecipe = new Recipe_Full(jObject);
+                showAPIOnScreen(singleRecipe);
+            }
+            /*    try {
 
                     Gson gson = new GsonBuilder().disableHtmlEscaping().create();
                     singleRecipe = gson.fromJson(response.parseAsString(), Recipe_Full.class);
-                        /* DEBUG: TEST GSON:
-                        * System.out.println("RESPONSE-GSON: " + view_single_recipe.getTitle());
-                        // END-DEBUG */
+                         DEBUG: TEST GSON:
+                         System.out.println("RESPONSE-GSON: " + view_single_recipe.getTitle());
+                         END-DEBUG
                     showAPIOnScreen(singleRecipe);
                 } catch (ParseException e) {
                     Log.e("hello", "Parsing recipe information failed!\n" + e.getLocalizedMessage());
                     Toast.makeText(SingleRecipeActivity.this,"There was some error in showing the recipe :(. Try again later!", Toast.LENGTH_SHORT).show();
                 }
-            }
-            /* DEBUG: TEST GSON:
+
+            DEBUG: TEST GSON:
             System.out.println("RESPONSE-HEADERS: " + response.getHeaders());
             System.out.println("RESPONSE-STRING: " + response.parseAsString());
-            // END-DEBUG */
+            System.out.println("RESPONSE-GSON: " + view_single_recipe.getTitle());
+            END-DEBUG */
+
             @Override
             public void onFailure(HttpContext context, Throwable error) {
                 Log.e("hello", "Getting recipe information failed! See below:\n" + error.getLocalizedMessage());
                 Toast.makeText(SingleRecipeActivity.this,"There was some error in reaching the server :(. Try again later!", Toast.LENGTH_SHORT).show();
-
             }
         });
-
     }
 
     private void showAPIOnScreen(Recipe_Full singleRecipe) {
@@ -374,7 +375,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(SingleRecipeActivity.this,"Error adding to list! Try again!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -383,12 +384,14 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
     private void openDialog(Ingredient ingredientDB, Ingredient ingredientAdd) {
         ChangeQuantityDialog changeQuantityDialog = new ChangeQuantityDialog();
         String ingDB;
+
         if (ingredientDB.getUnit() == null || ingredientDB.getUnit().isEmpty()){
             ingDB = "Current list has " + String.valueOf(ingredientDB.getAmount())+ " of " + ingredientDB.getName() + ".";
         }
         else {
             ingDB = "Current list has " + String.valueOf(ingredientDB.getAmount()) + " " + ingredientDB.getUnit() + " of " + ingredientDB.getName() + ".";
         }
+
         String ingAdd;
         if (ingredientAdd.getUnit() == null || ingredientAdd.getUnit().isEmpty()){
             ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount())+ " of " + ingredientDB.getName() + ".";
@@ -396,6 +399,7 @@ public class SingleRecipeActivity extends AppCompatActivity implements ChangeQua
         else {
             ingAdd = "You want to add " + String.valueOf(ingredientAdd.getAmount()) + " " + ingredientAdd.getUnit() + " of " + ingredientDB.getName() + ".";
         }
+
         Bundle bundle = new Bundle();
         bundle.putString("Database",ingDB);
         bundle.putString("Adding",ingAdd);

@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.junhu.savelah.R;
-import com.example.junhu.savelah.dataObjects.Recipe;
 import com.example.junhu.savelah.dataObjects.Recipe_DB;
 import com.squareup.picasso.Picasso;
 

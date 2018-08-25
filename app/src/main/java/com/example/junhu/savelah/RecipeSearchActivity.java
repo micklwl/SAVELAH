@@ -32,15 +32,11 @@ import com.mashape.p.spoonacularrecipefoodnutritionv1.models.DynamicResponse;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -154,63 +150,65 @@ public class RecipeSearchActivity extends AppCompatActivity{
             // Hide spinner:
             progressBar.setVisibility(View.GONE);
 
-                Map<String, String> example = response.getHeaders();
-                for (Map.Entry<String, String> entry : example.entrySet()) {
-                    String key = entry.getKey();
-                    String value = entry.getValue();
-                    Log.d("mapping", key + " " + value);
-                }
-
-                String valid = null;
-                try {
-                    valid = IOUtils.toString(response.getRawBody(), "UTF-8");
-                    Log.d("initial", valid);
-                } catch (IOException e) {
-
-                }
-
-                JSONObject jObject = null;
-                try {
-                    jObject = new JSONObject(valid);
-                } catch (JSONException e) {
-                }
-                
-                HTTP_RecipeShort handler = new HTTP_RecipeShort(jObject);
-
-                // Get the recipe results:
-                List<Recipe_Short> data = handler.getResults();
-                Log.d("initial", "reached");
-                List<Recipe> temp = new ArrayList<>();
-                results.clear();
-                for (Recipe_Short i : data) {
-                    Log.d("initial", "empty");
-                    String title = i.getTitle();
-                    String id = String.valueOf(i.getId());
-                    String suffix = i.getImage();
-                    String urlFinal = "https://spoonacular.com/recipeImages/";
-                    if (suffix.endsWith(".jpg")) {
-                        urlFinal = urlFinal + id + "-556x370.jpg";
-                    } else if (suffix.endsWith(".png")) {
-                        urlFinal = urlFinal + id + "-556x370.png";
-                    } else if (suffix.endsWith(".jpeg")) {
-                        urlFinal = urlFinal + id + "-556x370.jpeg";
-                    }
-                    Log.d("lol", title);
-                    temp.add(new Recipe(title, urlFinal, i.getId()));
-                }
-                results.addAll(temp);
-                adapter.notifyDataSetChanged();
-
-                // Provides proper feedback when no results are returned:
-                if (data.size() == 0) {
-                    ((TextView) recipeResults.getEmptyView()).setText("No Results");
-                }
+            Map<String, String> example = response.getHeaders();
+            for (Map.Entry<String, String> entry : example.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                Log.d("mapping", key + " " + value);
             }
+
+            String valid = null;
+            try {
+                valid = IOUtils.toString(response.getRawBody(), "UTF-8");
+                Log.d("initial", valid);
+            } catch (IOException e) {
+                Toast.makeText(RecipeSearchActivity.this,"Error in conversion! Press back and try again.", Toast.LENGTH_SHORT).show();
+            }
+
+            JSONObject jObject = null;
+            try {
+                jObject = new JSONObject(valid);
+            } catch (JSONException e) {
+                Toast.makeText(RecipeSearchActivity.this,"Error in conversion! Press back and try again.", Toast.LENGTH_SHORT).show();
+            }
+
+            HTTP_RecipeShort handler = new HTTP_RecipeShort(jObject);
+
+            // Get the recipe results:
+            List<Recipe_Short> data = handler.getResults();
+            Log.d("initial", "reached");
+            List<Recipe> temp = new ArrayList<>();
+            results.clear();
+            for (Recipe_Short i : data) {
+                Log.d("initial", "empty");
+                String title = i.getTitle();
+                String id = String.valueOf(i.getId());
+                String suffix = i.getImage();
+                String urlFinal = "https://spoonacular.com/recipeImages/";
+                if (suffix.endsWith(".jpg")) {
+                    urlFinal = urlFinal + id + "-556x370.jpg";
+                } else if (suffix.endsWith(".png")) {
+                    urlFinal = urlFinal + id + "-556x370.png";
+                } else if (suffix.endsWith(".jpeg")) {
+                    urlFinal = urlFinal + id + "-556x370.jpeg";
+                }
+                Log.d("lol", title);
+                temp.add(new Recipe(title, urlFinal, i.getId()));
+            }
+            results.addAll(temp);
+            adapter.notifyDataSetChanged();
+
+            // Provides proper feedback when no results are returned:
+            if (data.size() == 0) {
+                String empty = "No results";
+                ((TextView) recipeResults.getEmptyView()).setText(empty);
+            }
+        }
         @Override
         public void onFailure(HttpContext context, Throwable error) {
             // Unknown error. Originating from API or Mashape Key most likely.
             progressBar.setVisibility(View.GONE);
-            Log.d("Why", error.getMessage());
+            Log.d("Reason", error.getMessage());
             Toast.makeText(getApplicationContext(), "Recipe query failed", Toast.LENGTH_SHORT).show();
         }
     }

@@ -77,8 +77,8 @@ public class HTTP_RecipeShort {
             this.number = obj.getInt("number");
             this.processingTimeMs = obj.getInt("processingTimeMs");
             this.totalResults = obj.getInt("totalResults");
-            Log.d("initial", baseUri);
         } catch (JSONException e) {
+            Log.d("reason", e.getMessage());
         }
     }
 

@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.junhu.savelah.R;
-
 public class ChangeQuantityDialog extends AppCompatDialogFragment {
     private TextView saved;
     private TextView change;

@@ -3,13 +3,13 @@ package com.example.junhu.savelah.dataObjects;
 import com.google.gson.Gson;
 
 public class Ingredient_Full {
-    private int id;
-    private String aisle;
-    private String image;
-    private String name;
-    private float amount;
-    private String unit;
-    private String originalString;
+    public int id;
+    public String aisle;
+    public String image;
+    public String name;
+    public float amount;
+    public String unit;
+    public String originalString;
 
     public Ingredient_Full(){}
 
