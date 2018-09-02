@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recipeImage"
-                android:layout_margin="5dp"
+                android:layout_margin="8dp"
                 android:adjustViewBounds="true"
                 android:focusable="false"
                 android:maxHeight="35dp"
@@ -122,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recipeImage"
-                android:layout_margin="5dp"
+                android:layout_margin="8dp"
                 android:layout_toEndOf="@id/recipeTime"
                 android:adjustViewBounds="true"
                 android:focusable="false"
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:layout_below="@id/recipeIngredients"
-                android:layout_margin="5dp"
+                android:layout_margin="8dp"
                 android:focusable="true" />
 
             <!-- Instruction Information -->
@@ -194,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:layout_below="@id/recipeInstructions"
-                android:layout_margin="5dp"
+                android:layout_margin="8dp"
                 android:focusable="true" />
 
         </RelativeLayout>
